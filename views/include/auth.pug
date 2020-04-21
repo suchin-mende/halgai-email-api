@@ -1,0 +1,106 @@
+.panel.panel-default
+  .panel-heading
+    h5.panel-title
+      a(data-toggle='collapse', href='#auth')
+        h1 認証系処理
+  #auth.panel-collapse.collapse
+    .panel-body
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ログインテスト
+        .panel-body
+          form(method='post', class='form-horizontal', id='login-form')
+            .form-group.form-group-lg
+              label(for='userCd', class='control-label col-sm-4') ユーザCD
+              .col-sm-8
+                input(type='text', name='userCd', value='', id='userCd', class='form-control', placeholder='ユーザCD')
+            .form-group.form-group-lg
+              label(for='password', class='control-label col-sm-4') パスワード
+              .col-sm-8
+                input(type='password', name='password', value='', id='password', class='form-control', placeholder='パスワード')
+            .form-group.form-group-lg
+              label(for='apiKey', class='control-label col-sm-4') APIキー
+              .col-sm-8
+                input(type='text', name='apiKey', value='', id='apiKey', class='form-control', placeholder='APIキー', disabled)
+            <br>
+            button(type='button', id='login', class='btn btn-primary btn-block btn-lg')
+              span(class='glyphicon glyphicon-log-in', aria-hidden='true')
+              span ログイン
+            button(type='button', id='login-clear', class='btn btn-lg btn-block btn-default') クリア
+            <hr>
+            .form-group.form-group-lg
+              label(for='login-result', class='control-label col-sm-4') ログイン結果
+              .col-sm-8
+                textarea(id='login-result', class='form-control', placeholder='ログイン結果', disabled, rows='10')
+
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ログアウトテスト
+        .panel-body
+          form(method='post', class='form-horizontal', id='logout-form')
+            .form-group.form-group-lg
+              label(for='logoutApiKey', class='control-label col-sm-4') APIキー
+              .col-sm-8
+                input(type='text', name='apiKey', value='', id='logoutApiKey', class='form-control', placeholder='APIキー', disabled)
+            .form-group.form-group-lg
+              label(for='logoutSessionKey', class='control-label col-sm-4') セッションキー
+              .col-sm-8
+                input(type='text', name='sessionKey', value='', id='logoutSessionKey', class='form-control', placeholder='セッションキー', disabled)
+            <br>
+            button(type='button', id='logout', class='btn btn-primary btn-block btn-lg')
+              span(class='glyphicon glyphicon-log-in', aria-hidden='true')
+              span ログアウト
+            button(type='button', id='logout-clear', class='btn btn-lg btn-block btn-default') クリア
+            <hr>
+            .form-group.form-group-lg
+              label(for='logout-result', class='control-label col-sm-4') ログアウト結果
+              .col-sm-8
+                textarea(id='logout-result', class='form-control', placeholder='ログアウト結果', disabled, rows='10')
+
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title セッションリフレッシュテスト
+        .panel-body
+          form(method='post', class='form-horizontal', id='refresh-token-form')
+            .form-group.form-group-lg
+              label(for='refresh-session-ApiKey', class='control-label col-sm-4') APIキー
+              .col-sm-8
+                input(type='text', name='apiKey', value='', id='refresh-session-ApiKey', class='form-control', placeholder='APIキー', disabled)
+            .form-group.form-group-lg
+              label(for='refresh-session-RefreshKey', class='control-label col-sm-4') リフレッシュキー
+              .col-sm-8
+                input(type='text', name='refreshKey', value='', id='refresh-session-RefreshKey', class='form-control', placeholder='リフレッシュキー', disabled)
+            <br>
+            button(type='button', id='refresh-session', class='btn btn-primary btn-block btn-lg')
+              span(class='glyphicon glyphicon-log-in', aria-hidden='true')
+              span セッションリフレッシュ
+            button(type='button', id='refresh-session-clear', class='btn btn-lg btn-block btn-default') クリア
+            <hr>
+            .form-group.form-group-lg
+              label(for='refresh-session-result', class='control-label col-sm-4') セッションリフレッシュ結果
+              .col-sm-8
+                textarea(id='refresh-session-result', class='form-control', placeholder='セッションリフレッシュ結果', disabled, rows='10')
+
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title CSRFトークン再取得テスト
+        .panel-body
+          form(method='post', class='form-horizontal', id='refresh-token-form')
+            .form-group.form-group-lg
+              label(for='refresh-token-ApiKey', class='control-label col-sm-4') APIキー
+              .col-sm-8
+                input(type='text', name='apiKey', value='', id='refresh-token-ApiKey', class='form-control', placeholder='APIキー', disabled)
+            .form-group.form-group-lg
+              label(for='refresh-token-SessionKey', class='control-label col-sm-4') セッションキー
+              .col-sm-8
+                input(type='text', name='sessionKey', value='', id='refresh-token-SessionKey', class='form-control', placeholder='セッションキー', disabled)
+            <br>
+            button(type='button', id='refresh-token', class='btn btn-primary btn-block btn-lg')
+              span(class='glyphicon glyphicon-log-in', aria-hidden='true')
+              span  CSRFトークン再取得
+            button(type='button', id='refresh-token-clear', class='btn btn-lg btn-block btn-default') クリア
+            <hr>
+            .form-group.form-group-lg
+              label(for='refresh-token-result', class='control-label col-sm-4') CSRFトークン再取得結果
+              .col-sm-8
+                textarea(id='refresh-token-result', class='form-control', placeholder='CSRFトークン再取得結果', disabled, rows='10')

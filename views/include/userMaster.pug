@@ -1,0 +1,248 @@
+.panel.panel-default
+  .panel-heading
+    h5.panel-title
+      a(data-toggle='collapse', href='#user-master')
+        h1 ユーザマスタ処理
+  #user-master.panel-collapse.collapse
+    .panel-body
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ユーザ一覧取得
+        .panel-body
+          .panel.panel-default
+            .panel-heading
+              h5.panel-title 検索項目以外
+            .panel-body
+              form#search-user-info-form-1.form-horizontal(method='post')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='sort') sort
+                  .col-sm-8
+                    input#search-user-info-sort.form-control(type='text', name='sort', value='', placeholder='sort')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='asc') asc
+                  .col-sm-8
+                    input#search-user-info-asc.form-control(type='text', name='asc', value='', placeholder='asc')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='limit') limit
+                  .col-sm-8
+                    input#search-user-info-limit.form-control(type='text', name='limit', value='', placeholder='limit')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='offset') offset
+                  .col-sm-8
+                    input#search-user-info-offset.form-control(type='text', name='offset', value='', placeholder='offset')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-ApiKey') APIキー
+                  .col-sm-8
+                    input#search-user-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-SessionKey') セッションキー
+                  .col-sm-8
+                    input#search-user-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+          .panel.panel-default
+            .panel-heading
+              h5.panel-title 検索項目
+            .panel-body
+              form#search-user-info-form-2.form-horizontal(method='post')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-UserId') ユーザID
+                  .col-sm-8
+                    input#search-user-info-UserId.form-control(type='text', name='userId', value='', placeholder='ユーザID')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='userCd') ユーザCD
+                  .col-sm-8
+                    input#search-user-info-UserCd.form-control(type='text', name='userCd', value='', placeholder='ユーザCD')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-UserTx') ユーザ名
+                  .col-sm-8
+                    input#search-user-info-UserTx.form-control(type='text', name='userTx', value='', placeholder='ユーザ名')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-RoleId') 権限ロールID
+                  .col-sm-8
+                    input#search-user-info-RoleId.form-control(type='text', name='roleId', value='', placeholder='権限ロールID')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-RoleTx') 権限ロール名
+                  .col-sm-8
+                    input#search-user-info-RoleTx.form-control(type='text', name='roleTx', value='', placeholder='権限ロール名')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-user-info-LogicalWhId') サブ組織(logicalWhId)ID
+                  .col-sm-8
+                    input#search-user-info-LogicalWhId.form-control(type='text', name='logicalWhId', value='', placeholder='サブ組織(logicalWhId)ID')
+          form#search-user-info-form.form-horizontal(method='post')
+            br
+            button#search-user-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  ユーザ一覧取得
+            button#search-user-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-user-info-result') ユーザ一覧取得結果
+              .col-sm-8
+                textarea#search-user-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ユーザ情報取得
+        .panel-body
+          form#get-user-info-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-user-info-userId') ユーザID
+              .col-sm-8
+                input#get-user-info-userId.form-control(type='text', name='userId', value='', placeholder='ユーザID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-user-info-ApiKey') APIキー
+              .col-sm-8
+                input#get-user-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-user-info-SessionKey') セッションキー
+              .col-sm-8
+                input#get-user-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            br
+            button#get-user-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  ユーザ情報取得
+            button#get-user-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-user-info-result') ユーザ情報取得結果
+              .col-sm-8
+                textarea#get-user-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ユーザ情報登録
+        .panel-body
+          form#register-user-info-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-UserCd') ユーザCD
+              .col-sm-8
+                input#register-user-info-UserCd.form-control(type='text', name='userCd', value='', placeholder='ユーザCD')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-UserTx') ユーザ名
+              .col-sm-8
+                input#register-user-info-UserTx.form-control(type='text', name='userTx', value='', placeholder='ユーザ名')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-PasswordTx') パスワード
+              .col-sm-8
+                input#register-user-info-PasswordTx.form-control(type='password', name='passwordTx', value='', placeholder='パスワード')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-LangTx') 言語設定
+              .col-sm-8
+                input#register-user-info-LangTx.form-control(type='text', name='langTx', value='', placeholder='言語設定')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-RoleId') 権限ロールID
+              .col-sm-8
+                input#register-user-info-RoleId.form-control(type='text', name='roleId', value='', placeholder='権限ロールID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-LogicalWhId') サブ組織(logicalWhId)ID
+              .col-sm-8
+                input#register-user-info-LogicalWhId.form-control(type='text', name='logicalWhId', value='', placeholder='サブ組織(logicalWhId)ID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-ApiKey') APIキー
+              .col-sm-8
+                input#register-user-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-SessionKey') セッションキー
+              .col-sm-8
+                input#register-user-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-CsrfToken') CSRFトークン
+              .col-sm-8
+                input#register-user-info-CsrfToken.form-control(type='text', name='csrfToken', value='', placeholder='CSRFトークン', disabled='')
+            br
+            button#register-user-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  ユーザ情報登録
+            button#register-user-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='register-user-info-result') ユーザ情報登録結果
+              .col-sm-8
+                textarea#register-user-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ユーザ情報更新
+        .panel-body
+          form#update-user-info-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-UserId') ユーザID
+              .col-sm-8
+                input#update-user-info-UserId.form-control(type='text', name='userId', value='', placeholder='ユーザID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-UserCd') ユーザCD
+              .col-sm-8
+                input#update-user-info-UserCd.form-control(type='text', name='userCd', value='', placeholder='ユーザCD')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-UserTx') ユーザ名
+              .col-sm-8
+                input#update-user-info-UserTx.form-control(type='text', name='userTx', value='', placeholder='ユーザ名')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-LangTx') 言語設定
+              .col-sm-8
+                input#update-user-info-LangTx.form-control(type='text', name='langTx', value='', placeholder='言語設定')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-RoleId') 権限ロールID
+              .col-sm-8
+                input#update-user-info-RoleId.form-control(type='text', name='roleId', value='', placeholder='権限ロールID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-LogicalWhId') サブ組織(logicalWhId)ID
+              .col-sm-8
+                input#update-user-info-LogicalWhId.form-control(type='text', name='logicalWhId', value='', placeholder='サブ組織(logicalWhId)ID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-OldPasswordTx') 旧パスワード
+              .col-sm-8
+                input#update-user-info-OldPasswordTx.form-control(type='password', name='oldPasswordTx', value='', placeholder='旧パスワード')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-PasswordTx') 新パスワード
+              .col-sm-8
+                input#update-user-info-PasswordTx.form-control(type='password', name='passwordTx', value='', placeholder='新パスワード')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-ApiKey') APIキー
+              .col-sm-8
+                input#update-user-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-SessionKey') セッションキー
+              .col-sm-8
+                input#update-user-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-CsrfToken') CSRFトークン
+              .col-sm-8
+                input#update-user-info-CsrfToken.form-control(type='text', name='csrfToken', value='', placeholder='CSRFトークン', disabled='')
+            br
+            button#update-user-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  ユーザ情報更新
+            button#update-user-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-user-info-result') ユーザ情報更新結果
+              .col-sm-8
+                textarea#update-user-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title ユーザ情報削除
+        .panel-body
+          form#delete-user-info-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-user-info-UserId') ユーザID
+              .col-sm-8
+                input#delete-user-info-UserId.form-control(type='text', name='userId', value='', placeholder='ユーザID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-user-info-ApiKey') APIキー
+              .col-sm-8
+                input#delete-user-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-user-info-SessionKey') セッションキー
+              .col-sm-8
+                input#delete-user-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-user-info-CsrfToken') CSRFトークン
+              .col-sm-8
+                input#delete-user-info-CsrfToken.form-control(type='text', name='csrfToken', value='', placeholder='CSRFトークン', disabled='')
+            br
+            button#delete-user-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  ユーザ情報削除
+            button#delete-user-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-user-info-result') ユーザ情報削除結果
+              .col-sm-8
+                textarea#delete-user-info-result.form-control(placeholder='結果', disabled='', rows='10')

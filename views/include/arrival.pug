@@ -1,0 +1,303 @@
+.panel.panel-default
+  .panel-heading
+    h5.panel-title
+      a(data-toggle='collapse', href='#arrive')
+        h1 入庫処理
+  #arrive.panel-collapse.collapse
+    .panel-body
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷予定一覧取得
+        .panel-body
+          .panel.panel-default
+            .panel-heading
+              h5.panel-title 検索項目以外
+            .panel-body
+              form#search-arrive-info-form-1.form-horizontal(method='post')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-info-sort') sort
+                  .col-sm-8
+                    input#search-arrive-info-sort.form-control(type='text', name='sort', value='', placeholder='sort')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-info-asc') asc
+                  .col-sm-8
+                    input#search-arrive-info-asc.form-control(type='text', name='asc', value='', placeholder='asc')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-info-limit') limit
+                  .col-sm-8
+                    input#search-arrive-info-limit.form-control(type='text', name='limit', value='', placeholder='limit')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-info-offset') offset
+                  .col-sm-8
+                    input#search-arrive-info-offset.form-control(type='text', name='offset', value='', placeholder='offset')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-info-ApiKey') APIキー
+                  .col-sm-8
+                    input#search-arrive-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-info-SessionKey') セッションキー
+                  .col-sm-8
+                    input#search-arrive-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+          .panel.panel-default
+            .panel-heading
+              h5.panel-title 検索項目
+            .panel-body 追加予定
+          form#search-arrive-info-form.form-horizontal(method='post')
+            br
+            button#search-arrive-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷予定一覧取得
+            button#search-arrive-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-info-result') 入荷予定一覧取得結果
+              .col-sm-8
+                textarea#search-arrive-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷予定リスト削除
+        .panel-body
+          form#delete-arrive-info-list-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-arrive-info-list-arriveplanId1') 入荷予定ID 1
+              .col-sm-8
+                input#delete-arrive-info-list-arriveplanId1.form-control(type='text', name='arriveplanId1', value='', placeholder='入荷予定ID 1')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-arrive-info-list-arriveplanId2') 入荷予定ID 2
+              .col-sm-8
+                input#delete-arrive-info-list-arriveplanId2.form-control(type='text', name='arriveplanId2', value='', placeholder='入荷予定ID 2')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-arrive-info-list-arriveplanId3') 入荷予定ID 3
+              .col-sm-8
+                input#delete-arrive-info-list-arriveplanId3.form-control(type='text', name='arriveplanId3', value='', placeholder='入荷予定ID 3')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-arrive-info-list-ApiKey') APIキー
+              .col-sm-8
+                input#delete-arrive-info-list-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-arrive-info-list-SessionKey') セッションキー
+              .col-sm-8
+                input#delete-arrive-info-list-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            br
+            button#delete-arrive-info-list.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷予定リスト削除
+            button#delete-arrive-info-list-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-arrive-info-list-result') リスト削除結果
+              .col-sm-8
+                textarea#delete-arrive-info-list-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title CSVアップロード[入庫]
+        .panel-body
+          form#stock-upload-form.form-horizontal(enctype='multipart/form-data')
+            div
+              input(type='file', name='csvfile')
+              input#stock-upload-UserId.form-control(type='hidden', name='userId', value='1', placeholder='ユーザID')
+            br
+            div
+              button#stock-upload.btn.btn-primary.btn-block.btn-lg(type='button') アップロード
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='upload-stock-result') CSVアップロード結果
+              .col-sm-8
+                textarea#upload-stock-result.form-control(placeholder='CSVアプロード結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title Excelアップロード[入庫]
+        .panel-body
+          form#arrive-upload-form.form-horizontal(enctype='multipart/form-data')
+            div
+              input(type='file', name='excelfile')
+              input#arrive-upload-UserId.form-control(type='hidden', name='userId', value='1', placeholder='ユーザID')
+            br
+            div
+              button#arrive-upload.btn.btn-primary.btn-block.btn-lg(type='button') アップロード
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='upload-arrive-result') Excelアップロード結果
+              .col-sm-8
+                textarea#upload-arrive-result.form-control(placeholder='Excelアプロード結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷予定取得(作業者用)
+        .panel-body
+          form#get-arrive-info-work-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-arrive-info-work-ownerId') 荷主ID
+              .col-sm-8
+                input#get-arrive-info-work-ownerId.form-control(type='text', name='ownerId', value='', placeholder='荷主ID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-arrive-info-work-ApiKey') APIキー
+              .col-sm-8
+                input#get-arrive-info-work-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-arrive-info-work-SessionKey') セッションキー
+              .col-sm-8
+                input#get-arrive-info-work-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            br
+            button#get-arrive-info-work.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷予定取得
+            button#get-arrive-info-work-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='get-arrive-info-work-result') 入荷予定取得結果
+              .col-sm-8
+                textarea#get-arrive-info-work-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷実績一覧取得
+        .panel-body
+          .panel.panel-default
+            .panel-heading
+              h5.panel-title 検索項目以外
+            .panel-body
+              form#search-arrive-result-info-form-1.form-horizontal(method='post')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-result-info-sort') sort
+                  .col-sm-8
+                    input#search-arrive-result-info-sort.form-control(type='text', name='sort', value='', placeholder='sort')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-result-info-asc') asc
+                  .col-sm-8
+                    input#search-arrive-result-info-asc.form-control(type='text', name='asc', value='', placeholder='asc')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-result-info-limit') limit
+                  .col-sm-8
+                    input#search-arrive-result-info-limit.form-control(type='text', name='limit', value='', placeholder='limit')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-result-info-offset') offset
+                  .col-sm-8
+                    input#search-arrive-result-info-offset.form-control(type='text', name='offset', value='', placeholder='offset')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-result-info-ApiKey') APIキー
+                  .col-sm-8
+                    input#search-arrive-result-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+                .form-group.form-group-lg
+                  label.control-label.col-sm-4(for='search-arrive-result-info-SessionKey') セッションキー
+                  .col-sm-8
+                    input#search-arrive-result-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+          .panel.panel-default
+            .panel-heading
+              h5.panel-title 検索項目
+            .panel-body
+              | 追加予定
+          form#search-arrive-result-info-form.form-horizontal(method='post')
+            br
+            button#search-arrive-result-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷実績一覧取得
+            button#search-arrive-result-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-result-info-result') 入荷実績一覧取得結果
+              .col-sm-8
+                textarea#search-arrive-result-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷実績照会(1件取得)
+        .panel-body
+          form#search-arrive-result-info1-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-result-info1-instockId') 入庫ID
+              .col-sm-8
+                input#search-arrive-result-info1-instockId.form-control(type='text', name='instockId', value='', placeholder='入庫ID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-result-info1-ApiKey') APIキー
+              .col-sm-8
+                input#search-arrive-result-info1-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-result-info1-SessionKey') セッションキー
+              .col-sm-8
+                input#search-arrive-result-info1-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-result-info1-CsrfToken') CSRFトークン
+              .col-sm-8
+                input#search-arrive-result-info1-CsrfToken.form-control(type='text', name='csrfToken', value='', placeholder='CSRFトークン', disabled='')
+            br
+            button#search-arrive-result-info1.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷実績照会(1件取得)
+            button#search-arrive-result-info1-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='search-arrive-result-info1-result') 入荷実績照会(1件取得)結果
+              .col-sm-8
+                textarea#search-arrive-result-info1-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷実績更新
+        .panel-body
+          form#update-arrive-result-info-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-arriveresultId') 入荷実績ID
+              .col-sm-8
+                input#update-arrive-result-info-arriveresultId.form-control(type='text', name='arriveresultId', value='', placeholder='入荷実績ID')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-lotTx') ロット
+              .col-sm-8
+                input#update-arrive-result-info-lotTx.form-control(type='text', name='lotTx', value='', placeholder='ロット')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-arriveresultNr') 入荷実績数
+              .col-sm-8
+                input#update-arrive-result-info-arriveresultNr.form-control(type='text', name='arriveresultNr', value='', placeholder='入荷実績数')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-ApiKey') APIキー
+              .col-sm-8
+                input#update-arrive-result-info-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-SessionKey') セッションキー
+              .col-sm-8
+                input#update-arrive-result-info-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-CsrfToken') CSRFトークン
+              .col-sm-8
+                input#update-arrive-result-info-CsrfToken.form-control(type='text', name='csrfToken', value='', placeholder='CSRFトークン', disabled='')
+            br
+            button#update-arrive-result-info.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷実績更新
+            button#update-arrive-result-info-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='update-arrive-result-info-result') 入荷実績更新結果
+              .col-sm-8
+                textarea#update-arrive-result-info-result.form-control(placeholder='結果', disabled='', rows='10')
+      .panel.panel-default
+        .panel-heading
+          h5.panel-title 入荷実績リスト削除
+        .panel-body
+          form#delete-result-info-list-form.form-horizontal(method='post')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-result-info-list-arriveplanId1') 入荷実績ID 1
+              .col-sm-8
+                input#delete-result-info-list-arriveresultId1.form-control(type='text', name='arriveresultId1', value='', placeholder='入荷実績ID 1')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-result-info-list-arriveplanId2') 入荷実績ID 2
+              .col-sm-8
+                input#delete-result-info-list-arriveresultId2.form-control(type='text', name='arriveresultId2', value='', placeholder='入荷実績ID 2')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-result-info-list-arriveplanId3') 入荷実績ID 3
+              .col-sm-8
+                input#delete-result-info-list-arriveresultId3.form-control(type='text', name='arriveresultId3', value='', placeholder='入荷実績ID 3')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-result-info-list-ApiKey') APIキー
+              .col-sm-8
+                input#delete-result-info-list-ApiKey.form-control(type='text', name='apiKey', value='', placeholder='APIキー', disabled='')
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-result-info-list-SessionKey') セッションキー
+              .col-sm-8
+                input#delete-result-info-list-SessionKey.form-control(type='text', name='sessionKey', value='', placeholder='セッションキー', disabled='')
+            br
+            button#delete-result-info-list.btn.btn-primary.btn-block.btn-lg(type='button')
+              span.glyphicon.glyphicon-log-in(aria-hidden='true')
+              |  入荷実績リスト削除
+            button#delete-result-info-list-clear.btn.btn-lg.btn-block.btn-default(type='button') クリア
+            hr
+            .form-group.form-group-lg
+              label.control-label.col-sm-4(for='delete-result-info-list-result') リスト実績結果
+              .col-sm-8
+                textarea#delete-result-info-list-result.form-control(placeholder='結果', disabled='', rows='10')

@@ -1,0 +1,58 @@
+{
+  // Use IntelliSense to learn about possible Node.js debug attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "attach",
+      "name": "Attach",
+      "port": 9229,
+      "restart": true,
+      "address": "localhost",
+      "sourceMaps": true
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceRoot}/bin/www",
+      "sourceMaps": true,
+      "outFiles": [
+        "${workspaceRoot}/dist/*.js",
+        "${workspaceRoot}/dist/authenticate/*.js",
+        "${workspaceRoot}/dist/routes/*.js",
+        "${workspaceRoot}/dist/routes/include/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/1Arrival/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/3Shipment/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/5Move/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/6Stock/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/7Inventory/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/8Billing/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/9Master/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/9Master_MB/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/9Master_MD/*.js",
+        "${workspaceRoot}/dist/routes/include/sub/report/*.js",
+        "${workspaceRoot}/dist/db/*.js",
+        "${workspaceRoot}/dist/db/maindb/*.js",
+        "${workspaceRoot}/dist/db/models/*.js",
+        "${workspaceRoot}/dist/db/models/sub/0Common/*.js",
+        "${workspaceRoot}/dist/db/models/sub/1Arrival/*.js",
+        "${workspaceRoot}/dist/db/models/sub/3Shipment/*.js",
+        "${workspaceRoot}/dist/db/models/sub/5Move/*.js",
+        "${workspaceRoot}/dist/db/models/sub/6Stock/*.js",
+        "${workspaceRoot}/dist/db/models/sub/7Inventory/*.js",
+        "${workspaceRoot}/dist/db/models/sub/8Billing/*.js",
+        "${workspaceRoot}/dist/db/models/sub/9Master/*.js",
+        "${workspaceRoot}/dist/db/models/sub/9Master_MB/*.js",
+        "${workspaceRoot}/dist/db/models/sub/9Master_MD/*.js",
+        "${workspaceRoot}/dist/db/models/sub/report/*.js",
+        "${workspaceRoot}/dist/db/subdb/*.js",
+        "${workspaceRoot}/dist/utils/*.js",
+        "${workspaceRoot}/dist/utils/session/*.js",
+        "${workspaceRoot}/dist/utils/session/session/*.js",
+      ]
+    }
+  ]
+}
