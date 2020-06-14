@@ -7,7 +7,7 @@
 import * as Promise from 'bluebird';
 import * as camelcase from 'camelcase-keys-deep';
 
-export class MaLogicalWh {
+export class MService {
   private db: any;
 
   constructor(db: any) {
@@ -31,8 +31,11 @@ export class MaLogicalWh {
 
 const selectQuery = `
 SELECT
-  LOGICAL_WH_ID,
-  LOGICAL_WH_TX,
+  SERVICE_ID,
+  SERVICE_TX,
+  COMPANY_ID,
+  API_KEY_TX,
+  CONNECTION_CD,
   UPDUSER_ID,
   UPDUSER_TX,
   UPD_DT,
@@ -40,5 +43,5 @@ SELECT
   ADDUSER_TX,
   ADD_DT
 FROM
-  MA_LOGICAL_WH
+  M_SERVICE
 `;

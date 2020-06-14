@@ -1,5 +1,5 @@
 /**
- * @fileoverview DB Model for ma_user.
+ * @fileoverview DB Model for m_user.
  * @author Suchin Mende <suqin81@gmail.com>
  * @version - 0.0.1
  */
@@ -8,15 +8,15 @@ import { TableUtils } from '../tableUtils';
 import { Utils } from '../../utils/utils';
 import * as Promise from 'bluebird';
 
-export class MaUser {
+export class MUser {
   private db: any;
 
   constructor(db: any) {
     this.db = db;
   }
 
-  authUser(username: string, companyCd: string, callback: any) {
-    this.db.driver.execQuery(authUser, [username, companyCd], (err, data) => {
+  authUser (userCd: string, serviceId: number, companyCd: string, callback: any) {
+    this.db.driver.execQuery(authUser, [userCd, serviceId, companyCd], (err, data) => {
       callback(err, TableUtils.toCamelCase(data[0]));
     });
   }
@@ -60,13 +60,13 @@ export class MaUser {
           where.push(TableUtils.filterModelWhere(filterModel.roleTx, 'MR.ROLE_TX'));
           values.push(TableUtils.filterModelValue(filterModel.roleTx));
         }
-        if (args.logicalWhId) {
-          where.push(' MW.LOGICAL_WH_ID=?');
+        if (args.serviceId) {
+          where.push(' US.SERVICE_ID=?');
           values.push(args.logicalWhId);
         }
-        if (filterModel && filterModel.logicalWhTx) {
-          where.push(TableUtils.filterModelWhere(filterModel.logicalWhTx, 'MW.LOGICAL_WH_TX'));
-          values.push(TableUtils.filterModelValue(filterModel.logicalWhTx));
+        if (filterModel && filterModel.serviceTx) {
+          where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
+          values.push(TableUtils.filterModelValue(filterModel.serviceTx));
         }
         if (filterModel && filterModel.langTx) {
           where.push(TableUtils.filterModelWhere(filterModel.langTx, 'MU.LANG_TX'));
@@ -155,13 +155,13 @@ export class MaUser {
           where.push(TableUtils.filterModelWhere(filterModel.roleTx, 'MR.ROLE_TX'));
           values.push(TableUtils.filterModelValue(filterModel.roleTx));
         }
-        if (args.logicalWhId) {
-          where.push(' MW.LOGICAL_WH_ID=?');
+        if (args.serviceId) {
+          where.push(' US.SERVICE_ID=?');
           values.push(args.logicalWhId);
         }
-        if (filterModel && filterModel.logicalWhTx) {
-          where.push(TableUtils.filterModelWhere(filterModel.logicalWhTx, 'MW.LOGICAL_WH_TX'));
-          values.push(TableUtils.filterModelValue(filterModel.logicalWhTx));
+        if (filterModel && filterModel.serviceTx) {
+          where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
+          values.push(TableUtils.filterModelValue(filterModel.serviceTx));
         }
         if (filterModel && filterModel.langTx) {
           where.push(TableUtils.filterModelWhere(filterModel.langTx, 'MU.LANG_TX'));
@@ -203,6 +203,77 @@ export class MaUser {
       });
     });
   }
+
+  insert (args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.userCd,
+        args.companyId,
+        args.serviceId,
+        args.userTx,
+        args.langTx,
+        args.password,
+        args.telTx,
+        args.lockFl,
+        args.resetFl,
+        args.updprogramCd
+      ]
+      this.db.driver.execQuery(insert, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+  update (args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.userId,
+        args.companyId,
+        args.serviceId,
+        args.userTx,
+        args.langTx,
+
+        args.password,
+        args.mail,
+        args.lockFl,
+        args.resetFl,
+        args.countryCd,
+
+        args.tel,
+        args.myNo,
+        args.sex,
+        args.wechatCd,
+        args.updprogramCd
+      ]
+      this.db.driver.execQuery(update, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+  delete (args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.userId,
+        args.langTx,
+      ]
+      this.db.driver.execQuery(del, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
 }
 
 let authUser = `
@@ -212,37 +283,55 @@ SELECT
   MU.USER_TX,
   MU.LANG_TX,
   MU.PASSWORD_TX,
+  MU.COUNTRY_CD,
+  MU.MAIL,
+  MU.MY_NO,
+  MU.SEX,
+  MU.WECHAT_CD,
   MU.UPD_DT,
   MU.ADD_DT,
   MU.ADDUSER_ID,
   MU.ADDUSER_TX,
   MU.UPDUSER_ID,
   MU.UPDUSER_TX,
-  MR.ROLE_ID,
+  US.AUTHORITY_ID,
+  MA.AUTHORITY_TX,
+  US.ROLE_ID,
   MR.ROLE_TX,
-  MW.LOGICAL_WH_ID,
-  MW.LOGICAL_WH_TX,
+  US.LAST_LOGIN_DT,
+  US.CONTINUE_LOGIN_NR,
+  US.POINT_NR,
+  US.VIP_FL,
+  US.VIP_PLAN_CD,
+  US.VIP_FROM_DT,
+  US.VIP_TO_DT,
+  MV.VIP_PLAN_TX,
+  MS.SERVICE_ID,
+  MS.SERVICE_TX,
   MC.COMPANY_ID,
   MC.COMPANY_CD,
   MC.COMPANY_TX,
   MCI.CONNECTION_CD,
-  AK.API_KEY_TX
+  MS.API_KEY_TX
 FROM
-  MA_USER MU
-    LEFT JOIN MA_ROLE MR
-      ON MU.ROLE_ID = MR.ROLE_ID
-    LEFT JOIN USER_LOGICAL_WH UW
-      ON MU.USER_ID = UW.USER_ID
-    LEFT JOIN MA_LOGICAL_WH MW
-      ON UW.LOGICAL_WH_ID = MW.LOGICAL_WH_ID
-    LEFT JOIN MA_COMPANY MC
-      ON MU.COMPANY_ID = MC.COMPANY_ID
-    LEFT JOIN MA_CONNECTION_INFO MCI
-      ON MW.CONNECTION_CD = MCI.CONNECTION_CD
-    LEFT JOIN API_KEY AK
-      ON MU.COMPANY_ID = AK.COMPANY_ID
+  M_USER MU
+    LEFT JOIN USER_SERVICE US
+      ON MU.USER_ID = US.USER_ID
+    LEFT JOIN M_ROLE MR
+      ON US.ROLE_ID = MR.ROLE_ID
+    LEFT JOIN M_AUTHORITY MA
+      ON US.AUTHORITY_ID = MA.AUTHORITY_ID
+    LEFT JOIN M_VIP_PLAN MV
+      ON US.VIP_PLAN_CD = MV.VIP_PLAN_CD
+    LEFT JOIN M_SERVICE MS
+      ON US.SERVICE_ID = MS.SERVICE_ID
+    LEFT JOIN M_COMPANY MC
+      ON MS.COMPANY_ID = MC.COMPANY_ID
+    LEFT JOIN M_CONNECTION_INFO MCI
+      ON MS.CONNECTION_CD = MCI.CONNECTION_CD
 WHERE
   MU.USER_CD = ? AND
+  US.SERVICE_ID = ? AND
   MC.COMPANY_CD = ?
 LIMIT 1
 `;
@@ -257,27 +346,31 @@ SELECT
 	DATE_FORMAT(MU.ADD_DT, '%Y-%m-%d %H:%i:%S') AS ADD_DT,
   MR.ROLE_ID,
   MR.ROLE_TX,
-  MW.LOGICAL_WH_ID,
-  MW.LOGICAL_WH_TX
+  MS.SERVICE_ID,
+  MS.SERVICE_TX
 FROM
-  MA_USER MU
-    LEFT JOIN MA_ROLE MR
-      ON MU.ROLE_ID = MR.ROLE_ID
-    LEFT JOIN USER_LOGICAL_WH UW
-      ON MU.USER_ID = UW.USER_ID
-    LEFT JOIN MA_LOGICAL_WH MW
-      ON UW.LOGICAL_WH_ID = MW.LOGICAL_WH_ID
+  M_USER MU
+    LEFT JOIN USER_SERVICE US
+      ON MU.USER_ID = US.USER_ID
+    LEFT JOIN M_SERVICE MS
+      ON US.SERVICE_ID = MS.SERVICE_ID
+    LEFT JOIN M_ROLE MR
+      ON US.ROLE_ID = MR.ROLE_ID
 `;
 
 let selectCount = `
 SELECT
 COUNT(*) AS TOTAL
 FROM
-  MA_USER MU
-    LEFT JOIN MA_ROLE MR
-      ON MU.ROLE_ID = MR.ROLE_ID
-    LEFT JOIN USER_LOGICAL_WH UW
-      ON MU.USER_ID = UW.USER_ID
-    LEFT JOIN MA_LOGICAL_WH MW
-      ON UW.LOGICAL_WH_ID = MW.LOGICAL_WH_ID
+  M_USER MU
+    LEFT JOIN USER_SERVICE US
+      ON MU.USER_ID = US.USER_ID
+    LEFT JOIN M_SERVICE MS
+      ON US.SERVICE_ID = MS.SERVICE_ID
+    LEFT JOIN M_ROLE MR
+      ON US.ROLE_ID = MR.ROLE_ID
 `;
+
+const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?)'
+const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+const del = 'CALL USER_Del(?,?)'

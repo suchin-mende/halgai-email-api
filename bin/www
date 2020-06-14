@@ -5,14 +5,14 @@
  * Module dependencies.
  */
 const server = require('../dist/server');
-const debug = require('debug')('malajahi-api:server');
+const debug = require('debug')('halgai-api:server');
 const http = require('http');
 
 /**
  * Get port from environment and store in Express.
  */
 const app = server.Server.bootstrap().app;
-const port = normalizePort(process.env.PORT || '3002');
+const port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 /**
  * Create HTTP server.

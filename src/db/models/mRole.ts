@@ -1,5 +1,5 @@
 /**
- * @fileoverview DB Model for the MA_Role table.
+ * @fileoverview DB Model for the M_Role table.
  * @author Suchin Mende <suqin81@gmail.com>
  * @version - 0.0.1
  */
@@ -7,7 +7,7 @@
 import * as Promise from 'bluebird';
 import * as camelcase from 'camelcase-keys-deep';
 
-export class MaRole {
+export class MRole {
   private db: any;
 
   constructor(db: any) {
@@ -41,5 +41,5 @@ SELECT
   ADDUSER_TX,
   ADD_DT
 FROM
-  MA_ROLE
+  M_ROLE
 `;

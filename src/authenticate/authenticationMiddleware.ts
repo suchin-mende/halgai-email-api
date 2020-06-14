@@ -48,7 +48,7 @@ export class AuthenticationMiddleware {
       return res.status(401).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_invalid_companycd')] });
     }
 
-    Db.mainDb.models.maConnectionInfo.select({ connectionCd: req.session.user.connectionCd })
+    Db.mainDb.models.mConnectionInfo.select({ connectionCd: req.session.user.connectionCd })
       .then(data => {
         if (data.length > 0) {
           req.session.db = data[0];

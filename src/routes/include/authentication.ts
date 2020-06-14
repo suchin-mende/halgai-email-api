@@ -28,15 +28,16 @@ export class Authentication extends BaseRoute {
    */
   public static create(router: Router) {
     //add login route
-    router.post('/v1/:id/auth/login', (req: any, res: Response, next: NextFunction) => {
+    router.post('/v1/:id/auth/login/:lan', (req: any, res: Response, next: NextFunction) => {
       if (req.body.userCd) {
         req.body.userCd = JSON.stringify({ userCd: req.body.userCd, companyCd: req.params.id });
       }
       passport.authenticate('local', (err, user, info) => {
+        let lang = req.params.lan ? req.params.lan : 'cn';
         if (!user) {
           const err = {
             errors: [
-              ErrorUtils.getErrorJson('cn', 'error_invalid_loginid_password')
+              ErrorUtils.getErrorJson(lang, 'error_invalid_loginid_password')
             ]
           };
           Logger.log('error', `${req.ip} - Invalid user: ${req.body.userCd}`);
@@ -47,7 +48,7 @@ export class Authentication extends BaseRoute {
           if (err) {
             const err = {
               errors: [
-                ErrorUtils.getErrorJson('cn', 'error_saving_session')
+                ErrorUtils.getErrorJson(lang, 'error_saving_session')
               ]
             };
             return res.status(400).json(err);
@@ -64,8 +65,8 @@ export class Authentication extends BaseRoute {
             langTx: user.langTx,
             roleId: user.roleId,
             roleTx: user.roleTx,
-            logicalWhId: user.logicalWhId,
-            logicalWhTx: user.logicalWhTx,
+            serviceId: user.serviceId,
+            serviceTx: user.serviceTx,
             addDt: user.addDt,
             updDt: user.updDt,
             upduserId: user.upduserId,

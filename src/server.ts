@@ -8,7 +8,7 @@ import * as winston from 'winston';
 import * as path from 'path';
 import * as cors from 'cors';
 import * as fs from 'fs';
-import * as rfs from 'rotating-file-stream';
+// import * as rfs from 'rotating-file-stream';
 
 import { IndexRoute } from './routes/index';
 import { Db } from './db/db';
@@ -20,25 +20,26 @@ const RedisStore = Rstore(session);
 const signature = require('cookie-signature');
 const cookie = require('cookie');
 const fileUpload = require('express-fileupload');
+const rfs = require('rotating-file-stream')
 
 // path to log directory
 const logDirectory = path.join(__dirname, '../log');
 // ensure log directory exists
 fs.existsSync(logDirectory) || fs.mkdirSync(logDirectory);
 // create a rotating write stream for normal access
-const accessLog = rfs('access.log', {
-  size: '10M',  // rotate every 10 MegaBytes written
-  interval: '1d',   // rotate daily
+const accessLog = rfs.createStream('access.log', {
+  size: '10M', // rotate every 10 MegaBytes written
+  interval: '1d', // rotate daily
   // compress: 'gzip', // compress rotated files
-  path: logDirectory
-});
+  path: logDirectory,
+})
 // create a rotating write stream for error access
-const accessLogError = rfs('accessError.log', {
-  size: '10M',  // rotate every 10 MegaBytes written
-  interval: '1d',   // rotate daily
+const accessLogError = rfs.createStream('accessError.log', {
+  size: '10M', // rotate every 10 MegaBytes written
+  interval: '1d', // rotate daily
   // compress: 'gzip', // compress rotated files
-  path: logDirectory
-});
+  path: logDirectory,
+})
 
 /**
  * The server.
@@ -101,7 +102,7 @@ export class Server {
    */
   public config() {
     this.app.use((req, res, next) => {
-      res.header('x-api-type', 'wms');
+      res.header('x-api-type', 'halgai');
       next();
     });
     this.app.use(cors({ exposedHeaders: 'x-api-type' }));

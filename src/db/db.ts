@@ -5,9 +5,10 @@
  */
 
 import { MainDb } from './maindb/maindb';
-import { Subdb } from './subdb/familySubdb';
+import { Subdb1 } from './subdb/familySubdb';
+import { Subdb2 } from './subdb/mailSubdb';
 
-export class Db extends Subdb {
+export class Db extends Subdb1 {
   public static mainDb = new MainDb();
 
   constructor() {
@@ -15,7 +16,7 @@ export class Db extends Subdb {
   }
 }
 
-export class Db2 extends Subdb {
+export class Db2 extends Subdb2 {
   public static mainDb = new MainDb();
 
   constructor() {

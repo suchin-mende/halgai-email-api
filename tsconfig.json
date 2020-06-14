@@ -7,7 +7,8 @@
     "sourceMap": true,
     "newLine": "LF",
     "pretty": true,
-    "allowJs": true
+    "allowJs": true,
+    "skipLibCheck": true
   },
   "files": [
     "./node_modules/@types/mocha/index.d.ts",

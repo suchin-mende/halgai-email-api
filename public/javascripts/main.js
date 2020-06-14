@@ -1,8 +1,8 @@
 'use strict'
 
 $(function () {
-  var companyCd = 'mende';
-  var apiKey = 'halgai-api-key';
+  var companyCd = 'halgai';
+  var apiKey = 'Email-api-key';
 
   var sesshonKey = '';
   var refreshKey = '';
@@ -21,7 +21,7 @@ $(function () {
     var res;
     $('#login-result').val('');
     $.ajax({
-      url: '/v1/' + companyCd + '/auth/login',
+      url: '/v1/' + companyCd + '/auth/login/mn',
       method: 'post',
       contentType: 'application/json',
       headers: {

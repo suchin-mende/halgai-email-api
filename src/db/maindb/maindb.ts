@@ -7,10 +7,10 @@
 import * as orm from 'orm';
 import { Settings } from './../../config/settings';
 
-import { MaUser } from '../models/maUser';
-import { MaConnectionInfo } from '../models/maConnectionInfo';
-import { MaLogicalWh } from '../models/maLogicalwh';
-import { MaRole } from '../models/maRole';
+import { MUser } from '../models/mUser';
+import { MConnectionInfo } from '../models/mConnectionInfo';
+import { MService } from '../models/mService';
+import { MRole } from '../models/mRole';
 
 export class MainDb {
   private db: any;
@@ -18,10 +18,10 @@ export class MainDb {
   private _error: any;
 
   public models = {
-    maUser: null,
-    maConnectionInfo: null,
-    maLogicalWh: null,
-    maRole: null
+    mUser: null,
+    mConnectionInfo: null,
+    mService: null,
+    mRole: null
   }
 
   constructor() {
@@ -38,9 +38,9 @@ export class MainDb {
   }
 
   private setModels() {
-    this.models.maUser = new MaUser(this.db);
-    this.models.maConnectionInfo = new MaConnectionInfo(this.db);
-    this.models.maLogicalWh = new MaLogicalWh(this.db);
-    this.models.maRole = new MaRole(this.db);
+    this.models.mUser = new MUser(this.db);
+    this.models.mConnectionInfo = new MConnectionInfo(this.db);
+    this.models.mService = new MService(this.db);
+    this.models.mRole = new MRole(this.db);
   }
 }

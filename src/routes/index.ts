@@ -51,10 +51,10 @@ export class IndexRoute extends BaseRoute {
     });
 
     // Add the logical warehouse route
-    router.get('/v1/:id/logicalwhs', (req: Request, res: Response, next: NextFunction) => {
-      Db.mainDb.models.maLogicalWh.select()
+    router.get('/v1/:id/service', (req: Request, res: Response, next: NextFunction) => {
+      Db.mainDb.models.mService.select()
         .then(data => {
-          return res.json({ logicalWhs: data });
+          return res.json({ service: data });
         })
         .catch(err => {
           return res.status(500).json(err);
@@ -63,7 +63,7 @@ export class IndexRoute extends BaseRoute {
 
     // Add the roles route
     router.get('/v1/:id/roles', (req: Request, res: Response, next: NextFunction) => {
-      Db.mainDb.models.maRole.select()
+      Db.mainDb.models.mRole.select()
         .then(data => {
           return res.json({ roles: data });
         })

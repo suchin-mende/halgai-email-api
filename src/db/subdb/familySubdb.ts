@@ -24,7 +24,7 @@ import { FamilyShed } from '../models/sub/1Family/familyShed';
 import { FamilySpending } from '../models/sub/1Family/familySpending';
 import { FamilyUnesco } from '../models/sub/1Family/familyUnesco';
 
-export class Subdb {
+export class Subdb1 {
   private static subdb = {};
 
   /**

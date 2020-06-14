@@ -1,5 +1,5 @@
 /**
- * @fileoverview DB Model for the MA_CONNECTION_INFO table.
+ * @fileoverview DB Model for the M_CONNECTION_INFO table.
  * @author Suchin Mende <suqin81@gmail.com>
  * @version - 0.0.1
  */
@@ -7,7 +7,7 @@
 import * as Promise from 'bluebird';
 import * as camelcase from 'camelcase-keys-deep';
 
-export class MaConnectionInfo {
+export class MConnectionInfo {
   private db: any;
 
   constructor(db: any) {
@@ -37,5 +37,5 @@ const getInfo = `
 SELECT
   *
 FROM
-  MA_CONNECTION_INFO
+  M_CONNECTION_INFO
 `;
