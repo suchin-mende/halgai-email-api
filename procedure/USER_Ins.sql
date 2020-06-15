@@ -40,14 +40,14 @@ BEGIN
 		SELECT 'ROLLBACK';
 		ROLLBACK;
 
-		CALL PS_LOG_ERROR(procName, @type, @errno, @msg, 0, 0);
+		CALL PS_LOG_ERROR(procName, @type, @errno, @msg, 0, iSERVICE_ID, 0);
 		COMMIT;
 
 		-- 例外を上位に返す
 		RESIGNAL;
 	END;
 
-	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, 0);
+	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, iSERVICE_ID, 0);
 
 	-- 重複チェック
 	SELECT
@@ -94,7 +94,7 @@ BEGIN
 	INTO
 		vUSER_ID
 	FROM
-		MA_USER
+		M_USER
 	WHERE
 		USER_CD		= iUSER_CD;
 	IF vUSER_ID IS NOT NULL THEN
@@ -118,7 +118,7 @@ BEGIN
 		CALL PS_ERROR_RAISE(5000, iLANG_TX, '5002');
 	END IF;
 
-	CALL PS_LOG_DEBUG(procName, 'Info', 'End', 0, 0);
+	CALL PS_LOG_DEBUG(procName, 'Info', 'End', 0, iSERVICE_ID, 0);
 END;
 //
 DELIMITER ;

@@ -55,13 +55,15 @@ export class User extends BaseRoute {
       }
     });
 
-    router.post('/v1/:id/user', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/user', async (req: any, res: Response, next: NextFunction) => {
+      let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
-        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
+        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
       const query = {
-        companyId: req.session.user.companyId,
-        serviceId: req.session.user.serviceId,
+        companyId: req.body.companyId,
+        serviceId: req.body.serviceId,
+        langTx: lang,
         userCd: req.body.userCd,
         password: req.body.password,
         telTx: req.body.telTx,
@@ -75,15 +77,15 @@ export class User extends BaseRoute {
       }
     });
 
-    router.put('/v1/:id/user', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.put('/:lan/v1/:id/user', async (req: any, res: Response, next: NextFunction) => {
+      let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
-        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
+        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
       const query = {
-        companyId: req.session.user.companyId,
-        serviceId: req.session.user.serviceId,
-
-        langTx: req.body.langTx,
+        companyId: req.body.companyId,
+        serviceId: req.body.serviceId,
+        langTx: lang,
         password: req.body.password,
         mail: req.body.mail,
         countryCd: req.body.countryCd,
@@ -92,7 +94,7 @@ export class User extends BaseRoute {
         sex: req.body.sex,
         wechatCd: req.body.wechatCd,
 
-        userId: req.session.user.userId,
+        userId: req.body.userId,
         userTx: req.body.userTx,
         updprogramCd: req.body.updprogramCd
       };
