@@ -3,6 +3,7 @@
 $(function () {
   var companyCd = 'halgai';
   var apiKey = 'Email-api-key';
+  var lang = 'mn';
 
   var sesshonKey = '';
   var refreshKey = '';
@@ -21,7 +22,7 @@ $(function () {
     var res;
     $('#login-result').val('');
     $.ajax({
-      url: '/v1/' + companyCd + '/auth/login/mn',
+      url: lang + '/v1/' + companyCd + '/auth/login',
       method: 'post',
       contentType: 'application/json',
       headers: {

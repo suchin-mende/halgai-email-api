@@ -30,14 +30,14 @@ BEGIN
 		SELECT 'ROLLBACK';
 		ROLLBACK;
 
-		CALL PS_LOG_ERROR(procName, @type, @errno, @msg, 0, 0);
+		CALL PS_LOG_ERROR(procName, @type, @errno, @msg, 0, 0, 0);
 		COMMIT;
 
 		-- 例外を上位に返す
 		RESIGNAL;
 	END;
 
-	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, 0);
+	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, 0, 0);
 
 	-- 削除（必ず1件）
 	DELETE
@@ -50,7 +50,7 @@ BEGIN
 		CALL PS_ERROR_RAISE(5000, iLANG, '5002');
 	END IF;
 
-	CALL PS_LOG_DEBUG(procName, 'Info', 'End', 0, 0);
+	CALL PS_LOG_DEBUG(procName, 'Info', 'End', 0, 0, 0);
 END;
 //
 DELIMITER ;
