@@ -28,12 +28,16 @@ export class Authentication extends BaseRoute {
    */
   public static create(router: Router) {
     //add login route
-    router.post('/v1/:id/auth/login/:lan', (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/auth/login', (req: any, res: Response, next: NextFunction) => {
       if (req.body.userCd) {
         req.body.userCd = JSON.stringify({ userCd: req.body.userCd, companyCd: req.params.id });
       }
       passport.authenticate('local', (err, user, info) => {
         let lang = req.params.lan ? req.params.lan : 'cn';
+        if (err) {
+          const errJson = { errors: [err]};
+          return res.status(400).json(errJson);
+        }
         if (!user) {
           const err = {
             errors: [

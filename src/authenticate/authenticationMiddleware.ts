@@ -39,25 +39,26 @@ export class AuthenticationMiddleware {
 
   constructor() { }
 
-  auth(req: any, res: Response, next: NextFunction) {
+  auth (req: any, res: Response, next: NextFunction) {
+    let lang = req.session.user.langTx ? req.session.user.langTx : 'cn';
     if (!isAuthenticated(req)) {
-      return res.status(401).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'http_unauthorized')] });
+      return res.status(401).send({ errors: [ErrorUtils.getErrorJson(lang, 'http_unauthorized')] });
     }
 
     if (!isCorrectCompany(req)) {
-      return res.status(401).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_invalid_companycd')] });
+      return res.status(401).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_companycd')] });
     }
 
-    Db.mainDb.models.mConnectionInfo.select({ connectionCd: req.session.user.connectionCd })
-      .then(data => {
-        if (data.length > 0) {
-          req.session.db = data[0];
-        }
-        return next();
-      })
-      .catch(err => {
-        return res.status(401).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'http_unauthorized')] });
-      });
+    // Db.mainDb.models.mConnectionInfo.select({ connectionCd: req.session.user.connectionCd })
+    //   .then(data => {
+    //     if (data.length > 0) {
+    //       req.session.db = data[0];
+    //     }
+    //     return next();
+    //   })
+    //   .catch(err => {
+    //     return res.status(401).send({ errors: [ErrorUtils.getErrorJson(lang, 'http_unauthorized')] });
+    //   });
   }
 
 }

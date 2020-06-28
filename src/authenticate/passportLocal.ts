@@ -4,7 +4,7 @@
  * @version - 0.0.1
  */
 import { AuthenticationMiddleware } from './authenticationMiddleware';
-import { Db2 } from '../db/db';
+// import { Db2 } from '../db/db';
 import * as Passport from 'passport';
 
 const bcrypt = require('bcrypt');
@@ -12,14 +12,14 @@ const LocalStrategy = require('passport-local').Strategy;
 
 export class PassportLocal {
 
-  constructor(passport: Passport) {
+  constructor(passport: Passport, db: any) {
     passport.serializeUser((user, cb) => {
       cb(null, user.username)
     });
 
     passport.deserializeUser((username, cb) => {
       username = JSON.parse(username);
-      Db2.mainDb.models.mUser.authUser(username.userCd, username.serviceId, username.companyCd, cb)
+      db.mainDb.models.mUser.authUser(username.userCd, username.companyCd, cb)
     });
 
     passport.use(new LocalStrategy({
@@ -28,7 +28,7 @@ export class PassportLocal {
     },
       (username, password, done) => {
         username = JSON.parse(username);
-        Db2.mainDb.models.mUser.authUser(username.userCd, username.serviceId, username.companyCd, (err, user) => {
+        db.mainDb.models.mUser.authUser(username.userCd, username.companyCd, (err, user) => {
           if (err) {
             return done(err)
           }

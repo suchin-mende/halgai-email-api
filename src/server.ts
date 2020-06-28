@@ -50,7 +50,7 @@ export class Server {
 
   public app: express.Application;
   public db = new Db();
-  private passportLocal = new PassportLocal(passport);
+  private passportLocal = new PassportLocal(passport, this.db);
 
   /**
    * Bootstrap the application.
