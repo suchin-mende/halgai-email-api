@@ -65,8 +65,8 @@ export class User extends BaseRoute {
         serviceId: req.body.serviceId,
         langTx: lang,
         userCd: req.body.userCd,
-        password: req.body.password,
-        telTx: req.body.telTx,
+        password: req.body.passwordTx,
+        telTx: req.body.tel,
         updprogramCd: req.body.updprogramCd
       };
       try {
