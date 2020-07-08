@@ -71,7 +71,7 @@ export class User extends BaseRoute {
       };
       try {
         const db = await Db2.mainDb.models.mUser.insert(query);
-        return res.json({ message: 'OK' });
+        return res.json({ message: 'OK', url: 'http://yahoo.co.jp' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
