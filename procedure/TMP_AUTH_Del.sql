@@ -1,21 +1,23 @@
 -- Copyright (C) Halgai Corporation 2020 All rights reserved
 /************************************************************************************/
-/*	ユーザー削除																	*/
+/*	一時認証コード削除																	*/
 /************************************************************************************/
 
 /*
 */
 
-DROP PROCEDURE IF EXISTS USER_Del;
+DROP PROCEDURE IF EXISTS TMP_AUTH_Del;
 DELIMITER //
-CREATE PROCEDURE USER_Del(
+CREATE PROCEDURE TMP_AUTH_Del(
+	IN	iUSER_CD					VARCHAR(30)	,
 	IN	iSERVICE_ID					BIGINT		,
-	IN	iUSER_ID					BIGINT,
-	IN	iLANG_TX					VARCHAR(20)
+	IN	iLANG_TX					VARCHAR(20)	,
+	IN	iTEL_TX						BIGINT		,
+	IN	iAUTH_CD					VARCHAR(100)
 )
 BEGIN
 	-- 変数宣言エリア
-	DECLARE procName VARCHAR(100) DEFAULT 'USER_Del';
+	DECLARE procName VARCHAR(100) DEFAULT 'TMP_AUTH_Del';
 	DECLARE notFoundFl INT DEFAULT 0;
 	DECLARE rowCountNr INT;
 
@@ -43,9 +45,11 @@ BEGIN
 	-- 削除（必ず1件）
 	DELETE
 	FROM
-		M_USER
+		TMP_AUTH
 	WHERE
-		USER_ID	   = iUSER_ID;
+		USER_CD	= iUSER_CD AND
+		TEL		= iTEL_TX AND
+		AUTH_CD = iAUTH_CD;
 	SELECT ROW_COUNT() INTO rowCountNr;
 	IF rowCountNr <> 1 THEN
 		CALL PS_ERROR_RAISE(5000, iLANG_TX, '5002');

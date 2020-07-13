@@ -1,23 +1,26 @@
 -- Copyright (C) Halgai Corporation 2020 All rights reserved
 /************************************************************************************/
-/*	ユーザー削除																	*/
+/*	Regist TmpAuth																*/
 /************************************************************************************/
 
 /*
 */
 
-DROP PROCEDURE IF EXISTS USER_Del;
+DROP PROCEDURE IF EXISTS TMP_AUTH_Ins;
 DELIMITER //
-CREATE PROCEDURE USER_Del(
+CREATE PROCEDURE TMP_AUTH_Ins(
+	IN	iUSER_CD					VARCHAR(30)	,
 	IN	iSERVICE_ID					BIGINT		,
-	IN	iUSER_ID					BIGINT,
-	IN	iLANG_TX					VARCHAR(20)
+	IN	iLANG_TX					VARCHAR(20)	,
+	IN	iTEL_TX						BIGINT		,
+	IN	iAUTH_CD					VARCHAR(100)
 )
 BEGIN
 	-- 変数宣言エリア
-	DECLARE procName VARCHAR(100) DEFAULT 'USER_Del';
+	DECLARE procName VARCHAR(100) DEFAULT 'TMP_AUTH_Ins';
 	DECLARE notFoundFl INT DEFAULT 0;
 	DECLARE rowCountNr INT;
+
 
 	-- 終了ハンドラ宣言エリア
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -40,12 +43,21 @@ BEGIN
 
 	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, iSERVICE_ID, 0);
 
-	-- 削除（必ず1件）
-	DELETE
-	FROM
-		M_USER
-	WHERE
-		USER_ID	   = iUSER_ID;
+
+	INSERT INTO TMP_AUTH
+	(
+		USER_CD		,
+		SERVICE_ID 	,
+		TEL			,
+		AUTH_CD
+	)
+	VALUES
+	(
+		iUSER_CD	,
+		iSERVICE_ID ,
+		iTEL_TX		,
+		iAUTH_CD
+	);
 	SELECT ROW_COUNT() INTO rowCountNr;
 	IF rowCountNr <> 1 THEN
 		CALL PS_ERROR_RAISE(5000, iLANG_TX, '5002');

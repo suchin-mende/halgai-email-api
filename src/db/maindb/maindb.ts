@@ -11,6 +11,7 @@ import { MUser } from '../models/mUser';
 import { MConnectionInfo } from '../models/mConnectionInfo';
 import { MService } from '../models/mService';
 import { MRole } from '../models/mRole';
+import { TmpAuth } from '../models/tmpAuth'
 
 export class MainDb {
   private db: any;
@@ -21,7 +22,8 @@ export class MainDb {
     mUser: null,
     mConnectionInfo: null,
     mService: null,
-    mRole: null
+    mRole: null,
+    tmpAuth: null
   }
 
   constructor() {
@@ -42,5 +44,6 @@ export class MainDb {
     this.models.mConnectionInfo = new MConnectionInfo(this.db);
     this.models.mService = new MService(this.db);
     this.models.mRole = new MRole(this.db);
+    this.models.tmpAuth = new TmpAuth(this.db);
   }
 }

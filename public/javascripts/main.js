@@ -26,7 +26,11 @@ $(function () {
       method: 'post',
       contentType: 'application/json',
       headers: {
-        'x-api-key': apiKey
+        'H_API_KEY_TX': apiKey,
+        'H_SERVICE_ID': '1',
+        'H_APP_TX': 'Email-PC-MN',
+        'H_IP': '127.0.0.1',
+        'H_USER_AGENT': 'test'
       },
       data: json
     }).done(function (data, textStatus, jqXRH) {

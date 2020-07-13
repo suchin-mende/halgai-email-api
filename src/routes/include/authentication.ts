@@ -9,6 +9,7 @@ import { BaseRoute } from '../route';
 import { ErrorUtils } from '../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddleware';
 import { Logger } from '../../utils/logger';
+import { Db2 } from '../../db/db';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
@@ -89,14 +90,44 @@ export class Authentication extends BaseRoute {
       })(req, res, next);
     });
 
-    router.post('/v1/:id/auth/logout', (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/auth/logout', (req: any, res: Response, next: NextFunction) => {
       req.logout();
       req.session.destroy();
       res.status(204).end();
     });
 
-    router.get('/v1/:id/auth/csrf', auth.auth, (req: any, res: Response, next: NextFunction) => {
+    router.get('/:lan/v1/:id/auth/csrf', auth.auth, (req: any, res: Response, next: NextFunction) => {
       res.json({ csrfToken: req.session.user.csrfTx });
+    });
+
+    router.post('/:lan/v1/:id/authCd', async(req: any, res: Response, next: NextFunction) => {
+      Logger.log('info', `${req.ip} - request authCd ${req.tel}`);
+      let lang = req.params.lan ? req.params.lan : 'cn';
+      if (Object.keys(req.body).length <= 0) {
+        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
+      }
+
+      //authCd生成
+      var _ = require('underscore');
+      var authCd = _.map(_.range(0, 1000000), function (n) { return _.pad(n, 6, '0'); });
+      //TODO: ここにSMS認証SDKと接続する(authCdを携帯に送信する)
+
+      const query = {
+        serviceId: req.body.serviceId,
+        lang: lang,
+        userCd: req.body.userCd,
+        telTx: req.body.tel,
+        authCd: authCd
+      };
+
+      try {
+        Logger.log('info', `${req.ip} - request authCd success: ${req.tel}`);
+        await Db2.mainDb.models.tmpAuth.insert(query);
+        return res.json({ message: 'OK', authCd: authCd });
+      } catch (err) {
+        Logger.log('error', `${req.ip} - request authCd error: ${req.tel}`);
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
     });
   }
 

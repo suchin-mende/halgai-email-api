@@ -28,7 +28,7 @@ export class User extends BaseRoute {
    */
   public static create(router: Router) {
     // add users route
-    router.get('/v1/:id/users', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/v1/:id/user', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let query;
       if (Object.keys(req.query).length > 0) {
         query = req.query;
@@ -42,7 +42,7 @@ export class User extends BaseRoute {
       }
     });
 
-    router.get('/v1/:id/users/:uid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/v1/:id/user/:uid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       const query = {
         serviceId: req.session.user.serviceId,
         userCd: req.params.uid
@@ -55,11 +55,24 @@ export class User extends BaseRoute {
       }
     });
 
+    router.post('/v1/:id/chkuser', async (req: any, res: Response, next: NextFunction) => {
+      const query = {
+        userCd: req.body.userCd
+      };
+      try {
+        const user = await Db2.mainDb.models.mUser.getUsers(query);
+        return res.json({ user: user.userCd });
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
     router.post('/:lan/v1/:id/user', async (req: any, res: Response, next: NextFunction) => {
       let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
+      // Todo:ここに認証コードチェック req.body.authCd
       const query = {
         companyId: req.body.companyId,
         serviceId: req.body.serviceId,
@@ -100,6 +113,7 @@ export class User extends BaseRoute {
       };
       try {
         const result = await Db2.mainDb.models.mUser.update(query);
+        await Db2.mainDb.models.tmpAuth.delete(query);
         return res.json({ message: 'OK', userId: result.id });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -120,6 +134,8 @@ export class User extends BaseRoute {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
+
+
   }
 
   /**
