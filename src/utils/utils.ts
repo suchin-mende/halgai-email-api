@@ -181,4 +181,10 @@ export class Utils {
     return ref;
   }
 
+  static getRandom( min:number, max:number ): number {
+
+    var random = Math.floor(Math.random() * (max + 1 - min)) + min;
+    return random;
+}
+
 }

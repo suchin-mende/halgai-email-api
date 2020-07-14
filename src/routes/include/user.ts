@@ -9,6 +9,7 @@ import { BaseRoute } from '../route';
 import { ErrorUtils } from '../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddleware';
 import { Db2 } from '../../db/db';
+import { Logger } from '../../utils/logger';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
@@ -28,7 +29,7 @@ export class User extends BaseRoute {
    */
   public static create(router: Router) {
     // add users route
-    router.get('/v1/:id/user', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/:lan/v1/:id/user', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let query;
       if (Object.keys(req.query).length > 0) {
         query = req.query;
@@ -42,7 +43,7 @@ export class User extends BaseRoute {
       }
     });
 
-    router.get('/v1/:id/user/:uid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/:lan/v1/:id/user/:uid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       const query = {
         serviceId: req.session.user.serviceId,
         userCd: req.params.uid
@@ -55,7 +56,7 @@ export class User extends BaseRoute {
       }
     });
 
-    router.post('/v1/:id/chkuser', async (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/ckuser', async (req: any, res: Response, next: NextFunction) => {
       const query = {
         userCd: req.body.userCd
       };
@@ -72,7 +73,14 @@ export class User extends BaseRoute {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
-      // Todo:ここに認証コードチェック req.body.authCd
+
+      if (!req.body.authCd) {
+        return res
+          .status(400)
+          .send({
+            errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')],
+          })
+      }
       const query = {
         companyId: req.body.companyId,
         serviceId: req.body.serviceId,
@@ -80,11 +88,27 @@ export class User extends BaseRoute {
         userCd: req.body.userCd,
         password: req.body.passwordTx,
         telTx: req.body.tel,
-        updprogramCd: req.body.updprogramCd
+        authCd: req.body.authCd
       };
       try {
-        const db = await Db2.mainDb.models.mUser.insert(query);
-        return res.json({ message: 'OK', url: 'http://yahoo.co.jp' });
+        const result = await Db2.mainDb.models.tmpAuth.getTmpAuth(query);
+        if (!result || result.authCd !== req.body.authCd) {
+          return res.json({
+            errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')],
+          })
+        } else {
+          await Db2.mainDb.models.mUser.insert(query);
+
+          if (req.body.serviceId == 1)
+          {
+            //TODO:ここにplaユーザ登録APIに接続
+
+          }
+
+          //TODO:MMailにログインして正しいURLを返す
+
+          return res.json({ message: 'OK', url: 'http://yahoo.co.jp' })
+        }
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }

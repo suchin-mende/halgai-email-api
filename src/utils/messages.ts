@@ -16,7 +16,8 @@ const Messages = {
     error_required: 'This field is required',
     error_number: 'Numeric value expected',
     error_real: 'Real number value expected',
-    error_real_precision: 'Real number value with no more than %s digit(s) including {1} decimal(s) expected',
+    error_real_precision:
+      'Real number value with no more than %s digit(s) including {1} decimal(s) expected',
     error_min: 'Must be greater or equal to %s',
     error_min_strict: 'Must be strictly greater than %s',
     error_max: 'Must be less or equal to %s',
@@ -96,29 +97,9 @@ const Messages = {
     error_required_companytx: 'Company name is required',
     error_invalid_apikey: 'API Key is invalid',
     error_required_apikey: 'API Key is irequired',
-    error_invalid_logical_warehouse_id: 'Logical warehouse ID is invalid',
-    error_required_logical_warehouse_id: 'Logical warehouse ID is required',
-    error_invalid_logical_warehouse_code: 'Logical warehouse code is invalid',
-    error_required_logical_warehouse_code: 'Logical warehouse code is required',
-    error_invalid_physical_warehouse_id: 'Physical warehouse ID is invalid',
-    error_required_physical_warehouse_id: 'Physical warehouse ID is required',
-    error_invalid_physical_warehouse_code: 'Physical warehouse code is invalid',
-    error_required_physical_warehouse_code: 'Physical warehouse code is required',
 
-    error_failed_getting_user_information: 'Failed to get user information',
-    error_failed_updating_user_information: 'Failed to update user information',
-    error_failed_deleting_user_information: 'Failed to delete user information',
-    error_overwrite_existing_company_code: 'Cannot overwrite existing companycd',
-    error_overwrite_your_company_code: 'Can not update the company code of your company',
-    error_already_exists_company_code: 'Company code already exists',
-    error_failed_getting_company_information: 'Failed to get company information',
-    error_failed_updating_company_information: 'Failed to update company information',
-    error_failed_deleting_company_information: 'Failed to delete company information',
-    error_delete_your_company: 'Can not delete the company code of your company',
-    error_delete_company_exist_apikey: 'Can not delete company because it exists in apikey table',
-    error_delete_company_exist_logical_warehouse: 'Can not delete company because it exists in logical warehouse master',
-    error_delete_company_exist_user: 'Can not delete company because it exists in user master',
-
+    //これより追加
+    error_invalid_authcd: 'AuthCd is invalid',
   },
   ja: {
     constraint_min: '最小値: %s',
@@ -133,7 +114,8 @@ const Messages = {
     format_uuid: 'UUID',
     formats_date: 'yyyy-MM-dd',
     error_invalid: '無効な値です。有効な値を入力してください。',
-    error_invalid_java_util_Date: '無効な日付です。有効な日付を入力して下さい。',
+    error_invalid_java_util_Date:
+      '無効な日付です。有効な日付を入力して下さい。',
     error_invalid_date_format: '日付が無効です。有効な日付を入力して下さい。',
     error_required: '必須項目です。',
     error_number: '数値のみです。',
@@ -157,7 +139,8 @@ const Messages = {
     error_expected_jsnumber: 'Number値でなければなりません。',
     error_expected_jsobject: 'Object値でなければなりません。',
     error_expected_jsstring: 'String値でなければなりません。',
-    error_expected_jsnumberorjsstring: 'StringまたはNumber値でなければなりません。',
+    error_expected_jsnumberorjsstring:
+      'StringまたはNumber値でなければなりません。',
     error_expected_keypathnode: 'Node値でなければなりません。',
     error_expected_uuid: 'UUID値でなければなりません。',
     error_expected_validenumvalue: '有効な列挙値でなければなりません',
@@ -176,7 +159,8 @@ const Messages = {
     http_gone: '指定されたリソースは消滅しました。',
     http_request_entity_too_large: 'リクエストボディが大きすぎます。',
     http_request_uri_too_long: 'リクエストされたURIが長すぎます。',
-    http_unsupported_media_type: 'サポートされないメディアタイプが指定されました。',
+    http_unsupported_media_type:
+      'サポートされないメディアタイプが指定されました。',
     http_too_many_request: 'リクエスト回数が多すぎます。',
     http_internal_server_error: 'サーバ側でエラーが発生しました。',
     http_service_unavailable: 'サーバが一時的に停止しています。',
@@ -186,23 +170,34 @@ const Messages = {
     error_http_header_required_csrftoken: 'CSRFトークンヘッダーは必須です。',
     error_http_header_invalid_csrftoken: 'CSRFトークンヘッダーが無効です。',
     error_http_body_required_jsondata: 'データが空です。',
-    error_invalid_userid: 'ユーザIDが無効です。有効なユーザーIDを入力してください。',
+    error_invalid_userid:
+      'ユーザIDが無効です。有効なユーザーIDを入力してください。',
     error_required_userid: 'ユーザIDは必須です。ユーザIDを入力してください。',
-    error_invalid_loginid: 'ログインIDが無効です。有効なログインIDを入力してください。',
-    error_required_loginid: 'ログインIDは必須です。ログインIDを入力してください。',
-    error_invalid_logincd: 'ログインコードが無効です。有効なログインコードを入力してください。',
-    error_required_logincd: 'ログインコードは必須です。ログインコードを入力してください',
-    error_invalid_usercd: 'ユーザコードが無効です。有効なユーザコードを入力してください。',
-    error_required_usercd: 'ユーザコードは必須です。ユーザコードを入力してください。',
+    error_invalid_loginid:
+      'ログインIDが無効です。有効なログインIDを入力してください。',
+    error_required_loginid:
+      'ログインIDは必須です。ログインIDを入力してください。',
+    error_invalid_logincd:
+      'ログインコードが無効です。有効なログインコードを入力してください。',
+    error_required_logincd:
+      'ログインコードは必須です。ログインコードを入力してください',
+    error_invalid_usercd:
+      'ユーザコードが無効です。有効なユーザコードを入力してください。',
+    error_required_usercd:
+      'ユーザコードは必須です。ユーザコードを入力してください。',
     error_overlapping_usercd: 'ユーザコードが重複しています。',
     error_already_exists_usercd: 'ユーザコードはすでに存在しています。',
-    error_invalid_usertx: 'ユーザ名が無効です。有効なユーザ名を入力してください。',
+    error_invalid_usertx:
+      'ユーザ名が無効です。有効なユーザ名を入力してください。',
     error_required_usertx: 'ユーザ名は必須です。ユーザ名を入力してください。',
-    error_invalid_password: 'パスワードが無効です。有効なパスワードを入力してください。',
-    error_required_password: 'パスワードは必須です。パスワードを入力してください',
+    error_invalid_password:
+      'パスワードが無効です。有効なパスワードを入力してください。',
+    error_required_password:
+      'パスワードは必須です。パスワードを入力してください',
     error_minlength_password: 'パスワードは %s 桁以上で指定してください。',
     error_toosimple_password: 'もっと複雑なパスワードを指定してください。',
-    error_required_old_and_new_passwords: '変更前および変更後のパスワードを入力してください。',
+    error_required_old_and_new_passwords:
+      '変更前および変更後のパスワードを入力してください。',
     error_invalid_old_password: '旧パスワードが無効です。',
     error_invalid_loginid_password: 'ログインIDまたはパスワードが無効です。',
     error_saving_session: 'Error saving the session for the user.',
@@ -216,29 +211,12 @@ const Messages = {
     error_required_companycd: '会社コードは必須です。',
     error_invalid_companytx: '会社名は無効です。',
     error_required_companytx: '会社名は必須です。',
-    error_invalid_apikey: 'APIキーが無効です。有効なAPIキーを入力してください。',
+    error_invalid_apikey:
+      'APIキーが無効です。有効なAPIキーを入力してください。',
     error_required_apikey: 'APIキーは必須です。APIキーを入力してください。',
-    error_invalid_logical_warehouse_id: '論理倉庫IDが無効です。有効な論理倉庫IDを入力してください。',
-    error_required_logical_warehouse_id: '論理倉庫IDは必須です。論理倉庫IDを入力してください。',
-    error_invalid_logical_warehouse_code: '論理倉庫コードが無効です。有効な論理倉庫コードを入力してください。',
-    error_required_logical_warehouse_code: '論理倉庫コードは必須です。論理倉庫コードを入力してください。',
-    error_invalid_physical_warehouse_id: '物理倉庫IDが無効です。',
-    error_required_physical_warehouse_id: '物理倉庫IDは必須です。',
-    error_invalid_physical_warehouse_code: '物理倉庫コードが無効です。',
-    error_required_physical_warehouse_code: '物理倉庫コードは必須です。',
-    error_failed_getting_user_information: 'ユーザ情報の取得に失敗しました。',
-    error_failed_updating_user_information: 'ユーザ情報の更新に失敗しました。',
-    error_failed_deleting_user_information: 'ユーザ情報の削除に失敗しました。',
-    error_overwrite_existing_company_code: '既存の会社コードは上書きできません。',
-    error_overwrite_your_company_code: '所属企業コードを変更できません。',
-    error_already_exists_company_code: '会社コードは存在しています。',
-    error_failed_getting_company_information: '会社情報の取得に失敗しました。',
-    error_failed_updating_company_information: '会社情報の更新に失敗しました。',
-    error_failed_deleting_company_information: '会社情報の削除に失敗しました。',
-    error_delete_your_company: '所属企業を削除できません。',
-    error_delete_company_exist_apikey: 'APIキーテーブルに情報が存在するため会社を削除できません。',
-    error_delete_company_exist_logical_warehouse: '論理倉庫マスタに情報が存在するため会社を削除できません。',
-    error_delete_company_exist_user: 'ユーザマスタに情報が存在するため会社を削除できません。',
+
+    //これより追加
+    error_invalid_authcd: 'AuthCd is invalid',
   },
   cn: {
     constraint_min: '最小値: %s',
@@ -253,7 +231,8 @@ const Messages = {
     format_uuid: 'UUID',
     formats_date: 'yyyy-MM-dd',
     error_invalid: '無効な値です。有効な値を入力してください。',
-    error_invalid_java_util_Date: '無効な日付です。有効な日付を入力して下さい。',
+    error_invalid_java_util_Date:
+      '無効な日付です。有効な日付を入力して下さい。',
     error_invalid_date_format: '日付が無効です。有効な日付を入力して下さい。',
     error_required: '必須項目です。',
     error_number: '数値のみです。',
@@ -277,7 +256,8 @@ const Messages = {
     error_expected_jsnumber: 'Number値でなければなりません。',
     error_expected_jsobject: 'Object値でなければなりません。',
     error_expected_jsstring: 'String値でなければなりません。',
-    error_expected_jsnumberorjsstring: 'StringまたはNumber値でなければなりません。',
+    error_expected_jsnumberorjsstring:
+      'StringまたはNumber値でなければなりません。',
     error_expected_keypathnode: 'Node値でなければなりません。',
     error_expected_uuid: 'UUID値でなければなりません。',
     error_expected_validenumvalue: '有効な列挙値でなければなりません',
@@ -296,7 +276,8 @@ const Messages = {
     http_gone: '指定されたリソースは消滅しました。',
     http_request_entity_too_large: 'リクエストボディが大きすぎます。',
     http_request_uri_too_long: 'リクエストされたURIが長すぎます。',
-    http_unsupported_media_type: 'サポートされないメディアタイプが指定されました。',
+    http_unsupported_media_type:
+      'サポートされないメディアタイプが指定されました。',
     http_too_many_request: 'リクエスト回数が多すぎます。',
     http_internal_server_error: 'サーバ側でエラーが発生しました。',
     http_service_unavailable: 'サーバが一時的に停止しています。',
@@ -306,23 +287,34 @@ const Messages = {
     error_http_header_required_csrftoken: 'CSRFトークンヘッダーは必須です。',
     error_http_header_invalid_csrftoken: 'CSRFトークンヘッダーが無効です。',
     error_http_body_required_jsondata: 'データが空です。',
-    error_invalid_userid: 'ユーザIDが無効です。有効なユーザーIDを入力してください。',
+    error_invalid_userid:
+      'ユーザIDが無効です。有効なユーザーIDを入力してください。',
     error_required_userid: 'ユーザIDは必須です。ユーザIDを入力してください。',
-    error_invalid_loginid: 'ログインIDが無効です。有効なログインIDを入力してください。',
-    error_required_loginid: 'ログインIDは必須です。ログインIDを入力してください。',
-    error_invalid_logincd: 'ログインコードが無効です。有効なログインコードを入力してください。',
-    error_required_logincd: 'ログインコードは必須です。ログインコードを入力してください',
-    error_invalid_usercd: 'ユーザコードが無効です。有効なユーザコードを入力してください。',
-    error_required_usercd: 'ユーザコードは必須です。ユーザコードを入力してください。',
+    error_invalid_loginid:
+      'ログインIDが無効です。有効なログインIDを入力してください。',
+    error_required_loginid:
+      'ログインIDは必須です。ログインIDを入力してください。',
+    error_invalid_logincd:
+      'ログインコードが無効です。有効なログインコードを入力してください。',
+    error_required_logincd:
+      'ログインコードは必須です。ログインコードを入力してください',
+    error_invalid_usercd:
+      'ユーザコードが無効です。有効なユーザコードを入力してください。',
+    error_required_usercd:
+      'ユーザコードは必須です。ユーザコードを入力してください。',
     error_overlapping_usercd: 'ユーザコードが重複しています。',
     error_already_exists_usercd: 'ユーザコードはすでに存在しています。',
-    error_invalid_usertx: 'ユーザ名が無効です。有効なユーザ名を入力してください。',
+    error_invalid_usertx:
+      'ユーザ名が無効です。有効なユーザ名を入力してください。',
     error_required_usertx: 'ユーザ名は必須です。ユーザ名を入力してください。',
-    error_invalid_password: 'パスワードが無効です。有効なパスワードを入力してください。',
-    error_required_password: 'パスワードは必須です。パスワードを入力してください',
+    error_invalid_password:
+      'パスワードが無効です。有効なパスワードを入力してください。',
+    error_required_password:
+      'パスワードは必須です。パスワードを入力してください',
     error_minlength_password: 'パスワードは %s 桁以上で指定してください。',
     error_toosimple_password: 'もっと複雑なパスワードを指定してください。',
-    error_required_old_and_new_passwords: '変更前および変更後のパスワードを入力してください。',
+    error_required_old_and_new_passwords:
+      '変更前および変更後のパスワードを入力してください。',
     error_invalid_old_password: '旧パスワードが無効です。',
     error_invalid_loginid_password: 'ログインIDまたはパスワードが無効です。',
     error_saving_session: 'Error saving the session for the user.',
@@ -336,29 +328,12 @@ const Messages = {
     error_required_companycd: '会社コードは必須です。',
     error_invalid_companytx: '会社名は無効です。',
     error_required_companytx: '会社名は必須です。',
-    error_invalid_apikey: 'APIキーが無効です。有効なAPIキーを入力してください。',
+    error_invalid_apikey:
+      'APIキーが無効です。有効なAPIキーを入力してください。',
     error_required_apikey: 'APIキーは必須です。APIキーを入力してください。',
-    error_invalid_logical_warehouse_id: '論理倉庫IDが無効です。有効な論理倉庫IDを入力してください。',
-    error_required_logical_warehouse_id: '論理倉庫IDは必須です。論理倉庫IDを入力してください。',
-    error_invalid_logical_warehouse_code: '論理倉庫コードが無効です。有効な論理倉庫コードを入力してください。',
-    error_required_logical_warehouse_code: '論理倉庫コードは必須です。論理倉庫コードを入力してください。',
-    error_invalid_physical_warehouse_id: '物理倉庫IDが無効です。',
-    error_required_physical_warehouse_id: '物理倉庫IDは必須です。',
-    error_invalid_physical_warehouse_code: '物理倉庫コードが無効です。',
-    error_required_physical_warehouse_code: '物理倉庫コードは必須です。',
-    error_failed_getting_user_information: 'ユーザ情報の取得に失敗しました。',
-    error_failed_updating_user_information: 'ユーザ情報の更新に失敗しました。',
-    error_failed_deleting_user_information: 'ユーザ情報の削除に失敗しました。',
-    error_overwrite_existing_company_code: '既存の会社コードは上書きできません。',
-    error_overwrite_your_company_code: '所属企業コードを変更できません。',
-    error_already_exists_company_code: '会社コードは存在しています。',
-    error_failed_getting_company_information: '会社情報の取得に失敗しました。',
-    error_failed_updating_company_information: '会社情報の更新に失敗しました。',
-    error_failed_deleting_company_information: '会社情報の削除に失敗しました。',
-    error_delete_your_company: '所属企業を削除できません。',
-    error_delete_company_exist_apikey: 'APIキーテーブルに情報が存在するため会社を削除できません。',
-    error_delete_company_exist_logical_warehouse: '論理倉庫マスタに情報が存在するため会社を削除できません。',
-    error_delete_company_exist_user: 'ユーザマスタに情報が存在するため会社を削除できません。',
+
+    //これより追加
+    error_invalid_authcd: 'AuthCd is invalid',
   },
   mn: {
     constraint_min: '最小値: %s',
@@ -373,7 +348,8 @@ const Messages = {
     format_uuid: 'UUID',
     formats_date: 'yyyy-MM-dd',
     error_invalid: '無効な値です。有効な値を入力してください。',
-    error_invalid_java_util_Date: '無効な日付です。有効な日付を入力して下さい。',
+    error_invalid_java_util_Date:
+      '無効な日付です。有効な日付を入力して下さい。',
     error_invalid_date_format: '日付が無効です。有効な日付を入力して下さい。',
     error_required: '必須項目です。',
     error_number: '数値のみです。',
@@ -397,7 +373,8 @@ const Messages = {
     error_expected_jsnumber: 'Number値でなければなりません。',
     error_expected_jsobject: 'Object値でなければなりません。',
     error_expected_jsstring: 'String値でなければなりません。',
-    error_expected_jsnumberorjsstring: 'StringまたはNumber値でなければなりません。',
+    error_expected_jsnumberorjsstring:
+      'StringまたはNumber値でなければなりません。',
     error_expected_keypathnode: 'Node値でなければなりません。',
     error_expected_uuid: 'UUID値でなければなりません。',
     error_expected_validenumvalue: '有効な列挙値でなければなりません',
@@ -416,7 +393,8 @@ const Messages = {
     http_gone: '指定されたリソースは消滅しました。',
     http_request_entity_too_large: 'リクエストボディが大きすぎます。',
     http_request_uri_too_long: 'リクエストされたURIが長すぎます。',
-    http_unsupported_media_type: 'サポートされないメディアタイプが指定されました。',
+    http_unsupported_media_type:
+      'サポートされないメディアタイプが指定されました。',
     http_too_many_request: 'リクエスト回数が多すぎます。',
     http_internal_server_error: 'サーバ側でエラーが発生しました。',
     http_service_unavailable: 'サーバが一時的に停止しています。',
@@ -426,23 +404,34 @@ const Messages = {
     error_http_header_required_csrftoken: 'CSRFトークンヘッダーは必須です。',
     error_http_header_invalid_csrftoken: 'CSRFトークンヘッダーが無効です。',
     error_http_body_required_jsondata: 'データが空です。',
-    error_invalid_userid: 'ユーザIDが無効です。有効なユーザーIDを入力してください。',
+    error_invalid_userid:
+      'ユーザIDが無効です。有効なユーザーIDを入力してください。',
     error_required_userid: 'ユーザIDは必須です。ユーザIDを入力してください。',
-    error_invalid_loginid: 'ログインIDが無効です。有効なログインIDを入力してください。',
-    error_required_loginid: 'ログインIDは必須です。ログインIDを入力してください。',
-    error_invalid_logincd: 'ログインコードが無効です。有効なログインコードを入力してください。',
-    error_required_logincd: 'ログインコードは必須です。ログインコードを入力してください',
-    error_invalid_usercd: 'ユーザコードが無効です。有効なユーザコードを入力してください。',
-    error_required_usercd: 'ユーザコードは必須です。ユーザコードを入力してください。',
+    error_invalid_loginid:
+      'ログインIDが無効です。有効なログインIDを入力してください。',
+    error_required_loginid:
+      'ログインIDは必須です。ログインIDを入力してください。',
+    error_invalid_logincd:
+      'ログインコードが無効です。有効なログインコードを入力してください。',
+    error_required_logincd:
+      'ログインコードは必須です。ログインコードを入力してください',
+    error_invalid_usercd:
+      'ユーザコードが無効です。有効なユーザコードを入力してください。',
+    error_required_usercd:
+      'ユーザコードは必須です。ユーザコードを入力してください。',
     error_overlapping_usercd: 'ユーザコードが重複しています。',
     error_already_exists_usercd: 'ユーザコードはすでに存在しています。',
-    error_invalid_usertx: 'ユーザ名が無効です。有効なユーザ名を入力してください。',
+    error_invalid_usertx:
+      'ユーザ名が無効です。有効なユーザ名を入力してください。',
     error_required_usertx: 'ユーザ名は必須です。ユーザ名を入力してください。',
-    error_invalid_password: 'パスワードが無効です。有効なパスワードを入力してください。',
-    error_required_password: 'パスワードは必須です。パスワードを入力してください',
+    error_invalid_password:
+      'パスワードが無効です。有効なパスワードを入力してください。',
+    error_required_password:
+      'パスワードは必須です。パスワードを入力してください',
     error_minlength_password: 'パスワードは %s 桁以上で指定してください。',
     error_toosimple_password: 'もっと複雑なパスワードを指定してください。',
-    error_required_old_and_new_passwords: '変更前および変更後のパスワードを入力してください。',
+    error_required_old_and_new_passwords:
+      '変更前および変更後のパスワードを入力してください。',
     error_invalid_old_password: '旧パスワードが無効です。',
     error_invalid_loginid_password: 'ID ᠪᠤᠶᠤ ᠨᠢᠭᠤᠴᠨ ᠨᠤᠮᠧᠷ ᠴᠢᠨᠢ ᠪᠤᠷᠤᠭᠤ ᠲᠠᠢ᠃',
     error_saving_session: 'Error saving the session for the user.',
@@ -456,30 +445,13 @@ const Messages = {
     error_required_companycd: '会社コードは必須です。',
     error_invalid_companytx: '会社名は無効です。',
     error_required_companytx: '会社名は必須です。',
-    error_invalid_apikey: 'APIキーが無効です。有効なAPIキーを入力してください。',
+    error_invalid_apikey:
+      'APIキーが無効です。有効なAPIキーを入力してください。',
     error_required_apikey: 'APIキーは必須です。APIキーを入力してください。',
-    error_invalid_logical_warehouse_id: '論理倉庫IDが無効です。有効な論理倉庫IDを入力してください。',
-    error_required_logical_warehouse_id: '論理倉庫IDは必須です。論理倉庫IDを入力してください。',
-    error_invalid_logical_warehouse_code: '論理倉庫コードが無効です。有効な論理倉庫コードを入力してください。',
-    error_required_logical_warehouse_code: '論理倉庫コードは必須です。論理倉庫コードを入力してください。',
-    error_invalid_physical_warehouse_id: '物理倉庫IDが無効です。',
-    error_required_physical_warehouse_id: '物理倉庫IDは必須です。',
-    error_invalid_physical_warehouse_code: '物理倉庫コードが無効です。',
-    error_required_physical_warehouse_code: '物理倉庫コードは必須です。',
-    error_failed_getting_user_information: 'ユーザ情報の取得に失敗しました。',
-    error_failed_updating_user_information: 'ユーザ情報の更新に失敗しました。',
-    error_failed_deleting_user_information: 'ユーザ情報の削除に失敗しました。',
-    error_overwrite_existing_company_code: '既存の会社コードは上書きできません。',
-    error_overwrite_your_company_code: '所属企業コードを変更できません。',
-    error_already_exists_company_code: '会社コードは存在しています。',
-    error_failed_getting_company_information: '会社情報の取得に失敗しました。',
-    error_failed_updating_company_information: '会社情報の更新に失敗しました。',
-    error_failed_deleting_company_information: '会社情報の削除に失敗しました。',
-    error_delete_your_company: '所属企業を削除できません。',
-    error_delete_company_exist_apikey: 'APIキーテーブルに情報が存在するため会社を削除できません。',
-    error_delete_company_exist_logical_warehouse: '論理倉庫マスタに情報が存在するため会社を削除できません。',
-    error_delete_company_exist_user: 'ユーザマスタに情報が存在するため会社を削除できません。',
-  }
-};
+
+    //これより追加
+    error_invalid_authcd: 'AuthCd is invalid',
+  },
+}
 
 export { Messages };

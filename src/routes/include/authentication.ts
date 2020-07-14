@@ -10,6 +10,7 @@ import { ErrorUtils } from '../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddleware';
 import { Logger } from '../../utils/logger';
 import { Db2 } from '../../db/db';
+import { Utils } from '../../utils/utils'
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
@@ -101,17 +102,18 @@ export class Authentication extends BaseRoute {
     });
 
     router.post('/:lan/v1/:id/authCd', async(req: any, res: Response, next: NextFunction) => {
-      Logger.log('info', `${req.ip} - request authCd ${req.tel}`);
+      Logger.log('info', `${req.ip} - request authCd ${req.body.tel}`);
       let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
 
       //authCd生成
-      var _ = require('underscore');
-      var authCd = _.map(_.range(0, 1000000), function (n) { return _.pad(n, 6, '0'); });
+      var authCd = Utils.getRandom(100000, 999999);
+
       //TODO: ここにSMS認証SDKと接続する(authCdを携帯に送信する)
 
+      Logger.log('info', `${req.ip} - request authCd ${authCd}`)
       const query = {
         serviceId: req.body.serviceId,
         lang: lang,
@@ -121,11 +123,11 @@ export class Authentication extends BaseRoute {
       };
 
       try {
-        Logger.log('info', `${req.ip} - request authCd success: ${req.tel}`);
+        Logger.log('info', `${req.ip} - request authCd success`);
         await Db2.mainDb.models.tmpAuth.insert(query);
         return res.json({ message: 'OK', authCd: authCd });
       } catch (err) {
-        Logger.log('error', `${req.ip} - request authCd error: ${req.tel}`);
+        Logger.log('error', `${req.ip} - request authCd error`);
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });

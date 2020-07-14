@@ -7,6 +7,7 @@
 import { TableUtils } from '../tableUtils';
 import { Utils } from '../../utils/utils';
 import * as Promise from 'bluebird';
+import { Logger } from '../../utils/logger';
 
 export class TmpAuth {
   private db: any;
@@ -50,11 +51,12 @@ export class TmpAuth {
           query = ` ${query} LIMIT 1`;
         }
       }
+
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
         } else {
-          resolve(TableUtils.toCamelCase(data));
+          resolve(TableUtils.toCamelCase(data[0]));
         }
       });
     });
