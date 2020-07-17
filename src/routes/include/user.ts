@@ -10,9 +10,11 @@ import { ErrorUtils } from '../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddleware';
 import { Db2 } from '../../db/db';
 import { Logger } from '../../utils/logger';
+import { Settings } from '../../config/settings';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
+const axios = require('axios');
 /**
  * / route
  *
@@ -98,10 +100,28 @@ export class User extends BaseRoute {
           })
         } else {
           await Db2.mainDb.models.mUser.insert(query);
+          await Db2.mainDb.models.tmpAuth.delete(query);
 
+
+          //Emailアカウントを用意する
           if (req.body.serviceId == 1)
           {
             //TODO:ここにplaユーザ登録APIに接続
+            const pladata = {
+              uid: req.body.userCd,
+              pass: req.body.passwordTx,
+              add: '',
+            }
+            axios
+              .post(Settings.pdslApiDomain + '/halgai_api.php', pladata)
+              .then((respla) => {
+                console.log('success....')
+                console.log('info', respla)
+              })
+              .catch((errpla) => {
+                console.log('error....')
+                console.log('info', errpla)
+              })
 
           }
 

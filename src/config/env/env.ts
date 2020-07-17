@@ -3,6 +3,7 @@ import * as path from 'path'
 export const Settings = {
          path: path.normalize(path.join(__dirname, '..')),
          redirectUrl: 'http://localhost',
+         pdslApiDomain: 'http://pla.mongol.email',
          secret: 'SECRET_GOES_HERE',
          redisStore: {
            url: '127.0.01',
