@@ -116,7 +116,7 @@ export class User extends BaseRoute {
               .post(Settings.pdslApiDomain + '/halgai_api.php', pladata)
               .then((respla) => {
                 console.log('success....')
-                console.log('info', respla)
+                console.log('info', respla.data)
               })
               .catch((errpla) => {
                 console.log('error....')
