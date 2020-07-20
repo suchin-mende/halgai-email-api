@@ -113,14 +113,30 @@ export class Authentication extends BaseRoute {
 
       //TODO: ここにSMS認証SDKと接続する(authCdを携帯に送信する)
 
+      let result
+      if (!req.body.tel && req.body.userCd) {
+        result = await Db2.mainDb.models.tmpAuth.getTmpAuth(req.body.userCd);
+        if (!result)
+          return res
+            .status(400)
+            .send({
+              errors: [
+                ErrorUtils.getErrorJson(
+                  lang,
+                  'error_http_body_required_jsondata'
+                ),
+              ],
+            });
+      }
+
       Logger.log('info', `${req.ip} - request authCd ${authCd}`)
       const query = {
         serviceId: req.body.serviceId,
         lang: lang,
         userCd: req.body.userCd,
-        telTx: req.body.tel,
-        authCd: authCd
-      };
+        telTx: req.body.tel ? req.body.tel : result.tel,
+        authCd: authCd,
+      }
 
       try {
         Logger.log('info', `${req.ip} - request authCd success`);

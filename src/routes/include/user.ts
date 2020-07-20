@@ -90,7 +90,8 @@ export class User extends BaseRoute {
         userCd: req.body.userCd,
         password: req.body.passwordTx,
         telTx: req.body.tel,
-        authCd: req.body.authCd
+        authCd: req.body.authCd,
+        vipPlanCd: req.body.vipPlanCd ? req.body.vipPlanCd : 0
       };
       try {
         const result = await Db2.mainDb.models.tmpAuth.getTmpAuth(query);

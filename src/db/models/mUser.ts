@@ -216,6 +216,7 @@ export class MUser {
         args.telTx,
         args.lockFl,
         args.resetFl,
+        args.vipPlanCd,
         args.updprogramCd
       ]
       this.db.driver.execQuery(insert, values, (err, data) => {
@@ -371,6 +372,6 @@ FROM
       ON US.ROLE_ID = MR.ROLE_ID
 `;
 
-const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?)'
+const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?)'
 const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
 const del = 'CALL USER_Del(?,?)'
