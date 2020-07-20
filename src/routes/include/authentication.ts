@@ -1,5 +1,4 @@
-/**
- * @fileoverview Authentication route handler.
+leoverview Authentication route handler.
  * @author Suchin Mende <suqin81@gmail.com>
  * @version - 0.0.1
  */
@@ -113,22 +112,45 @@ export class Authentication extends BaseRoute {
 
       //TODO: ここにSMS認証SDKと接続する(authCdを携帯に送信する)
 
-      Logger.log('info', `${req.ip} - request authCd ${authCd}`)
-      const query = {
-        serviceId: req.body.serviceId,
-        lang: lang,
-        userCd: req.body.userCd,
-        telTx: req.body.tel,
-        authCd: authCd
-      };
-
       try {
-        Logger.log('info', `${req.ip} - request authCd success`);
-        await Db2.mainDb.models.tmpAuth.insert(query);
-        return res.json({ message: 'OK', authCd: authCd });
+        let result
+        if (req.body.tel == '99999') {
+          result = await Db2.mainDb.models.tmpAuth.getTmpAuth(req.body.userCd)
+          if (!result)
+            return res.status(400).send({
+              errors: [
+                ErrorUtils.getErrorJson(
+                  lang,
+                  'error_http_body_required_jsondata'
+                ),
+              ],
+            })
+        }
+
+        Logger.log('info', `${req.ip} - request authCd ${authCd}`)
+        const query = {
+          serviceId: req.body.serviceId,
+          lang: lang,
+          userCd: req.body.userCd,
+          telTx: result.tel ? result.tel :req.body.tel,
+          authCd: authCd,
+        }
+
+        Logger.log('info', `${req.ip} - request authCd success`)
+        await Db2.mainDb.models.tmpAuth.insert(query)
+        return res.json({ message: 'OK', authCd: authCd })
       } catch (err) {
-        Logger.log('error', `${req.ip} - request authCd error`);
-        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+        Logger.log('error', `${req.ip} - request authCd error`)
+        return res
+          .status(400)
+          .send({
+            errors: [
+              {
+                message: err.sqlMessage,
+                code: ErrorUtils.getDefaultErrorCode(),
+              },
+            ],
+          })
       }
     });
   }
@@ -144,3 +166,4 @@ export class Authentication extends BaseRoute {
   }
 
 }
+
