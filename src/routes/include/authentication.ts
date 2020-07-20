@@ -134,7 +134,7 @@ export class Authentication extends BaseRoute {
         serviceId: req.body.serviceId,
         lang: lang,
         userCd: req.body.userCd,
-        telTx: req.body.tel ? req.body.tel : result.tel,
+        telTx: req.body.tel != "99999" ? req.body.tel : result.tel,
         authCd: authCd,
       }
 
