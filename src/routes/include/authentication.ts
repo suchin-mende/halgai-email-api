@@ -114,7 +114,7 @@ export class Authentication extends BaseRoute {
       //TODO: ここにSMS認証SDKと接続する(authCdを携帯に送信する)
 
       let result
-      if (!req.body.tel && req.body.userCd) {
+      if (req.body.tel == "99999") {
         result = await Db2.mainDb.models.tmpAuth.getTmpAuth(req.body.userCd);
         if (!result)
           return res
