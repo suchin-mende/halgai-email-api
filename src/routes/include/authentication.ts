@@ -128,9 +128,9 @@ export class Authentication extends BaseRoute {
           serviceId: req.body.serviceId,
           lang: lang,
           userCd: req.body.userCd,
-          telTx: result.tel ? result.tel : req.body.tel,
-          authCd: authCd
-        };
+          telTx: req.body.tel == '99999' ? result.tel : req.body.tel,
+          authCd: authCd,
+        }
 
         Logger.log('info', `${req.ip} - request authCd success`);
         await Db2.mainDb.models.tmpAuth.insert(query);
