@@ -1,4 +1,5 @@
-leoverview Authentication route handler.
+/**
+ * @fileoverview Authentication route handler.
  * @author Suchin Mende <suqin81@gmail.com>
  * @version - 0.0.1
  */
@@ -124,7 +125,7 @@ export class Authentication extends BaseRoute {
                   'error_http_body_required_jsondata'
                 ),
               ],
-            })
+            });
         }
 
         Logger.log('info', `${req.ip} - request authCd ${authCd}`)
@@ -132,9 +133,9 @@ export class Authentication extends BaseRoute {
           serviceId: req.body.serviceId,
           lang: lang,
           userCd: req.body.userCd,
-          telTx: result.tel ? result.tel :req.body.tel,
-          authCd: authCd,
-        }
+          telTx: result && result.tel ? result.tel :req.body.tel,
+          authCd: authCd
+        };
 
         Logger.log('info', `${req.ip} - request authCd success`)
         await Db2.mainDb.models.tmpAuth.insert(query)
@@ -150,7 +151,7 @@ export class Authentication extends BaseRoute {
                 code: ErrorUtils.getDefaultErrorCode(),
               },
             ],
-          })
+          });
       }
     });
   }
