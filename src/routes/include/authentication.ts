@@ -125,9 +125,9 @@ export class Authentication extends BaseRoute {
         Logger.log('info', `${req.ip} - request authCd ${authCd}`);
         const query = {
           serviceId: req.body.serviceId,
-          lang: lang,
+          langTx: lang,
           userCd: req.body.userCd,
-          telTx: req.body.tel == "99999" ? result.tel : req.body.tel,
+          telTx: req.body.tel == '99999' ? result.tel : req.body.tel,
           authCd: authCd,
         }
 
