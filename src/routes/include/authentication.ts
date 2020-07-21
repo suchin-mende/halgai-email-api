@@ -102,7 +102,6 @@ export class Authentication extends BaseRoute {
     });
 
     router.post('/:lan/v1/:id/authCd', async(req: any, res: Response, next: NextFunction) => {
-      Logger.log('info', `${req.ip} - request authCd ${req.body.tel}`);
       let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
@@ -132,7 +131,7 @@ export class Authentication extends BaseRoute {
           authCd: authCd,
         }
 
-        Logger.log('info', `${req.ip} - request authCd success`);
+        Logger.log('info', `${query} - request query`);
         await Db2.mainDb.models.tmpAuth.insert(query);
         return res.json({ message: 'OK', authCd: authCd });
       } catch (err) {
