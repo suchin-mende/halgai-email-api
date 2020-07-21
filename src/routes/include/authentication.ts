@@ -131,6 +131,7 @@ export class Authentication extends BaseRoute {
           authCd: authCd,
         }
 
+        console.log(query);
         Logger.log('info', `${query} - request query`);
         await Db2.mainDb.models.tmpAuth.insert(query);
         return res.json({ message: 'OK', authCd: authCd });
