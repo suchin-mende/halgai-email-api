@@ -114,7 +114,7 @@ export class Authentication extends BaseRoute {
 
       try {
         let result;
-        if (req.body.tel == '99999') {
+        if (req.body.tel == "99999") {
           result = await Db2.mainDb.models.tmpAuth.getTmpAuth(req.body.userCd);
           if (!result)
             return res.status(400).send({
@@ -127,7 +127,7 @@ export class Authentication extends BaseRoute {
           serviceId: req.body.serviceId,
           lang: lang,
           userCd: req.body.userCd,
-          telTx: req.body.tel == '99999' ? result.tel : req.body.tel,
+          telTx: req.body.tel == "99999" ? result.tel : req.body.tel,
           authCd: authCd,
         }
 
