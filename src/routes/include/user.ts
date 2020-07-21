@@ -180,6 +180,52 @@ export class User extends BaseRoute {
       }
     });
 
+    router.post('/:lan/v1/:id/user/forgotpw', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let lang = req.params.lan ? req.params.lan : 'cn';
+      if (Object.keys(req.body).length <= 0) {
+        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
+      }
+
+      try {
+        let result;
+        if (req.body.tel == '99999')
+          result = await Db2.mainDb.models.tmpAuth.getTmpAuth(req.body.userCd);
+        let user = await Db2.mainDb.models.mUser.get.getTmpAuth(
+          req.body.userCd,
+          req.body.serviceId,
+          req.params.id
+        );
+        if (!result || !user)
+          return res.status(400).send({
+            errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_usercd')]
+          });
+
+        Logger.log('info', user);
+
+
+        const query = {
+          userCd: req.body.userCd,
+          authCd: req.body.authCd,
+          password: req.body.password,
+          telTx: result.tel,
+        }
+
+        await Db2.mainDb.models.mUser.update(query)
+        return res.json({ message: 'OK' })
+      } catch (err) {
+        return res
+          .status(400)
+          .send({
+            errors: [
+              {
+                message: err.sqlMessage,
+                code: ErrorUtils.getDefaultErrorCode(),
+              },
+            ],
+          })
+      }
+    });
+
 
   }
 

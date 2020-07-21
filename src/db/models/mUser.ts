@@ -15,8 +15,8 @@ export class MUser {
     this.db = db;
   }
 
-  authUser (userCd: string, companyCd: string, callback: any) {
-    this.db.driver.execQuery(authUser, [userCd, companyCd], (err, data) => {
+  authUser (userCd: string, serviceId: number, companyCd: string, callback: any) {
+    this.db.driver.execQuery(authUser, [userCd, serviceId, companyCd], (err, data) => {
       callback(err, TableUtils.toCamelCase(data[0]));
     });
   }
@@ -233,7 +233,6 @@ export class MUser {
     return new Promise((resolve, reject) => {
       const values = [
         args.userId,
-        args.companyId,
         args.serviceId,
         args.userTx,
         args.langTx,
