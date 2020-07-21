@@ -16,7 +16,7 @@ export const Settings = {
            host: 'localhost',
            database: 'h_userdb',
            user: 'root',
-           password: 'root',
+           password: 'Halgai*0201',
          },
          string: {
            COOKIE_SESSION_KEY: 'sessionKey',
