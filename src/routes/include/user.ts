@@ -192,15 +192,16 @@ export class User extends BaseRoute {
           userCd: req.body.userCd,
           authCd: req.body.authCd
         });
+
         if (!authCheck)
           return res.status(400).send({
             errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')]
           });
 
         //userチェック
-        let user = await Db2.mainDb.models.mUser.getUsers({ userCd: req.body.userCd, tel:authCheck.tel });
-
-        console.log("user.tel==" + user[0].tel);
+        let user = await Db2.mainDb.models.mUser.getUsers({ userCd: req.body.userCd, tel: authCheck.tel });
+        user = user[0];
+        console.log(user.tel);
         if (!user || authCheck.tel != user.tel)
           return res.status(400).send({
             errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_usercd')]
@@ -210,8 +211,8 @@ export class User extends BaseRoute {
           userId: user.userId,
           serviceId: user.serviceId,
           userTx: user.userTx,
-          langTx:user.langTx,
-          password: req.body.password,
+          langTx: lang,
+          password: req.body.newPW,
           mail: user.mail,
           lockFl: user.lockFl,
           resetFl: user.resetFl,
