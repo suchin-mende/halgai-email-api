@@ -101,39 +101,43 @@ export class Authentication extends BaseRoute {
       res.json({ csrfToken: req.session.user.csrfTx });
     });
 
+    //認証コードを取得する
     router.post('/:lan/v1/:id/authCd', async(req: any, res: Response, next: NextFunction) => {
       let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
 
-      //authCd生成
-      var authCd = Utils.getRandom(100000, 999999);
-
-      //TODO: ここにSMS認証SDKと接続する(authCdを携帯に送信する)
-
       try {
-        let result;
-        if (req.body.tel == "99999") {
-          result = await Db2.mainDb.models.tmpAuth.getTmpAuth(req.body.userCd);
-          if (!result)
-            return res.status(400).send({
-              errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_usercd')]
-            });
-        }
+        //authCd生成
+        var authCd = Utils.getRandom(100000, 999999);
+        var telNo = req.body.tel;
 
-        Logger.log('info', `${req.ip} - request authCd ${authCd}`);
         const query = {
           serviceId: req.body.serviceId,
           langTx: lang,
           userCd: req.body.userCd,
-          telTx: req.body.tel == '99999' ? result.tel : req.body.tel,
+          telTx: telNo,
           authCd: authCd,
         }
 
-        console.log(query);
-        Logger.log('info', `${query} - request query`);
+        if (telNo === "99999") {
+          let user = await Db2.mainDb.models.mUser.getUsers({ userCd: req.body.userCd });
+          if (user.length == 0) {
+            return res.status(400).send({
+              errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_usercd')]
+            });
+          } else {
+            telNo = query.telTx = user[0].tel;
+          }
+        }
+
         await Db2.mainDb.models.tmpAuth.insert(query);
+
+        //TODO: 国番号と電話番号の組合せが正しいかチェックが必要か
+        //TODO: telNoにSMS送信
+        console.log(telNo);
+
         return res.json({ message: 'OK', authCd: authCd });
       } catch (err) {
         Logger.log('error', `${req.ip} - request authCd error`);

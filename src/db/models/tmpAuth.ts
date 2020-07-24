@@ -16,10 +16,11 @@ export class TmpAuth {
     this.db = db;
   }
 
-  getTmpAuth(args?: any) {
+  getTmpAuth (args?: any) {
     return new Promise((resolve, reject) => {
       let query = findUsers;
       const values = [];
+
       if (args) {
         let filterModel;
         if (args.filterModel && Utils.isJSON(args.filterModel)) {
@@ -51,7 +52,6 @@ export class TmpAuth {
           query = ` ${query} LIMIT 1`;
         }
       }
-
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);

@@ -7,6 +7,7 @@
 import { TableUtils } from '../tableUtils';
 import { Utils } from '../../utils/utils';
 import * as Promise from 'bluebird';
+import { Logger } from '../../utils/logger';
 
 export class MUser {
   private db: any;
@@ -21,7 +22,8 @@ export class MUser {
     });
   }
 
-  getUsers(args?: any) {
+  getUsers (args?: any) {
+    console.log(args);
     return new Promise((resolve, reject) => {
       let query = findUsers;
       const values = [];
@@ -52,6 +54,10 @@ export class MUser {
         if (args.roleId) {
           where.push(' MU.ROLE_ID=?');
           values.push(args.roleId);
+        }
+        if (args.tel) {
+          where.push(' MU.TEL=?');
+          values.push(args.tel);
         }
         if (args.roleTx) {
           where.push(' MR.ROLE_TX=?');
@@ -106,6 +112,7 @@ export class MUser {
           query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
+      console.log(query);
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -285,6 +292,9 @@ SELECT
   MU.PASSWORD_TX,
   MU.COUNTRY_CD,
   MU.MAIL,
+  MU.LOCK_FL,
+  MU.RESET_FL,
+  MU.TEL,
   MU.MY_NO,
   MU.SEX,
   MU.WECHAT_CD,
@@ -342,6 +352,15 @@ SELECT
   MU.USER_CD,
   MU.USER_TX,
   MU.LANG_TX,
+  MU.PASSWORD_TX,
+  MU.MAIL,
+  MU.LOCK_FL,
+  MU.RESET_FL,
+  MU.COUNTRY_CD,
+  MU.TEL,
+  MU.MY_NO,
+  MU.SET,
+  MU.WECHAT_CD,
 	DATE_FORMAT(MU.UPD_DT, '%Y-%m-%d %H:%i:%S') AS UPD_DT,
 	DATE_FORMAT(MU.ADD_DT, '%Y-%m-%d %H:%i:%S') AS ADD_DT,
   MR.ROLE_ID,
