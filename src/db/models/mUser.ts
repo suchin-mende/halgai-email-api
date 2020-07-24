@@ -359,7 +359,7 @@ SELECT
   MU.COUNTRY_CD,
   MU.TEL,
   MU.MY_NO,
-  MU.SET,
+  MU.SEX,
   MU.WECHAT_CD,
 	DATE_FORMAT(MU.UPD_DT, '%Y-%m-%d %H:%i:%S') AS UPD_DT,
 	DATE_FORMAT(MU.ADD_DT, '%Y-%m-%d %H:%i:%S') AS ADD_DT,
