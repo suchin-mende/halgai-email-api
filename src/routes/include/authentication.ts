@@ -121,6 +121,7 @@ export class Authentication extends BaseRoute {
           authCd: authCd,
         }
 
+
         if (telNo === "99999") {
           let user = await Db2.mainDb.models.mUser.getUsers({ userCd: req.body.userCd });
           if (user.length == 0) {
