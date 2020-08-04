@@ -3,6 +3,7 @@ import * as path from 'path';
 export const Settings = {
   path: path.normalize(path.join(__dirname, '..')),
   redirectUrl: 'https://stg-api.mongol.email',
+  emailServerDomain: 'http://stg.mongol.email',
   pdslApiDomain: 'http://stg-pla.mongol.email',
   secret: 'SECRET_GOES_HERE',
   redisStore: {
@@ -21,5 +22,10 @@ export const Settings = {
   string: {
     COOKIE_SESSION_KEY: 'sessionKey',
     DEFAULT_ERROR_CODE: 'E999999'
+  },
+  vipPlan: {
+    nomalQuota: 500,
+    premiumQuota: 1000,
+    firstQuota: 2000
   }
 };

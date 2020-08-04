@@ -75,7 +75,7 @@ export class User extends BaseRoute {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
-
+      console.log(req.headers['APP_ID']);
       if (!req.body.authCd) {
         return res
           .status(400)
@@ -107,28 +107,42 @@ export class User extends BaseRoute {
           //Emailアカウントを用意する
           if (req.body.serviceId == 1)
           {
-            //TODO:ここにplaユーザ登録APIに接続
             const pladata = {
-              uid: req.body.userCd,
-              pass: req.body.passwordTx,
-              add: '',
+              "uid": req.body.userCd,
+              "pass": req.body.passwordTx,
+              "add": '',
+              "quota": '100'
+            };
+            if (req.body.vipPlanCd == "1") {
+              pladata.quota = Settings.vipPlan.nomalQuota;
+            } else if (req.body.vipPlanCd == "2") {
+              pladata.quota = Settings.vipPlan.premiumQuota;
+            } else if (req.body.vipPlanCd == "3") {
+              pladata.quota = Settings.vipPlan.FirstQuota;
             }
+            const params = new URLSearchParams();
+            Object.keys(pladata).forEach(function (key) {
+              params.append(key, this[key]);
+            }, pladata);
             axios
-              .post(Settings.pdslApiDomain + '/halgai_api.php', pladata)
+              .post(Settings.pdslApiDomain + '/halgai_api.php', params, {
+                headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded',
+                },
+              })
               .then((respla) => {
-                console.log('success....')
-                console.log('info', respla.data)
+                Logger.log('info', req.body.userCd + " add email account " + respla.data);
               })
               .catch((errpla) => {
-                console.log('error....')
-                console.log('info', errpla)
-              })
-
+                Logger.log('error', 'add email account error.');
+                Logger.log('info', req.body.userCd + " add email error " + errpla);
+              });
           }
 
           //TODO:MMailにログインして正しいURLを返す
 
-          return res.json({ message: 'OK', url: 'http://yahoo.co.jp' })
+
+          return res.json({ message: 'OK', url: Settings.emailServerDomain + '/?/login'})
         }
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
