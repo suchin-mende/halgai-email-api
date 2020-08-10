@@ -8,7 +8,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { BaseRoute } from '../../../route';
 import { ErrorUtils } from '../../../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../../../authenticate/authenticationMiddleware';
-import { Db } from '../../../../db/db';
+import { Db1 } from '../../../../db/db';
 import { Utils } from '../../../../utils/utils';
 
 import * as xlsx from 'xlsx';
@@ -47,9 +47,9 @@ export class FamilyBasics extends BaseRoute {
         query = req.query;
       }
       try {
-        const db = await Db.getSubdb(req.session.db);
-        const familyBasics = await Db.familyBasics.select(db, query);
-        const totaljson: any = await Db.familyBasics.count(db, query);
+        const db = await Db1.getSubdb(req.session.db);
+        const familyBasics = await Db1.familyBasics.select(db, query);
+        const totaljson: any = await Db1.familyBasics.count(db, query);
         return res.json({ familybasics: familyBasics, total: totaljson.total });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -84,8 +84,8 @@ export class FamilyBasics extends BaseRoute {
         updprogramCd: req.body.updprogramCd
       };
       try {
-        const db = await Db.getSubdb(req.session.db);
-        const result = await Db.familyBasics.update(db, query);
+        const db = await Db1.getSubdb(req.session.db);
+        const result = await Db1.familyBasics.update(db, query);
         return res.json({ message: '修正完璧' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -100,10 +100,10 @@ export class FamilyBasics extends BaseRoute {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }
       try {
-        const db = await Db.getSubdb(req.session.db);
+        const db = await Db1.getSubdb(req.session.db);
         const result = [];
         for (let plan of req.body.selectItems) {
-          result.push(await Db.familyBasics.del(db, plan.userId));
+          result.push(await Db1.familyBasics.del(db, plan.userId));
         }
         return res.json(result);
       } catch (err) {

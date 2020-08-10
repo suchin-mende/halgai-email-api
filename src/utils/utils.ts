@@ -5,6 +5,7 @@
  */
 
 const moment = require('moment');
+const bcrypt = require('bcrypt');
 
 export class Utils {
   constructor() { }
@@ -185,6 +186,14 @@ export class Utils {
 
     var random = Math.floor(Math.random() * (max + 1 - min)) + min;
     return random;
-}
+  }
+
+  static hashPassword (password: string): string {
+    let hashPass:string;
+    bcrypt.hash(password, 10, function (err, hash) {
+      hashPass = hash;
+    });
+    return hashPass;
+  }
 
 }

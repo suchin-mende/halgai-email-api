@@ -5,7 +5,6 @@ import * as Production from './env/env.production';
 
 const env = process.env.NODE_ENV || 'development';
 let Settings;
-console.log(`Current environment: ${env}`);
 switch (env) {
   case 'local':
     Settings = local.Settings;
@@ -14,7 +13,7 @@ switch (env) {
   case 'stage':
     Settings = Stage.Settings;
     break;
- 
+
   case 'production':
     Settings = Production.Settings;
     break;

@@ -4,7 +4,10 @@
  * @version - 0.0.1
  */
 import { AuthenticationMiddleware } from './authenticationMiddleware';
-// import { Db2 } from '../db/db';
+import { Db } from '../db/db';
+import { Db1 } from '../db/db';
+import { Db2 } from '../db/db';
+import { Db3 } from '../db/db';
 import * as Passport from 'passport';
 
 const bcrypt = require('bcrypt');
@@ -12,14 +15,19 @@ const LocalStrategy = require('passport-local').Strategy;
 
 export class PassportLocal {
 
-  constructor(passport: Passport, db: any) {
+  constructor(passport: Passport) {
     passport.serializeUser((user, cb) => {
       cb(null, user.username)
     });
 
     passport.deserializeUser((username, cb) => {
       username = JSON.parse(username);
-      db.mainDb.models.mUser.authUser(username.userCd, username.companyCd, cb)
+      switch (username.serviceId) {
+        case 1:
+      }
+      this.selectDB(username).mainDb.models.mUser.authUser(
+        username.userCd, username.serviceId, username.companyCd, cb
+      );
     });
 
     passport.use(new LocalStrategy({
@@ -28,7 +36,8 @@ export class PassportLocal {
     },
       (username, password, done) => {
         username = JSON.parse(username);
-        db.mainDb.models.mUser.authUser(username.userCd, username.companyCd, (err, user) => {
+        this.selectDB(username).mainDb.models.mUser.authUser(
+          username.userCd, username.serviceId, username.companyCd, (err, user) => {
           if (err) {
             return done(err)
           }
@@ -37,7 +46,6 @@ export class PassportLocal {
           if (!user) {
             return done(null, false)
           }
-
           // Always use hashed passwords and fixed time comparison
           bcrypt.compare(password, user.passwordTx, (err, isValid) => {
             if (err) {
@@ -62,5 +70,20 @@ export class PassportLocal {
       return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     }
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  }
+
+  selectDB (username) {
+    let res;
+    switch (username.serviceId) {
+      case 1:
+        res = Db1;
+      case 2:
+        res = Db2;
+      case 3:
+        res = Db3;
+      default:
+        res = Db;
+    }
+    return res;
   }
 }

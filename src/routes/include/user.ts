@@ -8,9 +8,10 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { BaseRoute } from '../route';
 import { ErrorUtils } from '../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddleware';
-import { Db2 } from '../../db/db';
+import { Db } from '../../db/db';
 import { Logger } from '../../utils/logger';
 import { Settings } from '../../config/settings';
+import { Utils } from '../../utils/utils';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
@@ -37,8 +38,8 @@ export class User extends BaseRoute {
         query = req.query;
       }
       try {
-        const users = await Db2.mainDb.models.mUser.getUsers(query);
-        const total = await Db2.mainDb.models.mUser.count(query);
+        const users = await Db.mainDb.models.mUser.getUsers(query);
+        const total = await Db.mainDb.models.mUser.count(query);
         return res.json({ users: users, total: total.total });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -51,7 +52,7 @@ export class User extends BaseRoute {
         userCd: req.params.uid
       };
       try {
-        const user = await Db2.mainDb.models.mUser.getUsers(query);
+        const user = await Db.mainDb.models.mUser.getUsers(query);
         return res.json({ users: user});
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -63,7 +64,7 @@ export class User extends BaseRoute {
         userCd: req.body.userCd
       };
       try {
-        const user = await Db2.mainDb.models.mUser.getUsers(query);
+        const user = await Db.mainDb.models.mUser.getUsers(query);
         return res.json({ user: user.userCd });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -75,7 +76,6 @@ export class User extends BaseRoute {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
-      console.log(req.headers['APP_ID']);
       if (!req.body.authCd) {
         return res
           .status(400)
@@ -88,20 +88,20 @@ export class User extends BaseRoute {
         serviceId: req.body.serviceId,
         langTx: lang,
         userCd: req.body.userCd,
-        password: req.body.passwordTx,
+        password: Utils.hashPassword(req.body.passwordTx),
         telTx: req.body.tel,
         authCd: req.body.authCd,
         vipPlanCd: req.body.vipPlanCd ? req.body.vipPlanCd : 0
       };
       try {
-        const result = await Db2.mainDb.models.tmpAuth.getTmpAuth(query);
+        const result = await Db.mainDb.models.tmpAuth.getTmpAuth(query);
         if (!result || result.authCd !== req.body.authCd) {
           return res.json({
             errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')]
           });
         } else {
-          await Db2.mainDb.models.mUser.insert(query);
-          await Db2.mainDb.models.tmpAuth.delete(query);
+          await Db.mainDb.models.mUser.insert(query);
+          await Db.mainDb.models.tmpAuth.delete(query);
 
 
           //Emailアカウントを用意する
@@ -171,8 +171,8 @@ export class User extends BaseRoute {
         updprogramCd: req.body.updprogramCd
       };
       try {
-        const result = await Db2.mainDb.models.mUser.update(query);
-        await Db2.mainDb.models.tmpAuth.delete(query);
+        const result = await Db.mainDb.models.mUser.update(query);
+        await Db.mainDb.models.tmpAuth.delete(query);
         return res.json({ message: 'OK', userId: result.id });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -187,7 +187,7 @@ export class User extends BaseRoute {
         userCd: req.body.userCd
       };
       try {
-        await Db2.mainDb.models.mUser.delete(query);
+        await Db.mainDb.models.mUser.delete(query);
         return res.json({ message: 'OK' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -202,7 +202,7 @@ export class User extends BaseRoute {
 
       try {
         //認証コードチェック
-        let authCheck = await Db2.mainDb.models.tmpAuth.getTmpAuth({
+        let authCheck = await Db.mainDb.models.tmpAuth.getTmpAuth({
           userCd: req.body.userCd,
           authCd: req.body.authCd
         });
@@ -213,9 +213,8 @@ export class User extends BaseRoute {
           });
 
         //userチェック
-        let user = await Db2.mainDb.models.mUser.getUsers({ userCd: req.body.userCd, tel: authCheck.tel });
+        let user = await Db.mainDb.models.mUser.getUsers({ userCd: req.body.userCd, tel: authCheck.tel });
         user = user[0];
-        console.log(user.tel);
         if (!user || authCheck.tel != user.tel)
           return res.status(400).send({
             errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_usercd')]
@@ -238,7 +237,7 @@ export class User extends BaseRoute {
           updprogramCd: "Email"
         }
 
-        await Db2.mainDb.models.mUser.update(query);
+        await Db.mainDb.models.mUser.update(query);
         return res.json({ message: 'OK' })
       } catch (err) {
         return res

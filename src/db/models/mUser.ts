@@ -23,7 +23,6 @@ export class MUser {
   }
 
   getUsers (args?: any) {
-    console.log(args);
     return new Promise((resolve, reject) => {
       let query = findUsers;
       const values = [];
@@ -112,7 +111,6 @@ export class MUser {
           query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
-      console.log(query);
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);

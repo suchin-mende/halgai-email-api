@@ -9,11 +9,12 @@ import { BaseRoute } from '../route';
 import { ErrorUtils } from '../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddleware';
 import { Logger } from '../../utils/logger';
-import { Db2 } from '../../db/db';
+import { Db } from '../../db/db';
 import { Utils } from '../../utils/utils'
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
+const bcrypt = require('bcrypt');
 /**
  * / route
  *
@@ -32,7 +33,10 @@ export class Authentication extends BaseRoute {
     //add login route
     router.post('/:lan/v1/:id/auth/login', (req: any, res: Response, next: NextFunction) => {
       if (req.body.userCd) {
-        req.body.userCd = JSON.stringify({ userCd: req.body.userCd, companyCd: req.params.id });
+        req.body.userCd = JSON.stringify({
+          userCd: req.body.userCd,
+          companyCd: req.params.id,
+          serviceId: req.headers.h_service_id });
       }
       passport.authenticate('local', (err, user, info) => {
         let lang = req.params.lan ? req.params.lan : 'cn';
@@ -60,34 +64,54 @@ export class Authentication extends BaseRoute {
             return res.status(400).json(err);
           }
         });
-        const ret = {
-          sessionKey: req.session.id,
-          csrfToken: user.csrfTx,
-          refreshKey: req.session.id,
-          user: {
-            userId: user.userId,
-            userCd: user.userCd,
-            userTx: user.userTx,
-            langTx: user.langTx,
-            roleId: user.roleId,
-            roleTx: user.roleTx,
-            serviceId: user.serviceId,
-            serviceTx: user.serviceTx,
-            addDt: user.addDt,
-            updDt: user.updDt,
-            upduserId: user.upduserId,
-            upduserTx: user.upduserTx,
-            adduserId: user.adduserId,
-            adduserTx: user.adduserTx
-          },
-          company: {
-            companyId: user.companyId,
-            companyCd: user.companyCd,
-            companyTx: user.companyTx
+        console.log(req.session);
+        bcrypt.compare(req.headers.h_api_key_tx, user.apiKeyTx, (err, isValid) => {
+          if (err) {
+            const err = {
+              errors: [
+                ErrorUtils.getErrorJson(lang, 'error_invalid_apikey')
+              ]
+            };
+            return res.status(400).json(err);
           }
-        };
-        Logger.log('info', `${req.ip} - Login user: ${user.userId} - User code: ${user.userCd}`);
-        return res.json(ret);
+          if (!isValid) {
+            const err = {
+              errors: [
+                ErrorUtils.getErrorJson(lang, 'error_invalid_apikey')
+              ]
+            };
+            return res.status(400).json(err);
+          } else {
+            const ret = {
+              sessionKey: req.session.id,
+              csrfToken: user.csrfTx,
+              refreshKey: req.session.id,
+              user: {
+                userId: user.userId,
+                userCd: user.userCd,
+                userTx: user.userTx,
+                langTx: user.langTx,
+                roleId: user.roleId,
+                roleTx: user.roleTx,
+                serviceId: user.serviceId,
+                serviceTx: user.serviceTx,
+                addDt: user.addDt,
+                updDt: user.updDt,
+                upduserId: user.upduserId,
+                upduserTx: user.upduserTx,
+                adduserId: user.adduserId,
+                adduserTx: user.adduserTx
+              },
+              company: {
+                companyId: user.companyId,
+                companyCd: user.companyCd,
+                companyTx: user.companyTx
+              }
+            };
+            Logger.log('info', `${req.ip} - Login user: ${user.userId} - User code: ${user.userCd}`);
+            return res.json(ret);
+          }
+        });
       })(req, res, next);
     });
 
@@ -123,7 +147,7 @@ export class Authentication extends BaseRoute {
 
 
         if (telNo === "99999") {
-          let user = await Db2.mainDb.models.mUser.getUsers({ userCd: req.body.userCd });
+          let user = await Db.mainDb.models.mUser.getUsers({ userCd: req.body.userCd });
           if (user.length == 0) {
             return res.status(400).send({
               errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_usercd')]
@@ -133,7 +157,7 @@ export class Authentication extends BaseRoute {
           }
         }
 
-        await Db2.mainDb.models.tmpAuth.insert(query);
+        await Db.mainDb.models.tmpAuth.insert(query);
 
         //TODO: 国番号と電話番号の組合せが正しいかチェックが必要か
         //TODO: telNoにSMS送信

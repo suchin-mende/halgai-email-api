@@ -8,7 +8,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { BaseRoute } from '../../../route';
 import { ErrorUtils } from '../../../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../../../authenticate/authenticationMiddleware';
-import { Db } from '../../../../db/db';
+import { Db1 } from '../../../../db/db';
 import { Utils } from '../../../../utils/utils';
 
 import * as xlsx from 'xlsx';
@@ -47,9 +47,9 @@ export class FamilyInsurance extends BaseRoute {
         query = req.query;
       }
       try {
-        const db = await Db.getSubdb(req.session.db);
-        const insurances = await Db.familyInsurance.select(db, query);
-        const totaljson: any = await Db.familyInsurance.count(db, query);
+        const db = await Db1.getSubdb(req.session.db);
+        const insurances = await Db1.familyInsurance.select(db, query);
+        const totaljson: any = await Db1.familyInsurance.count(db, query);
         return res.json({ insurances: insurances, total: totaljson.total });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -95,8 +95,8 @@ export class FamilyInsurance extends BaseRoute {
         updprogramCd: req.body.updprogramCd
       };
       try {
-        const db = await Db.getSubdb(req.session.db);
-        const result = await Db.familyInsurance.update(db, query);
+        const db = await Db1.getSubdb(req.session.db);
+        const result = await Db1.familyInsurance.update(db, query);
         return res.json({ message: '修正完璧' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
@@ -111,10 +111,10 @@ export class FamilyInsurance extends BaseRoute {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }
       try {
-        const db = await Db.getSubdb(req.session.db);
+        const db = await Db1.getSubdb(req.session.db);
         const result = [];
         for (let plan of req.body.selectItems) {
-          result.push(await Db.familyInsurance.del(db, plan.userId));
+          result.push(await Db1.familyInsurance.del(db, plan.userId));
         }
         return res.json(result);
       } catch (err) {
