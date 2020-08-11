@@ -4,10 +4,7 @@
  * @version - 0.0.1
  */
 import { AuthenticationMiddleware } from './authenticationMiddleware';
-import { Db } from '../db/db';
-import { Db1 } from '../db/db';
-import { Db2 } from '../db/db';
-import { Db3 } from '../db/db';
+import { Db, Db1, Db2, Db3 } from '../db/db';
 import * as Passport from 'passport';
 
 const bcrypt = require('bcrypt');

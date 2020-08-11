@@ -3,3 +3,4 @@ dist/
 node_modules/
 log/
 package-lock.json
+src/config/env/
