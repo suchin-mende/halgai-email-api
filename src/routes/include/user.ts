@@ -83,12 +83,13 @@ export class User extends BaseRoute {
             errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')],
           })
       }
+
       const query = {
         companyId: req.body.companyId,
         serviceId: req.body.serviceId,
         langTx: lang,
         userCd: req.body.userCd,
-        password: Utils.hashPassword(req.body.passwordTx),
+        password: Utils.hashText(req.body.passwordTx),
         telTx: req.body.tel,
         authCd: req.body.authCd,
         vipPlanCd: req.body.vipPlanCd ? req.body.vipPlanCd : 0

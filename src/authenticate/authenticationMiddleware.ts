@@ -40,7 +40,7 @@ export class AuthenticationMiddleware {
   constructor() { }
 
   auth (req: any, res: Response, next: NextFunction) {
-    let lang = req.session.user.langTx ? req.session.user.langTx : 'cn';
+    let lang = req.session.user ? req.session.user.langTx : 'cn';
     if (!isAuthenticated(req)) {
       return res.status(401).send({ errors: [ErrorUtils.getErrorJson(lang, 'http_unauthorized')] });
     }

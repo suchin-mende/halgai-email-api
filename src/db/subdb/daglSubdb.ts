@@ -9,6 +9,7 @@ import * as Bluebird from 'bluebird';
 
 import { Common } from '../models/sub/0Common/common';
 //Dagl-api
+import { Project } from '../models/sub/3Dagl/project';
 
 export class Subdb3 {
   private static subdb = {};
@@ -17,6 +18,8 @@ export class Subdb3 {
    * Add the tables to be used by the Subdb class
    */
   public static common = new Common();
+
+  public static project = new Project();
 
 
   constructor() { }

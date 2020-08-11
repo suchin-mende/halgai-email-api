@@ -188,12 +188,9 @@ export class Utils {
     return random;
   }
 
-  static hashPassword (password: string): string {
-    let hashPass:string;
-    bcrypt.hash(password, 10, function (err, hash) {
-      hashPass = hash;
-    });
-    return hashPass;
+  static hashText (text: string): string {
+    const saltRounds = 10; // ストレッチング回数
+    return bcrypt.hashSync(text, saltRounds);
   }
 
 }

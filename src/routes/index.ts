@@ -26,8 +26,10 @@ import { FamilyProject } from './include/sub/1Family/familyProject';
 import { FamilyShed } from './include/sub/1Family/familyShed';
 import { FamilySpending } from './include/sub/1Family/familySpending';
 import { FamilyUnesco } from './include/sub/1Family/familyUnesco';
-//
-import { Db } from '../db/db';
+//DAGL-api
+import { Project } from './include/sub/3Dagl/project';
+
+import { Db, Db1, Db2, Db3 } from '../db/db';
 
 /**
  * / route
@@ -76,7 +78,7 @@ export class IndexRoute extends BaseRoute {
     Authentication.create(router);
     Owner.create(router);
     User.create(router);
-    //Malajahui-api
+    // Malajahui-api
     FamilyUsers.create(router);
     FamilyBasics.create(router);
     FamilyAquacul.create(router);
@@ -90,6 +92,8 @@ export class IndexRoute extends BaseRoute {
     FamilyShed.create(router);
     FamilySpending.create(router);
     FamilyUnesco.create(router);
+    // DAGL
+    Project.create(router);
   }
 
   /**
