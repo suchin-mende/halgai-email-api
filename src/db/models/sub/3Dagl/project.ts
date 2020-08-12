@@ -22,7 +22,7 @@ export class Project {
           filterModel = JSON.parse(args.filterModel);
         }
         const where = [];
-        where.push('TU.DELETE_FL=0');
+        where.push('DELETE_FL=0');
 
         // Join the strings to build the query
         if (where.length > 0) {

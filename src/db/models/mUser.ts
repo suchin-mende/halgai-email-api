@@ -67,7 +67,7 @@ export class MUser {
         }
         if (args.serviceId) {
           where.push(' US.SERVICE_ID=?');
-          values.push(args.logicalWhId);
+          values.push(args.serviceId);
         }
         if (filterModel && filterModel.serviceTx) {
           where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
