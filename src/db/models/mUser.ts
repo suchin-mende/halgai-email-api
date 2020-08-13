@@ -17,6 +17,7 @@ export class MUser {
   }
 
   authUser (userCd: string, serviceId: number, companyCd: string, callback: any) {
+    Logger.log('info', 'userCd==' + userCd); Logger.log('info', 'serviceId==' + serviceId); Logger.log('info', 'companyCd==' + companyCd);
     this.db.driver.execQuery(authUser, [userCd, serviceId, companyCd], (err, data) => {
       callback(err, TableUtils.toCamelCase(data[0]));
     });
