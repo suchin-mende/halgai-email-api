@@ -10,6 +10,8 @@ import * as Bluebird from 'bluebird';
 import { Common } from '../models/sub/0Common/common';
 //Dagl-api
 import { Project } from '../models/sub/3Dagl/project';
+import { Archive } from '../models/sub/3Dagl/archive';
+import { File } from '../models/sub/3Dagl/file';
 
 export class Subdb3 {
   private static subdb = {};
@@ -20,7 +22,8 @@ export class Subdb3 {
   public static common = new Common();
 
   public static project = new Project();
-
+  public static archive = new Archive();
+  public static file = new File();
 
   constructor() { }
 
@@ -32,7 +35,7 @@ export class Subdb3 {
         const dbSettings = {
           protocol: 'mysql',
           query: { pool: true, multipleStatements: true },
-          host: dbInfo.dbUrlTx.replace('jdbc:mariadb:aurora//', '').replace(/.$/, ''),
+          host: 'localhost',//dbInfo.dbUrlTx.replace('jdbc:mariadb:aurora//', '').replace(/.$/, ''),
           database: dbInfo.dbSchemaTx,
           user: dbInfo.dbUsernameTx,
           password: dbInfo.dbPasswordTx

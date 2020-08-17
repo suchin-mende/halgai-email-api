@@ -193,4 +193,50 @@ export class Utils {
     return bcrypt.hashSync(text, saltRounds);
   }
 
+    /**
+   * 是否移动端来源
+   * @param req 
+   */
+  static isMobile(req) {
+    return req.headers.h_app_tx === 'Dagl-SP-CN';
+  }
+
+  /**
+   * 是否PC来源
+   * @param req 
+   */
+  static isPc(req) {
+    return req.headers.h_app_tx === 'Dagl-PC-CN';
+  }
+
+  /**
+   * 页数转换成SQL LIMIT
+   * @param args 
+   */
+  static args2SqlLimit(args) {
+    if (!args.pageNo)
+      args.pageNo = 1;
+
+    if (!args.pageSize)
+      args.pageSize = 15;
+
+    args.startRow = (args.pageNo - 1) * parseInt(args.pageSize);
+    args.endRow = args.pageSize; 
+  }
+
+  /**
+   * 转换分页数据，供客户端使用
+   * @param req 
+   * @param queryArgs 
+   * @param totalCount 
+   * @param datas 
+   * @param result 
+   */
+  static pagerNext(req, queryArgs, totalCount, datas, result) {
+    if (this.isMobile(req))
+      result['hasMore'] = datas == null || datas.length == 0 ? false : (queryArgs.pageNo * (datas == null ? 0 : datas.length)) < totalCount;
+    else
+      result['totalCount']  = totalCount;
+  }
+
 }
