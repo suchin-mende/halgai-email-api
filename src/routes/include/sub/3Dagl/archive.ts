@@ -37,6 +37,8 @@ export class Archive extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
+
+    // 检索档案
     router.get('/:lan/v1/:id/archive', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let query;
       if (Object.keys(req.query).length > 0) {
@@ -60,6 +62,28 @@ export class Archive extends BaseRoute {
 
         Utils.pagerNext(req, query, count, result['archives'], result);
         res.json(result);
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
+    // 新增档案
+    router.post('/:lan/v1/:id/archive', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.projectId) 
+          || Utils.isEmpty(params.blockId) 
+          || Utils.isEmpty(params.archiveCd) 
+          || Utils.isEmpty(params.archiveTx)) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.userId = req.session.user.userId;
+      params.userTx = req.session.user.userTx;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.archive.insert(db, params);
+        return res.json({ message: 'OK'});
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }

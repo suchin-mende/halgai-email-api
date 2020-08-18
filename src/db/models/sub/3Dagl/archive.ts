@@ -13,6 +13,11 @@ export class Archive {
 
   constructor() { }
 
+  /**
+   * 查询档案条数
+   * @param db
+   * @param args 
+   */
   selectCount(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
       if (!args)
@@ -55,6 +60,11 @@ export class Archive {
     });
   }
 
+  /**
+   * 查询档案列表
+   * @param db 
+   * @param args 
+   */
   select(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
       
@@ -106,8 +116,38 @@ export class Archive {
     });
   }
 
+  /**
+   * 新增档案
+   * @param args
+   */
+  insert (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectId,
+        args.blockId,
+        args.archiveCd,
+        args.archiveTx,
+        1,
+        0,
+        args.userId,
+        args.userTx
+      ];
+      db.driver.execQuery(insert, values, (err, data) => {
+        console.log(err)
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
+/**
+ * 查询档案SQL
+ */
 const selectByArchive = `
   SELECT
     *
@@ -115,9 +155,22 @@ const selectByArchive = `
   R_ARCHIVE
 `;
 
+/**
+ * 查询档案条数SQL
+ */
 const selectCountByArchive = `
   SELECT
     COUNT(1) AS totalCount
   FROM
     R_ARCHIVE
+`;
+
+/**
+ * 新增档案SQL
+ */
+const insert = `
+  INSERT INTO 
+    R_ARCHIVE (PROJECT_ID, BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, STATE_FL, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
+  VALUES
+	  (?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
 `;

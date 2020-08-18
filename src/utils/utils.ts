@@ -239,4 +239,7 @@ export class Utils {
       result['totalCount']  = totalCount;
   }
 
+  static isEmpty(o) {
+    return o == null || o === '';
+  }
 }
