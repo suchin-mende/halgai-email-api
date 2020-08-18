@@ -88,6 +88,30 @@ export class Archive extends BaseRoute {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
+
+    // 更新档案
+    router.put('/:lan/v1/:id/archive/:archiveId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.projectId) 
+          || Utils.isEmpty(params.blockId) 
+          || Utils.isEmpty(params.archiveCd) 
+          || Utils.isEmpty(params.archiveTx)
+          || params.stateFl == null) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.archiveId = req.params.archiveId;
+      params.userId = req.session.user.userId;
+      params.userTx = req.session.user.userTx;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.archive.update(db, params);
+        return res.json({ message: 'OK'});
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
   }
 
 }

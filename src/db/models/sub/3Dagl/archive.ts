@@ -133,7 +133,6 @@ export class Archive {
         args.userTx
       ];
       db.driver.execQuery(insert, values, (err, data) => {
-        console.log(err)
         if (err) {
           reject(err)
         } else {
@@ -142,6 +141,33 @@ export class Archive {
       })
     })
   }
+
+  /**
+   * 更新档案
+   * @param args
+   */
+  update (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectId,
+        args.blockId,
+        args.archiveCd,
+        args.archiveTx,
+        args.stateFl,
+        args.userId,
+        args.userTx,
+        args.archiveId
+      ];
+      db.driver.execQuery(update, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+  
 
 }
 
@@ -173,4 +199,23 @@ const insert = `
     R_ARCHIVE (PROJECT_ID, BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, STATE_FL, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
   VALUES
 	  (?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
+`;
+
+/**
+ * 更新档案SQL
+ */
+const update = `
+  UPDATE
+    R_ARCHIVE 
+  SET
+    PROJECT_ID = ?,
+    BLOCK_ID = ?,
+    ARCHIVE_CD = ?,
+    ARCHIVE_TX = ?,
+    STATE_FL = ?,
+    UPD_DT = CURRENT_TIMESTAMP,
+    UPDUSER_ID = ?,
+    UPDUSER_TX = ?
+  WHERE
+    ARCHIVE_ID = ?
 `;
