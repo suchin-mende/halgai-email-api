@@ -236,7 +236,7 @@ export class Utils {
     if (this.isMobile(req))
       result['hasMore'] = datas == null || datas.length == 0 ? false : (queryArgs.pageNo * (datas == null ? 0 : datas.length)) < totalCount;
     else
-      result['totalCount']  = totalCount;
+      result['total']  = totalCount;
   }
 
   static isEmpty(o) {
