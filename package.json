@@ -38,6 +38,7 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.6",
     "fs": "0.0.1-security",
+    "images": "^3.2.3",
     "moment": "^2.26.0",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
