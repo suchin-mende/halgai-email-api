@@ -71,8 +71,8 @@ export class File extends BaseRoute {
       }
     });
 
-    // 上传文件
-    router.post('/:lan/v1/:id/file/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    // 上传文件 PC
+    router.post('/:lan/v1/:id/archive/file/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
       let params = req.body;
       if (req.files === null || req.files.file === null || Utils.isEmpty(params.projectId) 
@@ -105,7 +105,48 @@ export class File extends BaseRoute {
       }
     });
 
+    // 上传文件 SP
+    router.post('/:lan/v1/:id/archive/images/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
+      let params = req.body;
+      if (req.files === null || req.files.images == null || Utils.isEmpty(params.projectId) 
+          || Utils.isEmpty(params.blockId) 
+          || Utils.isEmpty(params.archiveId)) {
+        return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      const imgs = req.files.images;
+
+      // 检测文件格式
+      imgs.forEach((file) =>{
+        if (Settings.uploadSetting.allowMimeTypes.indexOf(file.mimetype) == -1)
+          return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
+      });
+
+      params.userId = req.session.user.userId;
+      params.userTx = req.session.user.userTx;
+
+      const db = await Db3.getSubdb(req.session.db);
+      for (let i = 0; i < imgs.length; i++) {
+
+        var dbParams = {};
+        for (let p in params) 
+          dbParams[p] = params[p];
+
+        // 存储文件
+        let ret = FileUtils.fileUpload(Settings.uploadSetting.path, imgs[i]);
+        for (let p in ret) 
+          dbParams[p] = ret[p];
+        
+        // 写入数据库
+        try {
+          await Db3.file.insert(db, dbParams);
+        } catch (err) {
+          return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+        }
+      }
+      return res.json({ message: 'OK'});
+    });
   }
 
 }
