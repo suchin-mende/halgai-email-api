@@ -93,7 +93,7 @@ export class FileUtils {
    * @returns {
     *            path: '路径',
     *            fileTx: '文件名名称.ext',
-    *            thumbnailTx: '文件名名称.ext_xxx' (仅上传图像时返回)
+    *            thumbTx: '文件名名称.ext_xxx' (仅上传图像时返回)
     *          }
     */
   static fileUpload(storePath, fileUpload) {
