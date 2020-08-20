@@ -28,6 +28,7 @@ import { FamilySpending } from './include/sub/1Family/familySpending';
 import { FamilyUnesco } from './include/sub/1Family/familyUnesco';
 //DAGL-api
 import { Project } from './include/sub/3Dagl/project';
+import { Block } from './include/sub/3Dagl/block';
 import { Archive } from './include/sub/3Dagl/archive';
 import { File } from './include/sub/3Dagl/file';
 
@@ -96,6 +97,7 @@ export class IndexRoute extends BaseRoute {
     FamilyUnesco.create(router);
     // DAGL
     Project.create(router);
+    Block.create(router);
     Archive.create(router);
     File.create(router);
   }
