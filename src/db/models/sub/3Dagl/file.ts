@@ -115,8 +115,8 @@ export class File {
         null,
         null,
         args.fileTx,
-        args.thumbnailTx,
-        args.filePath,
+        args.thumbTx,
+        args.path,
         0,
         args.userId,
         args.userTx

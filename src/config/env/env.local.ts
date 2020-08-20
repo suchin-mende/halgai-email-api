@@ -30,6 +30,8 @@ export const Settings = {
   },
   uploadSetting : {
     path: path.resolve(__dirname,'../../../public/upload'),
+    folderImage: 'images',
+    folderDoc: 'documents',
     allowMimeTypes: ['image/png', 'image/jpeg', 'application/pdf'],
     image: {
       maxWidth: 800,

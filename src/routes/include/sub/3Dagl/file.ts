@@ -75,7 +75,7 @@ export class File extends BaseRoute {
     router.post('/:lan/v1/:id/file/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
       let params = req.body;
-      if (req.files === undefined || req.files.file === undefined || Utils.isEmpty(params.projectId) 
+      if (req.files === null || req.files.file === null || Utils.isEmpty(params.projectId) 
           || Utils.isEmpty(params.blockId) 
           || Utils.isEmpty(params.archiveId)) {
         return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
@@ -88,16 +88,21 @@ export class File extends BaseRoute {
         return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
 
       // 存储文件
-      let ret = null;
-      if (FileUtils.isImage(file.mimetype))
-        ret = FileUtils.storeImageUpload(Settings.uploadSetting.path, file);
+      let ret = FileUtils.fileUpload(Settings.uploadSetting.path, file);
+      for (let p in ret) 
+        params[p] = ret[p];
       
       params.userId = req.session.user.userId;
       params.userTx = req.session.user.userTx;
       
       // 写入数据库
-
-      return res.json({message: 'OK'});
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.file.insert(db, params);
+        return res.json({ message: 'OK'});
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
     });
 
 
