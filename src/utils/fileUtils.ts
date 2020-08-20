@@ -52,36 +52,12 @@ export class FileUtils {
       });
   }
 
-  /**
-   * 存储上传的图像
-   * @param path 存储路径
-   * @param uploadFile 上传的文件
-   * @returns {
-   *            path: '路径',
-   *            fileTx: '文件名名称.jpg',
-   *            thumbTx: '文件名名称.jpg_xxx'
-   *          }
-   */
-  static storeImageUpload(storePath, fileUpload) {
+  private static imageUpload(destPath, fileUpload) {
+    let thumbPath = `${destPath}_${Settings.uploadSetting.image.thumbWidth}${path.extname(fileUpload.name)}`;
     
-    let hashPath = `/${fileUpload.md5.substring(0, 2)}/${fileUpload.md5.substring(2, 4)}`;
-    let filePath = `${storePath}${hashPath}`;
-    let fileName = `${fileUpload.md5}${Utils.getRandom(1000, 9999)}`;
-    let fileExt = path.extname(fileUpload.name);
-
-    if (!fs.existsSync(filePath))
-      fs.mkdirSync(filePath, {recursive: true});
-
-    let fullPath = `${filePath}/${fileName}${fileExt}`;
-    let thumbName = `${fileName}${fileExt}_${Settings.uploadSetting.image.thumbWidth}${fileExt}`;
-    let thumbPath = `${filePath}/${thumbName}`;
-
-    if (fs.existsSync(fullPath))
-      return `${hashPath}/${fileName}${fileExt}`;
-
     FileUtils.zoomImage(
       fileUpload.data, 
-      fullPath, 
+      destPath, 
       Settings.uploadSetting.image.maxWidth, 
       Settings.uploadSetting.image.maxHeight, 
       Settings.uploadSetting.image.quality
@@ -96,18 +72,48 @@ export class FileUtils {
     );
 
     return {
-      path: hashPath,
-      fileTx: `${fileName}${fileExt}`,
-      thumbTx: thumbName
+      fileTx: destPath.substring(destPath.lastIndexOf('/') + 1),
+      thumbTx: thumbPath.substring(thumbPath.lastIndexOf('/') + 1)
     };
   }
 
-  /**
-   * 存储文件
-   * @param storePath 
-   * @param fileUpload 
-   */
-  static storeFile(storePath, fileUpload) {
+  private static docUpload(destPath, fileUpload) {
+    var ws = fs.createWriteStream(destPath);
+    ws.write(fileUpload.data);
+    ws.end();
+    return {
+      fileTx: destPath.substring(destPath.lastIndexOf('/') + 1)
+    }
+  }
 
+  /**
+   * 存储上传的文件
+   * @param storePath 存储路径
+   * @param fileUpload 上传的文件
+   * @returns {
+    *            path: '路径',
+    *            fileTx: '文件名名称.ext',
+    *            thumbTx: '文件名名称.ext_xxx' (仅上传图像时返回)
+    *          }
+    */
+  static fileUpload(storePath, fileUpload) {
+    let hashPath = `/${FileUtils.isImage(fileUpload.mimetype) ? Settings.uploadSetting.folderImage : Settings.uploadSetting.folderDoc }/${fileUpload.md5.substring(0, 2)}/${fileUpload.md5.substring(2, 4)}`;
+    let filePath = `${storePath}${hashPath}`;
+    let fileName = `${fileUpload.md5}${Utils.getRandom(10000, 99999)}`;
+    let fileExt = path.extname(fileUpload.name);
+
+    if (!fs.existsSync(filePath))
+      fs.mkdirSync(filePath, {recursive: true});
+
+    let destPath = `${filePath}/${fileName}${fileExt}`;
+
+    let ret = null;
+    if (FileUtils.isImage(fileUpload.mimetype))
+      ret = FileUtils.imageUpload(destPath, fileUpload);
+    else
+      ret = FileUtils.docUpload(destPath, fileUpload);
+
+    ret.path = hashPath;
+    return ret;
   }
 }
