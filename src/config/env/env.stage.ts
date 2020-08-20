@@ -27,5 +27,15 @@ export const Settings = {
     nomalQuota: 500,
     premiumQuota: 1000,
     firstQuota: 2000
+  },
+  uploadSetting : {
+    path: path.resolve(__dirname,'../../../public/upload'),
+    allowMimeTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+    image: {
+      maxWidth: 800,
+      maxHeight: 800,
+      thumbWidth: 320,
+      quality: 85
+    }
   }
 };

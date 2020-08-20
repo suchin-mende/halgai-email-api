@@ -13,6 +13,11 @@ export class File {
 
   constructor() { }
 
+  /**
+   * 检索文件条数
+   * @param db 
+   * @param args 
+   */
   selectCount(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
       if (!args)
@@ -47,6 +52,11 @@ export class File {
     });
   }
 
+  /**
+   * 检索文件
+   * @param db 
+   * @param args 
+   */
   select(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
       
@@ -92,8 +102,38 @@ export class File {
     });
   }
 
+  /**
+   * 新增文件
+   * @param args
+   */
+  insert (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectId,
+        args.blockId,
+        args.archiveId,
+        null,
+        null,
+        args.fileTx,
+        args.thumbnailTx,
+        args.filePath,
+        0,
+        args.userId,
+        args.userTx
+      ];
+      db.driver.execQuery(insert, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
+// 检索文件SQL
 const selectByFile = `
   SELECT
     *
@@ -101,9 +141,18 @@ const selectByFile = `
     R_FILE
 `;
 
+// 检索文件条数SQL
 const selectCountByFile = `
   SELECT
     COUNT(1) AS totalCount
   FROM
     R_FILE
+`;
+
+// 新增文件SQL
+const insert = `
+  INSERT INTO 
+    R_FILE (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
+  VALUES
+	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
