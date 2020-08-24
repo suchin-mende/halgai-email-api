@@ -78,8 +78,10 @@ export class Archive {
         where.push('PROJECT_ID = ?');
         where.push('BLOCK_ID = ?');
 
-        values.push(args.projectId);
-        values.push(args.blockId);
+        for (var i = 0; i < 2; i++) {
+          values.push(args.projectId);
+          values.push(args.blockId);
+        }
 
         if (args.archiveId) {
           where.push('ARCHIVE_ID = ?');
@@ -176,9 +178,12 @@ export class Archive {
  */
 const selectByArchive = `
   SELECT
-    *
+    archive.*,
+    (
+      SELECT COUNT(1) FROM R_FILE where PROJECT_ID = ? and BLOCK_ID = ? and ARCHIVE_ID = archive.ARCHIVE_ID
+    ) as fileTotalCnt
   FROM
-  R_ARCHIVE
+    R_ARCHIVE as archive
 `;
 
 /**
