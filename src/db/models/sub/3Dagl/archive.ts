@@ -41,8 +41,7 @@ export class Archive {
       }
 
       if (args.archiveTx) {
-        where.push('ARCHIVE_TX = ?');
-        values.push(args.archiveTx);
+        where.push(`ARCHIVE_TX like \'%${args.archiveTx}%\'`);
       }
 
       if (where.length > 0) {
@@ -89,8 +88,7 @@ export class Archive {
         }
 
         if (args.archiveTx) {
-          where.push('ARCHIVE_TX = ?');
-          values.push(args.archiveTx);
+          where.push(`ARCHIVE_TX like \'%${args.archiveTx}%\'`);
         }
 
         if (where.length > 0) {
