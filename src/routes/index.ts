@@ -30,6 +30,7 @@ import { FamilyUnesco } from './include/sub/1Family/familyUnesco';
 import { Project } from './include/sub/3Dagl/project';
 import { Archive } from './include/sub/3Dagl/archive';
 import { File } from './include/sub/3Dagl/file';
+import { Template } from './include/sub/3Dagl/template';
 
 import { Db, Db1, Db2, Db3 } from '../db/db';
 
@@ -98,6 +99,7 @@ export class IndexRoute extends BaseRoute {
     Project.create(router);
     Archive.create(router);
     File.create(router);
+    Template.create(router);
   }
 
   /**
