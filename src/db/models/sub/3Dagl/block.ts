@@ -48,7 +48,6 @@ export class Block {
           query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
-      console.log("query=====" + query);
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -64,10 +63,12 @@ export class Block {
 const selectByBlock = `
   SELECT
     BLOCK.PROJECT_ID,
+    PROJECT.PROJECT_TX,
     BLOCK.BLOCK_ID,
     BLOCK.BLOCK_CD,
     BLOCK.BLOCK_TX,
     BLOCK.PARENT_BLOCK_ID,
+    BLOCK1.BLOCK_TX AS PARENT_BLOCK_TX,
     BLOCK.TEMPLATE_FL,
     BLOCK.TYPE,
     (SELECT count(PARENT_BLOCK_ID) from M_BLOCK where PARENT_BLOCK_ID=BLOCK.BLOCK_ID) AS SUB_BLOCK_CNT,
@@ -77,4 +78,6 @@ const selectByBlock = `
     BLOCK.ADDUSER_TX
   FROM
     M_BLOCK BLOCK
+    LEFT JOIN M_PROJECT PROJECT ON BLOCK.PROJECT_ID = PROJECT.PROJECT_ID
+    LEFT JOIN M_BLOCK BLOCK1 ON BLOCK.PARENT_BLOCK_ID = BLOCK1.BLOCK_ID
 `;
