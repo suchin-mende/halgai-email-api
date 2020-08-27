@@ -16,7 +16,7 @@ export class Archive {
   /**
    * 查询档案条数
    * @param db
-   * @param args 
+   * @param args
    */
   selectCount(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
@@ -48,7 +48,7 @@ export class Archive {
         query = `${query} WHERE ${where.join(' AND ')}`;
       }
       console.log(query);
-    
+
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -61,12 +61,12 @@ export class Archive {
 
   /**
    * 查询档案列表
-   * @param db 
-   * @param args 
+   * @param db
+   * @param args
    */
   select(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
-      
+
       let query = selectByArchive;
 
       const values = [];
@@ -104,8 +104,6 @@ export class Archive {
         }
       }
 
-      console.log(query);
-      
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -167,7 +165,52 @@ export class Archive {
       })
     })
   }
-  
+
+  /**
+   * 查询档案状态数
+   * @param db
+   * @param args
+   */
+  countArchiveState (db: any, args: any): Bluebird {
+    return new Bluebird((resolve, reject) => {
+      let query = selectByArchiveState;
+
+      const values = [];
+      if (args) {
+        const where = [];
+        where.push('DELETE_FL = 0');
+
+        if (args.projectId) {
+          where.push('PROJECT_ID = ?');
+          values.push(args.projectId);
+        }
+        if (args.blockId) {
+          where.push('BLOCK_ID = ?');
+          values.push(args.blockId);
+        }
+
+        if (where.length > 0) {
+          query = `${query} WHERE ${where.join(' AND ')}`;
+        }
+
+        if (args.colId) {
+          query = ` ${query} ORDER BY ${TableUtils.toSnakeCase(args.colId)} ${args.sort || 'asc'}`;
+        }
+
+        if (args.startRow != null && args.endRow != null) {
+          query = ` ${query} LIMIT ${args.startRow},${args.endRow}`;
+        }
+      }
+
+      db.driver.execQuery(query, values, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(TableUtils.toCamelCase(data));
+        }
+      });
+    });
+  }
 
 }
 
@@ -198,7 +241,7 @@ const selectCountByArchive = `
  * 新增档案SQL
  */
 const insert = `
-  INSERT INTO 
+  INSERT INTO
     R_ARCHIVE (PROJECT_ID, BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, STATE_FL, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
   VALUES
 	  (?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
@@ -209,7 +252,7 @@ const insert = `
  */
 const update = `
   UPDATE
-    R_ARCHIVE 
+    R_ARCHIVE
   SET
     PROJECT_ID = ?,
     BLOCK_ID = ?,
@@ -221,4 +264,16 @@ const update = `
     UPDUSER_TX = ?
   WHERE
     ARCHIVE_ID = ?
+`;
+
+/**
+ * 查询档案状态SQL
+ */
+const selectByArchiveState = `
+  SELECT
+    COUNT(IF(STATE_FL = 0, 1, NULL)) AS NOT_BEING_CNT,
+    COUNT(IF(STATE_FL = 1, 1, NULL)) AS FINISH_CNT,
+    COUNT(IF(STATE_FL = 2, 1, NULL)) AS STAGE_CNT
+  FROM
+    R_ARCHIVE
 `;

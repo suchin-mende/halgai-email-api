@@ -10,6 +10,7 @@ import * as Bluebird from 'bluebird';
 import { Common } from '../models/sub/0Common/common';
 //Dagl-api
 import { Project } from '../models/sub/3Dagl/project';
+import { Block } from '../models/sub/3Dagl/block';
 import { Archive } from '../models/sub/3Dagl/archive';
 import { File } from '../models/sub/3Dagl/file';
 import { Template } from '../models/sub/3Dagl/template';
@@ -23,6 +24,7 @@ export class Subdb3 {
   public static common = new Common();
 
   public static project = new Project();
+  public static block = new Block();
   public static archive = new Archive();
   public static file = new File();
   public static template = new Template();

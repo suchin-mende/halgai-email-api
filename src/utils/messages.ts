@@ -316,7 +316,7 @@ const Messages = {
     error_required_old_and_new_passwords:
       '変更前および変更後のパスワードを入力してください。',
     error_invalid_old_password: '旧パスワードが無効です。',
-    error_invalid_loginid_password: 'ログインIDまたはパスワードが無効です。',
+    error_invalid_loginid_password: '登录 ID 或密码无效。',
     error_saving_session: 'Error saving the session for the user.',
     error_invalid_language: '言語設定が無効です。',
     error_required_language: '言語設定は必須です。',
