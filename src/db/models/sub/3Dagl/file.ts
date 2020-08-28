@@ -112,7 +112,7 @@ export class File {
         args.projectId,
         args.blockId,
         args.archiveId,
-        null,
+        args.templateId,
         null,
         args.fileTx,
         args.thumbTx,
@@ -122,6 +122,25 @@ export class File {
         args.userTx
       ];
       db.driver.execQuery(insert, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+    /**
+   * 更新档案
+   * @param args
+   */
+  logicaDeleteWithTemplate (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.templateId
+      ];
+      db.driver.execQuery(logicaDeleteWithTemplate, values, (err, data) => {
         if (err) {
           reject(err)
         } else {
@@ -155,4 +174,14 @@ const insert = `
     R_FILE (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
   VALUES
 	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+`;
+
+const logicaDeleteWithTemplate = `
+  UPDATE
+  R_FILE 
+  SET
+    DELETE_FL = 1
+  WHERE
+    TEMPLATE_ID = ?
+    AND DELETE_FL = 0
 `;

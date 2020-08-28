@@ -75,7 +75,7 @@ export class File extends BaseRoute {
     router.post('/:lan/v1/:id/archive/file/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
       let params = req.body;
-      if (req.files === null || req.files.file === null || Utils.isEmpty(params.projectId) 
+      if (req.files === null || req.files === undefined || req.files.file === null || Utils.isEmpty(params.projectId) 
           || Utils.isEmpty(params.blockId) 
           || Utils.isEmpty(params.archiveId)) {
         return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
