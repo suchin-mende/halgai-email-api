@@ -39,6 +39,49 @@ export class Template extends BaseRoute {
    * @static
    */
   public static create(router: Router) {
+
+    // 检索模版
+    router.get('/:lan/v1/:id/template', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let query;
+      if (Object.keys(req.query).length > 0) {
+        query = req.query;
+      }
+      if (query === undefined) {
+        query = {};
+      }
+
+      try {
+        Utils.args2SqlLimit(query);
+
+        const db = await Db3.getSubdb(req.session.db);
+        const count = await Db3.template.selectCount(db, query);
+        let result = {};
+        if (count > 0) {
+          const tmpRet = await Db3.template.select(db, query);
+          const templates = [];
+          tmpRet.forEach(v => {
+            templates.push({
+              templateId: v.templateId,
+              templateCd: v.templateCd,
+              templateTx: v.templateTx,
+              addDt: v.addDt,
+              adduserId: v.adduserId,
+              adduserTx: v.adduserTx,
+              blockId: v.blockId,
+              filePath: v.filePath,
+              fileTx: v.fileTx
+            })
+          });
+          result['templates'] = templates;
+        }
+
+        Utils.pagerNext(req, query, count, result['templates'], result);
+        res.json(result);
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
     // 新增模版
     router.post('/:lan/v1/:id/template', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       console.log(req.files)
@@ -87,7 +130,7 @@ export class Template extends BaseRoute {
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
 
-      let isFileUpload = req.files !== null || req.files !== undefined || req.files.file !== null;
+      let isFileUpload = req.files !== null && req.files !== undefined && req.files.file !== null;
       if (isFileUpload && 
         Settings.uploadSetting.allowMimeTypes.indexOf(req.files.file.mimetype) == -1) {
           return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
