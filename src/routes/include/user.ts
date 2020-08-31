@@ -33,10 +33,15 @@ export class User extends BaseRoute {
   public static create(router: Router) {
     // add users route
     router.get('/:lan/v1/:id/user', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let lang = req.params.lan ? req.params.lan : 'cn';
+      if (!req.headers.h_service_id) {
+        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
+      }
       let query;
       if (Object.keys(req.query).length > 0) {
         query = req.query;
       }
+      query.serviceId = req.headers.h_service_id;
       try {
         const users = await Db.mainDb.models.mUser.getUsers(query);
         const total = await Db.mainDb.models.mUser.count(query);
@@ -89,6 +94,8 @@ export class User extends BaseRoute {
         serviceId: req.body.serviceId,
         langTx: lang,
         userCd: req.body.userCd,
+        userTx: req.body.userTx,
+        roleId: req.body.roleId,
         password: Utils.hashText(req.body.passwordTx),
         telTx: req.body.tel,
         authCd: req.body.authCd,
