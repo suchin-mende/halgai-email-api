@@ -29,13 +29,26 @@ export class File {
       const where = [];
 
       where.push('DELETE_FL = 0');
-      where.push('PROJECT_ID = ?');
-      where.push('BLOCK_ID = ?');
-      where.push('ARCHIVE_ID = ?');
 
-      values.push(args.projectId);
-      values.push(args.blockId);
-      values.push(args.archiveId);
+      if (args.projectId) {
+        where.push('PROJECT_ID = ?');
+        values.push(args.projectId);
+      }
+
+      if (args.blockId) {
+        where.push('BLOCK_ID = ?');
+        values.push(args.blockId);
+      }
+
+      if (args.archiveId) {
+        where.push('ARCHIVE_ID = ?');
+        values.push(args.archiveId);
+      }
+
+      if (args.templateId) {
+        where.push('TEMPLATE_ID = ?');
+        values.push(args.templateId);
+      }
 
       if (where.length > 0) {
         query = `${query} WHERE ${where.join(' AND ')}`;
@@ -67,13 +80,25 @@ export class File {
         const where = [];
         where.push('DELETE_FL = 0');
 
-        where.push('PROJECT_ID = ?');
-        where.push('BLOCK_ID = ?');
-        where.push('ARCHIVE_ID = ?');
+        if (args.projectId) {
+          where.push('PROJECT_ID = ?');
+          values.push(args.projectId);
+        }
+  
+        if (args.blockId) {
+          where.push('BLOCK_ID = ?');
+          values.push(args.blockId);
+        }
+  
+        if (args.archiveId) {
+          where.push('ARCHIVE_ID = ?');
+          values.push(args.archiveId);
+        }
 
-        values.push(args.projectId);
-        values.push(args.blockId);
-        values.push(args.archiveId);
+        if (args.templateId) {
+          where.push('TEMPLATE_ID = ?');
+          values.push(args.templateId);
+        }
 
         if (where.length > 0) {
           query = `${query} WHERE ${where.join(' AND ')}`;

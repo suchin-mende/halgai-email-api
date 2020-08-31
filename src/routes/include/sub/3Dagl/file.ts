@@ -51,9 +51,9 @@ export class File extends BaseRoute {
         query = {};
       }
 
-      if (query.projectId == null || query.blockId == null || 
-          query.archiveId == null) 
-        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      // if (query.projectId == null || query.blockId == null || 
+      //     query.archiveId == null) 
+      //   return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
 
       try {
         Utils.args2SqlLimit(query);
