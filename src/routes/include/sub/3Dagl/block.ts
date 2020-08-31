@@ -60,7 +60,7 @@ export class Block extends BaseRoute {
     router.post('/:lan/v1/:id/block', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let params = req.body;
       if (Utils.isEmpty(params.projectId)
-        || Utils.isEmpty(params.blockId)
+        || Utils.isEmpty(params.blockCd)
         || Utils.isEmpty(params.blockTx)
         || Utils.isEmpty(params.templateFl)
         || Utils.isEmpty(params.type)) {
@@ -73,6 +73,29 @@ export class Block extends BaseRoute {
       try {
         const db = await Db3.getSubdb(req.session.db);
         await Db3.block.insert(db, params);
+        return res.json({ message: 'OK' });
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
+    // 更新目录
+    router.put('/:lan/v1/:id/block/:blockId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.blockCd)
+        || Utils.isEmpty(params.blockTx)
+        || Utils.isEmpty(params.parentBlockId)
+        || Utils.isEmpty(params.templateFl)
+        || Utils.isEmpty(params.type)
+        || params.stateFl == null) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.blockId = req.params.blockId;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.block.update(db, params);
         return res.json({ message: 'OK' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });

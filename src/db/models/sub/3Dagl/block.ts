@@ -84,6 +84,30 @@ export class Block {
     })
   }
 
+  /**
+   * 更新目录
+   * @param args
+   */
+  update (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.blockCd,
+        args.blockTx,
+        args.parentBlockId,
+        args.templateFl,
+        args.type,
+        args.blockId
+      ];
+      db.driver.execQuery(update, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 const selectByBlock = `
@@ -113,7 +137,31 @@ const selectByBlock = `
  */
 const insert = `
   INSERT INTO
-    M_BLOCK (PROJECT_ID, BLOCK_CD, BLOCK_TX, PARENT_BLOCK_ID, TEMPLATE_FL, TYPE, ADDUSER_ID, ADDUSER_TX)
+    M_BLOCK (
+      PROJECT_ID,
+      BLOCK_CD,
+      BLOCK_TX,
+      PARENT_BLOCK_ID,
+      TEMPLATE_FL,
+      TYPE,
+      ADDUSER_ID,
+      ADDUSER_TX)
   VALUES
 	  (?, ?, ?, ?, ?, ?, ?, ?);
+`;
+
+/**
+ * 更新目录SQL
+ */
+const update = `
+  UPDATE
+    M_BLOCK
+  SET
+    BLOCK_CD = ?,
+    BLOCK_TX = ?,
+    PARENT_BLOCK_ID = ?,
+    TEMPLATE_FL = ?,
+    TYPE = ?
+  WHERE
+    BLOCK_ID = ?
 `;
