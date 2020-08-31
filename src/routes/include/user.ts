@@ -97,9 +97,10 @@ export class User extends BaseRoute {
       try {
         const result = await Db.mainDb.models.tmpAuth.getTmpAuth(query);
         if (!result || result.authCd !== req.body.authCd) {
-          return res.json({
-            errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')]
-          });
+          if (req.body.serviceId != 2)
+            return res.json({
+              errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')]
+            });
         } else {
           await Db.mainDb.models.mUser.insert(query);
           await Db.mainDb.models.tmpAuth.delete(query);
