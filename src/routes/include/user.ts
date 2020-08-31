@@ -76,7 +76,7 @@ export class User extends BaseRoute {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
       }
-      if (!req.body.authCd) {
+      if (!req.body.authCd && req.body.serviceId !== 2) {
         return res
           .status(400)
           .send({
@@ -95,13 +95,15 @@ export class User extends BaseRoute {
         vipPlanCd: req.body.vipPlanCd ? req.body.vipPlanCd : 0
       };
       try {
-        const result = await Db.mainDb.models.tmpAuth.getTmpAuth(query);
-        if (!result || result.authCd !== req.body.authCd) {
-          if (req.body.serviceId != 2)
+        if (req.body.serviceId !== 2) {
+          const result = await Db.mainDb.models.tmpAuth.getTmpAuth(query);
+          if (!result || result.authCd !== req.body.authCd) {
+
             return res.json({
               errors: [ErrorUtils.getErrorJson(lang, 'error_invalid_authcd')]
             });
-        } else {
+          }
+        }
           await Db.mainDb.models.mUser.insert(query);
           await Db.mainDb.models.tmpAuth.delete(query);
 
@@ -144,8 +146,7 @@ export class User extends BaseRoute {
           //TODO:MMailにログインして正しいURLを返す
 
 
-          return res.json({ message: 'OK', url: Settings.emailServerDomain + '/?/login'})
-        }
+        return res.json({ message: 'OK', url: Settings.emailServerDomain + '/?/login' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
