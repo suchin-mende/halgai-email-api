@@ -9,6 +9,7 @@ import { BaseRoute } from '../../../route';
 import { ErrorUtils } from '../../../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../../../authenticate/authenticationMiddleware';
 import { Db3 } from '../../../../db/db';
+import { Utils } from '../../../../utils/utils';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
@@ -50,6 +51,29 @@ export class Block extends BaseRoute {
         const db = await Db3.getSubdb(req.session.db);
         const blocks = await Db3.block.select(db, query);
         res.json({ blocks: blocks })
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
+    // 新增目录
+    router.post('/:lan/v1/:id/block', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.projectId)
+        || Utils.isEmpty(params.blockId)
+        || Utils.isEmpty(params.blockTx)
+        || Utils.isEmpty(params.templateFl)
+        || Utils.isEmpty(params.type)) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.userId = req.session.user.userId;
+      params.userTx = req.session.user.userTx;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.block.insert(db, params);
+        return res.json({ message: 'OK' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }

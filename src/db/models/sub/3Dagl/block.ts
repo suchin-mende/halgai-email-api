@@ -58,6 +58,32 @@ export class Block {
     });
   }
 
+  /**
+   * 新增目录
+   * @param args
+   */
+  insert (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectId,
+        args.blockCd,
+        args.blockTx,
+        args.parentBlockId,
+        args.templateFl,
+        args.type,
+        args.userId,
+        args.userTx
+      ];
+      db.driver.execQuery(insert, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 const selectByBlock = `
@@ -80,4 +106,14 @@ const selectByBlock = `
     M_BLOCK BLOCK
     LEFT JOIN M_PROJECT PROJECT ON BLOCK.PROJECT_ID = PROJECT.PROJECT_ID
     LEFT JOIN M_BLOCK BLOCK1 ON BLOCK.PARENT_BLOCK_ID = BLOCK1.BLOCK_ID
+`;
+
+/**
+ * 新增目录SQL
+ */
+const insert = `
+  INSERT INTO
+    M_BLOCK (PROJECT_ID, BLOCK_CD, BLOCK_TX, PARENT_BLOCK_ID, TEMPLATE_FL, TYPE, ADDUSER_ID, ADDUSER_TX)
+  VALUES
+	  (?, ?, ?, ?, ?, ?, ?, ?);
 `;

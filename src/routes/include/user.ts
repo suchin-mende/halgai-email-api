@@ -111,7 +111,8 @@ export class User extends BaseRoute {
             });
           }
         }
-          await Db.mainDb.models.mUser.insert(query);
+        await Db.mainDb.models.mUser.insert(query);
+        if (req.body.serviceId !== 2)
           await Db.mainDb.models.tmpAuth.delete(query);
 
 
