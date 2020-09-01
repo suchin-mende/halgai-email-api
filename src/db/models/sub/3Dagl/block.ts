@@ -32,6 +32,10 @@ export class Block {
           where.push('BLOCK.BLOCK_ID = ?');
           values.push(args.blockId);
         }
+        if (args.parentBlockId) {
+          where.push('BLOCK.PARENT_BLOCK_ID = ?');
+          values.push(args.parentBlockId);
+        }
         if (args.type) {
           where.push('BLOCK.TYPE = ?');
           values.push(args.type);
