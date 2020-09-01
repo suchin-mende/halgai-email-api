@@ -86,8 +86,7 @@ export class Block extends BaseRoute {
         || Utils.isEmpty(params.blockTx)
         || Utils.isEmpty(params.parentBlockId)
         || Utils.isEmpty(params.templateFl)
-        || Utils.isEmpty(params.type)
-        || params.stateFl == null) {
+        || Utils.isEmpty(params.type)) {
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
 

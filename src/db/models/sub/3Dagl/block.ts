@@ -29,7 +29,7 @@ export class Block {
           values.push(args.projectId);
         }
         if (args.blockId) {
-          where.push('BLOCK.PARENT_BLOCK_ID = ?');
+          where.push('BLOCK.BLOCK_ID = ?');
           values.push(args.blockId);
         }
         if (args.type) {
