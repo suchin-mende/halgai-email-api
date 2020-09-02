@@ -36,7 +36,6 @@ export class Project {
           query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
-      console.log("query=====" + query);
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -47,6 +46,53 @@ export class Project {
     });
   }
 
+  /**
+   * 新增工程
+   * @param args
+   */
+  insert (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectCd,
+        args.projectTx,
+        args.startDt,
+        args.endDt,
+        args.userId,
+        args.userTx
+      ];
+      db.driver.execQuery(insert, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+  /**
+   * 更新工程
+   * @param args
+   */
+  update (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectCd,
+        args.projectTx,
+        args.startDt,
+        args.endDt,
+        args.projectId
+      ];
+      db.driver.execQuery(update, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 const selectByProject = `
@@ -54,4 +100,35 @@ const selectByProject = `
     *
   FROM
     M_PROJECT
+`;
+
+/**
+ * 新增目录SQL
+ */
+const insert = `
+  INSERT INTO
+    M_PROJECT (
+      PROJECT_CD,
+      PROJECT_TX,
+      START_DT,
+      END_DT,
+      ADDUSER_ID,
+      ADDUSER_TX)
+  VALUES
+	  (?, ?, ?, ?, ?, ?);
+`;
+
+/**
+ * 更新目录SQL
+ */
+const update = `
+  UPDATE
+    M_PROJECT
+  SET
+    PROJECT_CD = ?,
+    PROJECT_TX = ?,
+    START_DT = ?,
+    END_DT = ?
+  WHERE
+    PROJECT_ID = ?
 `;

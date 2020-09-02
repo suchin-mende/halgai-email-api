@@ -13,7 +13,6 @@ CREATE PROCEDURE USER_Upd(
 	IN	iSERVICE_ID					BIGINT		,
 	IN	iUSER_TX					VARCHAR(200),
 	IN	iLANG_TX					VARCHAR(20)	,
-	IN	iPASSWORD_TX 				VARCHAR(200),
 	IN	iMAIL						VARCHAR(30)	,
 	IN	iLOCK_FL					TINYINT		,
 	IN	iRESET_FL 					TINYINT		,
@@ -29,6 +28,8 @@ BEGIN
 	DECLARE procName VARCHAR(100) DEFAULT 'USER_Upd';
 	DECLARE notFoundFl INT DEFAULT 0;
 	DECLARE rowCountNr INT;
+
+	DECLARE vPASSWORD_TX   VARCHAR(200);
 
 	-- 終了ハンドラ宣言エリア
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION
@@ -51,12 +52,14 @@ BEGIN
 
 	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, iSERVICE_ID, 0);
 
+	SELECT PASSWORD_TX INTO vPASSWORD_TX FROM M_USER WHERE USER_ID = iUSER_ID;
+
 	UPDATE
 		M_USER
 	SET
 		USER_TX                 = iUSER_TX			,
 		LANG_TX                 = iLANG_TX	        ,
-		PASSWORD_TX             = iPASSWORD_TX      ,
+		PASSWORD_TX             = vPASSWORD_TX      ,
 		MAIL           		  	= iMAIL  		    ,
 		LOCK_FL					= IFNULL(iLOCK_FL, 0),
 		RESET_FL                = IFNULL(iRESET_FL, 0),

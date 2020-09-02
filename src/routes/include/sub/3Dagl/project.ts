@@ -9,6 +9,7 @@ import { BaseRoute } from '../../../route';
 import { ErrorUtils } from '../../../../utils/errorUtils';
 import { AuthenticationMiddleware } from '../../../../authenticate/authenticationMiddleware';
 import { Db3 } from '../../../../db/db';
+import { Utils } from '../../../../utils/utils';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
@@ -51,6 +52,49 @@ export class Project extends BaseRoute {
         res.json({ projects: projects })
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
+    // 新增工程
+    router.post('/:lan/v1/:id/project', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.projectCd)
+        || Utils.isEmpty(params.projectTx)
+        || Utils.isEmpty(params.startDt)
+        || Utils.isEmpty(params.endDt)) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.userId = req.session.user.userId;
+      params.userTx = req.session.user.userTx;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.project.insert(db, params);
+        return res.json({ code: 0, mess: 'OK' });
+      } catch (err) {
+        return res.status(400).send({ code: 1, mess: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
+    // 更新目录
+    router.put('/:lan/v1/:id/project/:projectId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.projectCd)
+        || Utils.isEmpty(params.projectTx)
+        || Utils.isEmpty(params.startDt)
+        || Utils.isEmpty(params.endDt)) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.projectId = req.params.projectId;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.project.update(db, params);
+        return res.json({ code: 0, mess: 'OK' });
+      } catch (err) {
+        return res.status(400).send({ code: 1, mess: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
   }

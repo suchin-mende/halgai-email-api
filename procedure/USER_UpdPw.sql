@@ -1,21 +1,22 @@
 -- Copyright (C) Halgai Corporation 2020 All rights reserved
 /************************************************************************************/
-/*	ユーザー削除																	*/
+/*	ユーザーパスワード変更													*/
 /************************************************************************************/
 
 /*
 */
 
-DROP PROCEDURE IF EXISTS USER_Del;
+DROP PROCEDURE IF EXISTS USER_UpdPw;
 DELIMITER //
-CREATE PROCEDURE USER_Del(
-	IN	iSERVICE_ID					BIGINT		,
+CREATE PROCEDURE USER_UpdPw(
 	IN	iUSER_ID					BIGINT,
-	IN	iLANG_TX					VARCHAR(20)
+	IN	iSERVICE_ID					BIGINT,
+	IN	iLANG_TX					VARCHAR(20),
+	IN  iPASSWORD					VARCHAR(200)
 )
 BEGIN
 	-- 変数宣言エリア
-	DECLARE procName VARCHAR(100) DEFAULT 'USER_Del';
+	DECLARE procName VARCHAR(100) DEFAULT 'USER_UpdPw';
 	DECLARE notFoundFl INT DEFAULT 0;
 	DECLARE rowCountNr INT;
 
@@ -40,10 +41,10 @@ BEGIN
 
 	CALL PS_LOG_DEBUG(procName, 'Info', 'Start', 0, iSERVICE_ID, 0);
 
-	-- 削除（必ず1件）
+	-- 
 	UPDATE M_USER
 	SET
-	 	DEL_FL = 1
+	 	PASSWORD_TX = iPASSWORD
 	WHERE
 		USER_ID	   = iUSER_ID;
 	SELECT ROW_COUNT() INTO rowCountNr;

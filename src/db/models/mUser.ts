@@ -33,6 +33,7 @@ export class MUser {
           filterModel = JSON.parse(args.filterModel);
         }
         const where = [];
+        where.push('DEL_FL = 0');
         if (args.userId) {
           where.push(' MU.USER_ID=?');
           values.push(args.userId);
@@ -132,6 +133,7 @@ export class MUser {
           filterModel = JSON.parse(args.filterModel);
         }
         const where = [];
+        where.push('DEL_FL = 0');
         if (args.userId) {
           where.push(' MU.USER_ID=?');
           values.push(args.userId);
@@ -243,7 +245,6 @@ export class MUser {
         args.userTx,
         args.langTx,
 
-        args.password,
         args.mail,
         args.lockFl,
         args.resetFl,
@@ -268,10 +269,29 @@ export class MUser {
   delete (args: any) {
     return new Promise((resolve, reject) => {
       const values = [
+        args.serviceId,
         args.userId,
         args.langTx,
       ]
       this.db.driver.execQuery(del, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+  updatePW (args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.userId,
+        args.serviceId,
+        args.langTx,
+        args.password
+      ]
+      this.db.driver.execQuery(updatePW, values, (err, data) => {
         if (err) {
           reject(err)
         } else {
@@ -390,5 +410,6 @@ FROM
 `;
 
 const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?)'
-const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
-const del = 'CALL USER_Del(?,?)'
+const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?)'
+const del = 'CALL USER_Del(?,?,?)'
+const updatePW = 'CALL USER_UpdPw(?,?,?,?)'

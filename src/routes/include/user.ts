@@ -160,7 +160,7 @@ export class User extends BaseRoute {
       }
     });
 
-    router.put('/:lan/v1/:id/user', async (req: any, res: Response, next: NextFunction) => {
+    router.put('/:lan/v1/:id/user/:uid', async (req: any, res: Response, next: NextFunction) => {
       let lang = req.params.lan ? req.params.lan : 'cn';
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
@@ -177,25 +177,25 @@ export class User extends BaseRoute {
         sex: req.body.sex,
         wechatCd: req.body.wechatCd,
 
-        userId: req.body.userId,
+        userId: req.params.uid,
         userTx: req.body.userTx,
         updprogramCd: req.body.updprogramCd
       };
       try {
         const result = await Db.mainDb.models.mUser.update(query);
-        await Db.mainDb.models.tmpAuth.delete(query);
+        if (req.body.serviceId !== 2)
+          await Db.mainDb.models.tmpAuth.delete(query);
         return res.json({ message: 'OK', userId: result.id });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
 
-    router.post('/v1/:id/user/delete', auth.auth, async (req: any, res: Response, next: NextFunction) => {
-      if (Object.keys(req.body).length <= 0) {
-        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
-      }
+    router.delete('/:lan/v1/:id/user/:uid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       const query = {
-        userCd: req.body.userCd
+        serviceId: req.headers.h_service_id,
+        userId: req.params.uid,
+        langTx: req.params.lan
       };
       try {
         await Db.mainDb.models.mUser.delete(query);
@@ -264,6 +264,44 @@ export class User extends BaseRoute {
       }
     });
 
+    router.put('/:lan/v1/:id/user/password/change/:uid', async (req: any, res: Response, next: NextFunction) => {
+      let lang = req.params.lan ? req.params.lan : 'cn';
+      if (Object.keys(req.body).length <= 0) {
+        return res.status(400).send({ errors: [ErrorUtils.getErrorJson(lang, 'error_http_body_required_jsondata')] });
+      }
+
+      //旧パスワードチェック
+      if (req.body.userCd && req.body.serviceId !== 2) {
+        req.body.userCd = JSON.stringify({
+          userCd: req.body.userCd,
+          companyCd: req.params.id,
+          serviceId: req.headers.h_service_id
+        });
+        passport.authenticate('local', (err, user, info) => {
+          if (!user) {
+            const err = {
+              errors: [
+                ErrorUtils.getErrorJson(lang, 'error_invalid_loginid_password')
+              ]
+            };
+            return res.status(400).json(err);
+          }
+        });
+      }
+
+      const query = {
+        serviceId: req.body.serviceId,
+        langTx: lang,
+        password: req.body.newPW,
+        userId: req.params.uid
+      };
+      try {
+        await Db.mainDb.models.mUser.updatePW(query);
+        return res.json({ message: 'OK' });
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
 
   }
 
