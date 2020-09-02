@@ -218,6 +218,7 @@ export class MUser {
         args.userCd,
         args.companyId,
         args.serviceId,
+        args.roleId,
         args.userTx,
         args.langTx,
         args.password,
@@ -244,7 +245,7 @@ export class MUser {
         args.serviceId,
         args.userTx,
         args.langTx,
-
+        args.roleId,
         args.mail,
         args.lockFl,
         args.resetFl,
@@ -409,7 +410,7 @@ FROM
       ON US.ROLE_ID = MR.ROLE_ID
 `;
 
-const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?)'
-const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?)'
+const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?,?)'
+const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
 const del = 'CALL USER_Del(?,?,?)'
 const updatePW = 'CALL USER_UpdPw(?,?,?,?)'

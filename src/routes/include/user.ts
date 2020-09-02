@@ -176,7 +176,7 @@ export class User extends BaseRoute {
         myNo: req.body.myNo,
         sex: req.body.sex,
         wechatCd: req.body.wechatCd,
-
+        roleId: req.body.roleId,
         userId: req.params.uid,
         userTx: req.body.userTx,
         updprogramCd: req.body.updprogramCd
