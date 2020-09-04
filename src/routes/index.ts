@@ -32,6 +32,7 @@ import { Block } from './include/sub/3Dagl/block';
 import { Archive } from './include/sub/3Dagl/archive';
 import { File } from './include/sub/3Dagl/file';
 import { Template } from './include/sub/3Dagl/template';
+import { News } from './include/sub/3Dagl/news';
 
 import { Db, Db1, Db2, Db3 } from '../db/db';
 
@@ -102,6 +103,7 @@ export class IndexRoute extends BaseRoute {
     Archive.create(router);
     File.create(router);
     Template.create(router);
+    News.create(router);
   }
 
   /**

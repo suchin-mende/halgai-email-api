@@ -14,6 +14,7 @@ import { Block } from '../models/sub/3Dagl/block';
 import { Archive } from '../models/sub/3Dagl/archive';
 import { File } from '../models/sub/3Dagl/file';
 import { Template } from '../models/sub/3Dagl/template';
+import { News } from '../models/sub/3Dagl/news';
 
 export class Subdb3 {
   private static subdb = {};
@@ -28,6 +29,7 @@ export class Subdb3 {
   public static archive = new Archive();
   public static file = new File();
   public static template = new Template();
+  public static news = new News();
 
   constructor() { }
 
