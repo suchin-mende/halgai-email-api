@@ -179,11 +179,10 @@ const insert = `
       END_DT,
       STATUS,
       CONTENTS,
-      ADD_DT,
       ADDUSER_ID,
       ADDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, ?, ?, ?);
+	  (?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 /**
