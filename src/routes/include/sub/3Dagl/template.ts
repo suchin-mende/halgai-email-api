@@ -95,7 +95,7 @@ export class Template extends BaseRoute {
 
       const file = req.files.file;
       // 文件格式错误
-      if (Settings.uploadSetting.allowMimeTypes.indexOf(file.mimetype) == -1)
+      if (Settings.uploadSetting.getMimeType(file.mimetype) == null)
         return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
 
       // 存储文件
@@ -132,7 +132,7 @@ export class Template extends BaseRoute {
 
       let isFileUpload = req.files !== null && req.files !== undefined && req.files.file !== null;
       if (isFileUpload && 
-        Settings.uploadSetting.allowMimeTypes.indexOf(req.files.file.mimetype) == -1) {
+        Settings.uploadSetting.getMimeType(req.files.file.mimetype) == null) {
           return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
       }
 
