@@ -100,9 +100,7 @@ export class Project extends BaseRoute {
 
     router.delete('/:lan/v1/:id/project/:pid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       const query = {
-        serviceId: req.headers.h_service_id,
-        userId: req.params.pid,
-        langTx: req.params.lan
+        projectId: req.params.pid
       };
       try {
         const db = await Db3.getSubdb(req.session.db);

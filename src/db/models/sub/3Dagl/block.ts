@@ -112,6 +112,25 @@ export class Block {
     })
   }
 
+  /**
+   * 目录删除
+   * @param args
+   */
+  delete (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.blockId
+      ];
+      db.driver.execQuery(deleteBlock, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 const selectByBlock = `
@@ -169,3 +188,16 @@ const update = `
   WHERE
     BLOCK_ID = ?
 `;
+
+/**
+ * 删除目录SQL
+ */
+const deleteBlock = `
+  UPDATE
+    M_BLOCK
+  SET
+    DELETE_FL = 1
+  WHERE
+    BLOCK_ID = ?
+`;
+

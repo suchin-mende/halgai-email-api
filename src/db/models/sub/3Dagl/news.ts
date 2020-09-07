@@ -132,8 +132,6 @@ export class News {
         args.endDt,
         args.status,
         args.contents,
-        args.userId,
-        args.userTx,
         args.newsId
       ];
       db.driver.execQuery(update, values, (err, data) => {
