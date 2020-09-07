@@ -113,6 +113,19 @@ export class News extends BaseRoute {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
+
+    router.delete('/:lan/v1/:id/news/:newsId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      const query = {
+        newsId: req.params.newsId
+      };
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.news.delete(db, query);
+        return res.json({ message: 'OK' });
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
   }
 
 }

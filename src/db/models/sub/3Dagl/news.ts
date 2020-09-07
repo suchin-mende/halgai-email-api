@@ -143,6 +143,25 @@ export class News {
       })
     })
   }
+
+  /**
+   * 公告删除
+   * @param args
+   */
+  delete (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.blockId
+      ];
+      db.driver.execQuery(deleteNews, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
 }
 
 /**
@@ -196,6 +215,18 @@ const update = `
     END_DT = ?,
     STATUS = ?,
     CONTENTS = ?
+  WHERE
+    NEWS_ID = ?
+`;
+
+/**
+ * 删除公告SQL
+ */
+const deleteNews = `
+  UPDATE
+    R_NEWS
+  SET
+    DELETE_FL = 1
   WHERE
     NEWS_ID = ?
 `;
