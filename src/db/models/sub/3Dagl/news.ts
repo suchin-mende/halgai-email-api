@@ -151,7 +151,7 @@ export class News {
   delete (db: any, args: any) {
     return new Promise((resolve, reject) => {
       const values = [
-        args.blockId
+        args.newsId
       ];
       db.driver.execQuery(deleteNews, values, (err, data) => {
         if (err) {
