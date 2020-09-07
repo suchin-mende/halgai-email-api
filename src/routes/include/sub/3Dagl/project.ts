@@ -97,6 +97,21 @@ export class Project extends BaseRoute {
         return res.status(400).send({ code: 1, mess: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
+
+    router.delete('/:lan/v1/:id/project/:pid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      const query = {
+        serviceId: req.headers.h_service_id,
+        userId: req.params.pid,
+        langTx: req.params.lan
+      };
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.project.delete(db, query);
+        return res.json({ message: 'OK' });
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
   }
 
 }

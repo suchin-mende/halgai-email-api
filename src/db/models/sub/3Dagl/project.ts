@@ -93,6 +93,21 @@ export class Project {
     })
   }
 
+  delete (db:any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectId
+      ]
+      db.driver.execQuery(delProject, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 const selectByProject = `
@@ -129,6 +144,18 @@ const update = `
     PROJECT_TX = ?,
     START_DT = ?,
     END_DT = ?
+  WHERE
+    PROJECT_ID = ?
+`;
+
+/**
+ * delete project
+ */
+const delProject = `
+  UPDATE
+    M_PROJECT
+  SET
+    DELETE_FL = 1
   WHERE
     PROJECT_ID = ?
 `;
