@@ -116,4 +116,30 @@ export class FileUtils {
     ret.path = hashPath;
     return ret;
   }
+
+  static fileUploadSp(storePath, fileUpload, callback) {
+    if (!FileUtils.isImage(fileUpload.mimetype)) {
+      return FileUtils.fileUpload(storePath, fileUpload);
+    }
+    
+    const mimeType = Settings.uploadSetting.getMimeType(fileUpload.mimetype);
+    const tmpPath = Settings.uploadSetting.path + '/' + fileUpload.md5 + Utils.getRandom(10000, 99999) + '.' + mimeType[fileUpload.mimetype][0];
+    
+    fileUpload.mv(tmpPath, ()=> {
+      var fd = fs.openSync(tmpPath, 'r+');
+      var buffer = fs.readFileSync(fd);
+      fs.closeSync(fd);
+      
+      const rebuildParam = {};
+      for (let p in fileUpload)
+        rebuildParam[p] = fileUpload[p]
+      rebuildParam['name'] = tmpPath;
+      rebuildParam['data'] = buffer;
+      
+      const ret = FileUtils.fileUpload(storePath, rebuildParam)
+      fs.unlinkSync(tmpPath);
+      if (callback)
+        callback(ret);
+    })
+  }
 }
