@@ -32,7 +32,19 @@ export const Settings = {
     path: path.resolve(__dirname,'../../../public/upload'),
     folderImage: 'images',
     folderDoc: 'documents',
-    allowMimeTypes: ['image/png', 'image/jpeg', 'application/pdf'],
+    mimeTypes: [
+      {'image/png': ['png']}, 
+      {'image/jpeg': ['jpeg', 'jpg']}, 
+      {'application/pdf': ['pdf']}
+    ],
+    hasMimeType(mimeType) {
+      for (let i = 0; i < this.mimeTypes.length; i++) {
+        for (const p in this.mimeTypes[i])
+          if (p === mimeType)
+            return this.mimeTypes[i];
+      }
+      return null;
+    },
     image: {
       maxWidth: 800,
       maxHeight: 800,
