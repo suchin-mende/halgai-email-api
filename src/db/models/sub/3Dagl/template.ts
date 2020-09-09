@@ -76,12 +76,12 @@ export class Template {
           where.push('template.TEMPLATE_ID = ?');
           values.push(args.templateId);
         }
-  
+
         if (args.blockId) {
           where.push('template.BLOCK_ID = ?');
           values.push(args.blockId);
         }
-  
+
         if (args.templateTx) {
           where.push(`template.TEMPLATE_TX like \'%${args.templateTx}%\'`);
         }
@@ -155,7 +155,21 @@ export class Template {
       })
     })
   }
-  
+
+  delete (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.templateId
+      ];
+      db.driver.execQuery(deleteTemplate, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
 
 }
 
@@ -187,7 +201,7 @@ const selectCountByTemplate = `
  * 新增模版SQL
  */
 const insert = `
-  INSERT INTO 
+  INSERT INTO
     M_TEMPLATE (BLOCK_ID, TEMPLATE_CD, TEMPLATE_TX, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
   VALUES
 	  (?, ?, ?, ?, ?, ?);
@@ -198,11 +212,20 @@ const insert = `
  */
 const update = `
   UPDATE
-    M_TEMPLATE 
+    M_TEMPLATE
   SET
     BLOCK_ID = ?,
     TEMPLATE_CD = ?,
     TEMPLATE_TX = ?
+  WHERE
+    TEMPLATE_ID = ?
+`;
+
+const deleteTemplate = `
+  UPDATE
+    M_TEMPLATE
+  SET
+    DELETE_FL = 1
   WHERE
     TEMPLATE_ID = ?
 `;

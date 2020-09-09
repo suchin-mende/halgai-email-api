@@ -87,8 +87,8 @@ export class Template extends BaseRoute {
       console.log(req.files)
       let params = req.body;
       if (req.files === null || req.files === undefined || req.files.file === null
-          || Utils.isEmpty(params.blockId) 
-          || Utils.isEmpty(params.templateCd) 
+          || Utils.isEmpty(params.blockId)
+          || Utils.isEmpty(params.templateCd)
           || Utils.isEmpty(params.templateTx)) {
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
@@ -100,7 +100,7 @@ export class Template extends BaseRoute {
 
       // 存储文件
       let ret = FileUtils.fileUpload(Settings.uploadSetting.path, file);
-      for (let p in ret) 
+      for (let p in ret)
         params[p] = ret[p];
 
       params.userId = req.session.user.userId;
@@ -123,15 +123,15 @@ export class Template extends BaseRoute {
     router.put('/:lan/v1/:id/template/:templateId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
       let params = req.body;
-      if (Utils.isEmpty(params.blockId) 
-          || Utils.isEmpty(params.templateCd) 
+      if (Utils.isEmpty(params.blockId)
+          || Utils.isEmpty(params.templateCd)
           || Utils.isEmpty(params.templateTx)
           || Utils.isEmpty(req.params.templateId)) {
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
 
       let isFileUpload = req.files !== null && req.files !== undefined && req.files.file !== null;
-      if (isFileUpload && 
+      if (isFileUpload &&
         Settings.uploadSetting.getMimeType(req.files.file.mimetype) == null) {
           return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
       }
@@ -155,6 +155,19 @@ export class Template extends BaseRoute {
         return res.json({ message: 'OK'});
       } catch (err) {
         console.log(err)
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
+    router.delete('/:lan/v1/:id/template/:tid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      const query = {
+        templateId: req.params.tid
+      };
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.template.delete(db, query);
+        return res.json({ message: 'OK' });
+      } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
