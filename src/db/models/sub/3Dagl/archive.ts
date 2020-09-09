@@ -212,6 +212,21 @@ export class Archive {
     });
   }
 
+  delete (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.archiveId
+      ];
+      db.driver.execQuery(deleteArchive, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 /**
@@ -276,4 +291,13 @@ const selectByArchiveState = `
     COUNT(IF(STATE_FL = 2, 1, NULL)) AS STAGE_CNT
   FROM
     R_ARCHIVE
+`;
+
+const deleteArchive = `
+  UPDATE
+    R_ARCHIVE
+  SET
+    DELETE_FL = 1
+  WHERE
+    ARCHIVE_ID = ?
 `;
