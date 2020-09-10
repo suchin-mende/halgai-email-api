@@ -25,7 +25,7 @@ export class Block {
         where.push('BLOCK.DELETE_FL=0');
 
         if (args.projectId) {
-          where.push('BLOCK.PROJECT_ID = ?');
+          where.push('BLOCK.PROJECT_ID in (0, ?)');
           values.push(args.projectId);
         }
         if (args.blockId) {
@@ -145,7 +145,7 @@ const selectByBlock = `
     BLOCK.TEMPLATE_FL,
     BLOCK.TYPE,
     (SELECT count(PARENT_BLOCK_ID) from M_BLOCK where PARENT_BLOCK_ID=BLOCK.BLOCK_ID) AS SUB_BLOCK_CNT,
-    (SELECT count(BLOCK_ID) from R_ARCHIVE where PROJECT_ID=BLOCK.PROJECT_ID AND BLOCK_ID=BLOCK.BLOCK_ID) AS ARCHIVE_CNT,
+    (SELECT count(BLOCK_ID) from R_ARCHIVE where BLOCK_ID=BLOCK.BLOCK_ID) AS ARCHIVE_CNT,
     BLOCK.ADD_DT,
     BLOCK.ADDUSER_ID,
     BLOCK.ADDUSER_TX

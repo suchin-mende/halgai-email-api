@@ -48,7 +48,7 @@ export class Archive extends BaseRoute {
         query = {};
       }
 
-      if (query.projectId == null || query.blockId == null)
+      if (query.blockId == null)
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
 
       try {
@@ -70,8 +70,7 @@ export class Archive extends BaseRoute {
     // 新增档案
     router.post('/:lan/v1/:id/archive', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let params = req.body;
-      if (Utils.isEmpty(params.projectId)
-          || Utils.isEmpty(params.blockId)
+      if (Utils.isEmpty(params.blockId)
           || Utils.isEmpty(params.archiveCd)
           || Utils.isEmpty(params.archiveTx)) {
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
@@ -92,8 +91,7 @@ export class Archive extends BaseRoute {
     // 更新档案
     router.put('/:lan/v1/:id/archive/:archiveId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let params = req.body;
-      if (Utils.isEmpty(params.projectId)
-          || Utils.isEmpty(params.blockId)
+      if (Utils.isEmpty(params.blockId)
           || Utils.isEmpty(params.archiveCd)
           || Utils.isEmpty(params.archiveTx)
           || params.stateFl == null) {

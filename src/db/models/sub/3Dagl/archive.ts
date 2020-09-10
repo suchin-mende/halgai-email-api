@@ -29,10 +29,8 @@ export class Archive {
       const where = [];
 
       where.push('DELETE_FL = 0');
-      where.push('PROJECT_ID = ?');
       where.push('BLOCK_ID = ?');
 
-      values.push(args.projectId);
       values.push(args.blockId);
 
       if (args.archiveId) {
@@ -74,11 +72,9 @@ export class Archive {
         const where = [];
         where.push('DELETE_FL = 0');
 
-        where.push('PROJECT_ID = ?');
         where.push('BLOCK_ID = ?');
 
         for (var i = 0; i < 2; i++) {
-          values.push(args.projectId);
           values.push(args.blockId);
         }
 
@@ -121,7 +117,6 @@ export class Archive {
   insert (db: any, args: any) {
     return new Promise((resolve, reject) => {
       const values = [
-        args.projectId,
         args.blockId,
         args.archiveCd,
         args.archiveTx,
@@ -147,7 +142,6 @@ export class Archive {
   update (db: any, args: any) {
     return new Promise((resolve, reject) => {
       const values = [
-        args.projectId,
         args.blockId,
         args.archiveCd,
         args.archiveTx,
@@ -180,10 +174,6 @@ export class Archive {
         const where = [];
         where.push('DELETE_FL = 0');
 
-        if (args.projectId) {
-          where.push('PROJECT_ID = ?');
-          values.push(args.projectId);
-        }
         if (args.blockId) {
           where.push('BLOCK_ID = ?');
           values.push(args.blockId);
@@ -236,7 +226,7 @@ const selectByArchive = `
   SELECT
     archive.*,
     (
-      SELECT COUNT(1) FROM R_FILE where PROJECT_ID = ? and BLOCK_ID = ? and ARCHIVE_ID = archive.ARCHIVE_ID
+      SELECT COUNT(1) FROM R_FILE where BLOCK_ID = ? and ARCHIVE_ID = archive.ARCHIVE_ID
     ) as fileTotalCnt
   FROM
     R_ARCHIVE as archive
@@ -257,9 +247,9 @@ const selectCountByArchive = `
  */
 const insert = `
   INSERT INTO
-    R_ARCHIVE (PROJECT_ID, BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, STATE_FL, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
+    R_ARCHIVE (BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, STATE_FL, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
+	  (?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
 `;
 
 /**
@@ -269,7 +259,6 @@ const update = `
   UPDATE
     R_ARCHIVE
   SET
-    PROJECT_ID = ?,
     BLOCK_ID = ?,
     ARCHIVE_CD = ?,
     ARCHIVE_TX = ?,

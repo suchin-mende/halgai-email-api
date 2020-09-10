@@ -15,8 +15,8 @@ export class File {
 
   /**
    * 检索文件条数
-   * @param db 
-   * @param args 
+   * @param db
+   * @param args
    */
   selectCount(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
@@ -29,11 +29,6 @@ export class File {
       const where = [];
 
       where.push('DELETE_FL = 0');
-
-      if (args.projectId) {
-        where.push('PROJECT_ID = ?');
-        values.push(args.projectId);
-      }
 
       if (args.blockId) {
         where.push('BLOCK_ID = ?');
@@ -54,7 +49,7 @@ export class File {
         query = `${query} WHERE ${where.join(' AND ')}`;
       }
       console.log(query);
-    
+
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -67,12 +62,12 @@ export class File {
 
   /**
    * 检索文件
-   * @param db 
-   * @param args 
+   * @param db
+   * @param args
    */
   select(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
-      
+
       let query = selectByFile;
 
       const values = [];
@@ -80,16 +75,11 @@ export class File {
         const where = [];
         where.push('DELETE_FL = 0');
 
-        if (args.projectId) {
-          where.push('PROJECT_ID = ?');
-          values.push(args.projectId);
-        }
-  
         if (args.blockId) {
           where.push('BLOCK_ID = ?');
           values.push(args.blockId);
         }
-  
+
         if (args.archiveId) {
           where.push('ARCHIVE_ID = ?');
           values.push(args.archiveId);
@@ -116,7 +106,7 @@ export class File {
       }
 
       console.log(query);
-      
+
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -134,7 +124,6 @@ export class File {
   insert (db: any, args: any) {
     return new Promise((resolve, reject) => {
       const values = [
-        args.projectId,
         args.blockId,
         args.archiveId,
         args.templateId,
@@ -195,15 +184,15 @@ const selectCountByFile = `
 
 // 新增文件SQL
 const insert = `
-  INSERT INTO 
-    R_FILE (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
+  INSERT INTO
+    R_FILE (BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 const logicaDeleteWithTemplate = `
   UPDATE
-  R_FILE 
+  R_FILE
   SET
     DELETE_FL = 1
   WHERE
