@@ -30,6 +30,11 @@ export class File {
 
       where.push('DELETE_FL = 0');
 
+      if (args.projectId) {
+        where.push('PROJECT_ID = ?');
+        values.push(args.projectId);
+      }
+
       if (args.blockId) {
         where.push('BLOCK_ID = ?');
         values.push(args.blockId);
@@ -74,6 +79,11 @@ export class File {
       if (args) {
         const where = [];
         where.push('DELETE_FL = 0');
+
+        if (args.projectId) {
+          where.push('PROJECT_ID = ?');
+          values.push(args.projectId);
+        }
 
         if (args.blockId) {
           where.push('BLOCK_ID = ?');
@@ -124,6 +134,7 @@ export class File {
   insert (db: any, args: any) {
     return new Promise((resolve, reject) => {
       const values = [
+        args.projectId,
         args.blockId,
         args.archiveId,
         args.templateId,
@@ -185,9 +196,9 @@ const selectCountByFile = `
 // 新增文件SQL
 const insert = `
   INSERT INTO
-    R_FILE (BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
+    R_FILE (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 const logicaDeleteWithTemplate = `

@@ -120,7 +120,6 @@ export class Archive {
         args.blockId,
         args.archiveCd,
         args.archiveTx,
-        1,
         0,
         args.userId,
         args.userTx
@@ -145,7 +144,6 @@ export class Archive {
         args.blockId,
         args.archiveCd,
         args.archiveTx,
-        args.stateFl,
         args.userId,
         args.userTx,
         args.archiveId
@@ -247,9 +245,9 @@ const selectCountByArchive = `
  */
 const insert = `
   INSERT INTO
-    R_ARCHIVE (BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, STATE_FL, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
+    R_ARCHIVE (BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
+	  (?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
 `;
 
 /**
@@ -262,7 +260,6 @@ const update = `
     BLOCK_ID = ?,
     ARCHIVE_CD = ?,
     ARCHIVE_TX = ?,
-    STATE_FL = ?,
     UPD_DT = CURRENT_TIMESTAMP,
     UPDUSER_ID = ?,
     UPDUSER_TX = ?

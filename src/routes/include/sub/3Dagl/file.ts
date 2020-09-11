@@ -11,10 +11,13 @@ import { AuthenticationMiddleware } from '../../../../authenticate/authenticatio
 import { Db3 } from '../../../../db/db';
 import { Utils } from '../../../../utils/utils';
 import { Settings } from '../../../../config/settings';
+import * as fs from 'fs';
 import { FileUtils } from '../../../../utils/fileUtils';
+import * as path from 'path';
 
 const auth = new AuthenticationMiddleware();
-
+const passport = require('passport');
+const images = require('images');
 /**
  * / route
  *
@@ -48,7 +51,7 @@ export class File extends BaseRoute {
         query = {};
       }
 
-      // if (query.blockId == null ||
+      // if (query.projectId == null || query.blockId == null ||
       //     query.archiveId == null)
       //   return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
 
@@ -72,7 +75,7 @@ export class File extends BaseRoute {
     router.post('/:lan/v1/:id/archive/file/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
       let params = req.body;
-      if (req.files === null || req.files === undefined || req.files.file === null
+      if (req.files === null || req.files === undefined || req.files.file === null || Utils.isEmpty(params.projectId)
           || Utils.isEmpty(params.blockId)
           || Utils.isEmpty(params.archiveId)) {
         return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
@@ -81,7 +84,7 @@ export class File extends BaseRoute {
       const file = req.files.file;
 
       // 文件格式错误
-      if (Settings.uploadSetting.getMimeType(file.mimetype) == null)
+      if (Settings.uploadSetting.allowMimeTypes.indexOf(file.mimetype) == -1)
         return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
 
       // 存储文件
@@ -104,19 +107,19 @@ export class File extends BaseRoute {
 
     // 上传文件 SP
     router.post('/:lan/v1/:id/archive/images/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
-      const imgs = req.files == null || req.files.images == null ? null :
-        req.files.images instanceof Array ? req.files.images : [req.files.images]
 
       let params = req.body;
-      if (imgs == null
+      if (req.files === null || req.files.images == null || Utils.isEmpty(params.projectId)
           || Utils.isEmpty(params.blockId)
           || Utils.isEmpty(params.archiveId)) {
         return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
 
+      const imgs = req.files.images;
+
       // 检测文件格式
       imgs.forEach((file) =>{
-        if (Settings.uploadSetting.getMimeType(file.mimetype) == null)
+        if (Settings.uploadSetting.allowMimeTypes.indexOf(file.mimetype) == -1)
           return res.status(500).send({ errors: [{ message: 'Bad File Format', code: ErrorUtils.getDefaultErrorCode() }] });
       });
 
@@ -126,26 +129,21 @@ export class File extends BaseRoute {
       const db = await Db3.getSubdb(req.session.db);
       for (let i = 0; i < imgs.length; i++) {
 
+        var dbParams = {};
+        for (let p in params)
+          dbParams[p] = params[p];
 
+        // 存储文件
+        let ret = FileUtils.fileUpload(Settings.uploadSetting.path, imgs[i]);
+        for (let p in ret)
+          dbParams[p] = ret[p];
 
-        FileUtils.fileUploadSp(Settings.uploadSetting.path, imgs[i], (ret) => {
-          console.log(ret)
-
-          var dbParams = {};
-          for (let p in params)
-            dbParams[p] = params[p];
-
-          for (let p in ret)
-            dbParams[p] = ret[p];
-
-          // 写入数据库
-          try {
-            Db3.file.insert(db, dbParams);
-          } catch (err) {
-            return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
-          }
-
-        });
+        // 写入数据库
+        try {
+          await Db3.file.insert(db, dbParams);
+        } catch (err) {
+          return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+        }
       }
       return res.json({ message: 'OK'});
     });

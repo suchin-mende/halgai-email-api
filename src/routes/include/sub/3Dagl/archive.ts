@@ -93,8 +93,7 @@ export class Archive extends BaseRoute {
       let params = req.body;
       if (Utils.isEmpty(params.blockId)
           || Utils.isEmpty(params.archiveCd)
-          || Utils.isEmpty(params.archiveTx)
-          || params.stateFl == null) {
+          || Utils.isEmpty(params.archiveTx)) {
         return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
 
