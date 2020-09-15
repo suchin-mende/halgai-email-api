@@ -140,6 +140,7 @@ export class File {
         args.templateId,
         null,
         args.fileTx,
+        args.stateFl,
         args.thumbTx,
         args.path,
         0,
@@ -196,9 +197,9 @@ const selectCountByFile = `
 // 新增文件SQL
 const insert = `
   INSERT INTO
-    R_FILE (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
+    R_FILE (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, TEMPLATE_ID, FILE_CD, FILE_TX, STATE_FL, THUMBNAIL_TX, FILE_PASS, DELETE_FL, ADDUSER_ID, ADDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+	  (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
 `;
 
 const logicaDeleteWithTemplate = `

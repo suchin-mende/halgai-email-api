@@ -59,8 +59,7 @@ export class Block extends BaseRoute {
     // 新增目录
     router.post('/:lan/v1/:id/block', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let params = req.body;
-      if (Utils.isEmpty(params.projectId)
-        || Utils.isEmpty(params.blockCd)
+      if (Utils.isEmpty(params.blockCd)
         || Utils.isEmpty(params.blockTx)
         || Utils.isEmpty(params.templateFl)
         || Utils.isEmpty(params.type)) {
