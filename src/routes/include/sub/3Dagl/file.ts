@@ -11,13 +11,10 @@ import { AuthenticationMiddleware } from '../../../../authenticate/authenticatio
 import { Db3 } from '../../../../db/db';
 import { Utils } from '../../../../utils/utils';
 import { Settings } from '../../../../config/settings';
-import * as fs from 'fs';
 import { FileUtils } from '../../../../utils/fileUtils';
-import * as path from 'path';
 
 const auth = new AuthenticationMiddleware();
-const passport = require('passport');
-const images = require('images');
+
 /**
  * / route
  *
@@ -51,8 +48,8 @@ export class File extends BaseRoute {
         query = {};
       }
 
-      // if (query.projectId == null || query.blockId == null ||
-      //     query.archiveId == null)
+      // if (query.projectId == null || query.blockId == null || 
+      //     query.archiveId == null) 
       //   return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
 
       try {
@@ -75,8 +72,8 @@ export class File extends BaseRoute {
     router.post('/:lan/v1/:id/archive/file/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
 
       let params = req.body;
-      if (req.files === null || req.files === undefined || req.files.file === null
-          || Utils.isEmpty(params.blockId)
+      if (req.files === null || req.files === undefined || req.files.file === null || Utils.isEmpty(params.projectId) 
+          || Utils.isEmpty(params.blockId) 
           || Utils.isEmpty(params.archiveId)) {
         return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
@@ -89,12 +86,12 @@ export class File extends BaseRoute {
 
       // 存储文件
       let ret = FileUtils.fileUpload(Settings.uploadSetting.path, file);
-      for (let p in ret)
+      for (let p in ret) 
         params[p] = ret[p];
-
+      
       params.userId = req.session.user.userId;
       params.userTx = req.session.user.userTx;
-
+      
       // 写入数据库
       try {
         const db = await Db3.getSubdb(req.session.db);
@@ -109,10 +106,10 @@ export class File extends BaseRoute {
     router.post('/:lan/v1/:id/archive/images/upload', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       const imgs = req.files == null || req.files.images == null ? null :
         req.files.images instanceof Array ? req.files.images : [req.files.images]
-
+      
       let params = req.body;
-      if (imgs == null
-          || Utils.isEmpty(params.blockId)
+      if (imgs == null || Utils.isEmpty(params.projectId) 
+          || Utils.isEmpty(params.blockId) 
           || Utils.isEmpty(params.archiveId)) {
         return res.status(500).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
       }
@@ -130,17 +127,17 @@ export class File extends BaseRoute {
       for (let i = 0; i < imgs.length; i++) {
 
 
-
+        
         FileUtils.fileUploadSp(Settings.uploadSetting.path, imgs[i], (ret) => {
           console.log(ret)
 
           var dbParams = {};
-          for (let p in params)
+          for (let p in params) 
             dbParams[p] = params[p];
 
-          for (let p in ret)
+          for (let p in ret) 
             dbParams[p] = ret[p];
-
+        
           // 写入数据库
           try {
             Db3.file.insert(db, dbParams);
