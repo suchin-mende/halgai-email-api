@@ -55,7 +55,7 @@ export class Project {
       const values = [
         args.projectCd,
         args.projectTx,
-        args.profaile,
+        args.profile,
         args.responsible,
         args.supervision,
         args.startDt,
@@ -82,7 +82,7 @@ export class Project {
       const values = [
         args.projectCd,
         args.projectTx,
-        args.profaile,
+        args.profile,
         args.responsible,
         args.supervision,
         args.startDt,
