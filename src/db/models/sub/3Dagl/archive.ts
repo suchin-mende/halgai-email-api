@@ -120,6 +120,7 @@ export class Archive {
         args.blockId,
         args.archiveCd,
         args.archiveTx,
+        args.responsible,
         0,
         args.userId,
         args.userTx
@@ -144,10 +145,11 @@ export class Archive {
         args.blockId,
         args.archiveCd,
         args.archiveTx,
+        args.responsible,
         args.userId,
         args.userTx,
-        args.archiveId
-      ];
+        args.archiveId,
+      ]
       db.driver.execQuery(update, values, (err, data) => {
         if (err) {
           reject(err)
@@ -225,10 +227,26 @@ const selectByArchive = `
     archive.*,
     (
       SELECT COUNT(1) FROM R_FILE where BLOCK_ID = ? and ARCHIVE_ID = archive.ARCHIVE_ID
-    ) as fileTotalCnt
+    ) as fileTotalCnt,
+    (SELECT
+        STATE_FL
+     FROM
+        R_FILE file01
+     WHERE
+        file01.ADD_DT = (
+            SELECT
+                MAX(file02.ADD_DT)
+            FROM
+                R_FILE file02
+            WHERE
+                file02.ARCHIVE_ID = archive.ARCHIVE_ID
+            GROUP BY
+                file02.ARCHIVE_ID
+        )
+    ) as stateFl
   FROM
     R_ARCHIVE as archive
-`;
+`
 
 /**
  * 查询档案条数SQL
@@ -245,10 +263,10 @@ const selectCountByArchive = `
  */
 const insert = `
   INSERT INTO
-    R_ARCHIVE (BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
+    R_ARCHIVE (BLOCK_ID, ARCHIVE_CD, ARCHIVE_TX, RESPONSIBLE, DELETE_FL, ADDUSER_ID, ADDUSER_TX, UPD_DT, UPDUSER_ID, UPDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
-`;
+	  (?, ?, ?, ?, ?, ?, ?, NULL, NULL, NULL);
+`
 
 /**
  * 更新档案SQL
@@ -260,12 +278,13 @@ const update = `
     BLOCK_ID = ?,
     ARCHIVE_CD = ?,
     ARCHIVE_TX = ?,
+    RESPONSIBLE = ?,
     UPD_DT = CURRENT_TIMESTAMP,
     UPDUSER_ID = ?,
     UPDUSER_TX = ?
   WHERE
     ARCHIVE_ID = ?
-`;
+`
 
 /**
  * 查询档案状态SQL

@@ -55,6 +55,9 @@ export class Project {
       const values = [
         args.projectCd,
         args.projectTx,
+        args.profaile,
+        args.responsible,
+        args.supervision,
         args.startDt,
         args.endDt,
         args.userId,
@@ -79,10 +82,13 @@ export class Project {
       const values = [
         args.projectCd,
         args.projectTx,
+        args.profaile,
+        args.responsible,
+        args.supervision,
         args.startDt,
         args.endDt,
-        args.projectId
-      ];
+        args.projectId,
+      ]
       db.driver.execQuery(update, values, (err, data) => {
         if (err) {
           reject(err)
@@ -125,13 +131,16 @@ const insert = `
     M_PROJECT (
       PROJECT_CD,
       PROJECT_TX,
+      PROFILE,
+      RESPONSIBLE,
+      SUPERVISION,
       START_DT,
       END_DT,
       ADDUSER_ID,
       ADDUSER_TX)
   VALUES
-	  (?, ?, ?, ?, ?, ?);
-`;
+	  (?, ?, ?, ?, ?, ?, ?, ?, ?);
+`
 
 /**
  * 更新目录SQL
@@ -142,11 +151,14 @@ const update = `
   SET
     PROJECT_CD = ?,
     PROJECT_TX = ?,
+    PROFILE = ?,
+    RESPONSIBLE = ?,
+    SUPERVISION = ?,
     START_DT = ?,
     END_DT = ?
   WHERE
     PROJECT_ID = ?
-`;
+`
 
 /**
  * delete project
