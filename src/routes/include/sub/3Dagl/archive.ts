@@ -110,6 +110,29 @@ export class Archive extends BaseRoute {
       }
     });
 
+    // 更新档案状态
+    router.put('/:lan/v1/:id/archive/state/:archiveId', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      console.log(params);
+      if (Utils.isEmpty(params.blockId)
+          || Utils.isEmpty(params.projectId)
+          || Utils.isEmpty(params.stateFl)) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      params.archiveId = req.params.archiveId;
+      params.userId = req.session.user.userId;
+      params.userTx = req.session.user.userTx;
+
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        await Db3.archive.updateState(db, params);
+        return res.json({ message: 'OK'});
+      } catch (err) {
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
+
     router.delete('/:lan/v1/:id/archive/:aid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       const query = {
         archiveId: req.params.aid

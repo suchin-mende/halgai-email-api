@@ -161,6 +161,36 @@ export class Archive {
   }
 
   /**
+   * 更新档案状态
+   * @param args
+   */
+  updateState(db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.projectId,
+        args.blockId,
+        args.archiveId,
+        args.stateFl,
+        args.userId,
+        args.userTx,
+        args.projectId,
+        args.blockId,
+        args.archiveId,
+        args.stateFl,
+        args.userId,
+        args.userTx
+      ];
+      db.driver.execQuery(updateInsertState, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+  /**
    * 查询档案状态数
    * @param db
    * @param args
@@ -284,6 +314,25 @@ const update = `
     UPDUSER_TX = ?
   WHERE
     ARCHIVE_ID = ?
+`
+
+/**
+ * 更新档案SQL
+ */
+const updateInsertState = `
+  INSERT INTO
+    R_ARCHIVE_STATE
+    (PROJECT_ID, BLOCK_ID, ARCHIVE_ID, STATE_FL, ADD_DT, ADDUSER_ID, ADDUSER_TX)
+    VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?)
+  ON duplicate KEY UPDATE
+    PROJECT_ID = ?,
+    BLOCK_ID = ?,
+    ARCHIVE_ID = ?,
+    STATE_FL = ?,
+    UPD_DT = CURRENT_TIMESTAMP,
+    UPDUSER_ID = ?,
+    UPDUSER_TX = ?,
+    UPDCOUNT_NR = UPDCOUNT_NR + 1
 `
 
 /**
