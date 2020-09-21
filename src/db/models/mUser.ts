@@ -71,6 +71,10 @@ export class MUser {
           where.push(' US.SERVICE_ID=?');
           values.push(args.serviceId);
         }
+        if (args.openId) {
+          where.push(' MU.W_OPEN_ID=? ');
+          values.push(args.openId);
+        }
         if (filterModel && filterModel.serviceTx) {
           where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
           values.push(TableUtils.filterModelValue(filterModel.serviceTx));
@@ -301,6 +305,23 @@ export class MUser {
       })
     })
   }
+
+  updateWxOpenId (args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.openId,
+        args.serviceId,
+        args.userId
+      ]
+      this.db.driver.execQuery(updateWxOpenIdSql, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
 }
 
 let authUser = `
@@ -408,6 +429,16 @@ FROM
       ON US.SERVICE_ID = MS.SERVICE_ID
     LEFT JOIN M_ROLE MR
       ON US.ROLE_ID = MR.ROLE_ID
+`;
+
+const updateWxOpenIdSql = `
+  UPDATE
+    M_USER
+  SET
+    W_OPEN_ID = ?,
+    SERVICE_ID = ?
+  WHERE
+    USER_ID = ?
 `;
 
 const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?,?)'
