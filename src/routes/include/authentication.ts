@@ -11,10 +11,13 @@ import { AuthenticationMiddleware } from '../../authenticate/authenticationMiddl
 import { Logger } from '../../utils/logger';
 import { Db } from '../../db/db';
 import { Utils } from '../../utils/utils'
+import { Settings } from '../../config/env/env.local';
 
 const auth = new AuthenticationMiddleware();
 const passport = require('passport');
 const bcrypt = require('bcrypt');
+const axios = require('axios');
+const util = require('util');
 /**
  * / route
  *
@@ -177,6 +180,94 @@ export class Authentication extends BaseRoute {
             ],
           });
       }
+    });
+
+    // 微信登录
+    router.post('/:lan/v1/:id/auth/wx/login', async (req: any, res: Response, next: NextFunction) => {
+      let params = req.body;
+      if (Utils.isEmpty(params.code)) {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+
+      let lang = req.params.lan ? req.params.lan : 'cn';
+
+      axios
+      .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL, 
+          Settings.wx.APPID, Settings.wx.SECRET, params.code)
+      )
+      .then(async (resp) => {
+        let data = resp.data;
+        if (!Utils.isEmpty(data.errcode))
+          return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+
+        const user = await Db.mainDb.models.mUser.authWxUser(data.openid, req.headers.h_service_id, req.params.id);
+        if (user == null)
+          return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+        
+        user.csrfTx = Utils.guid();
+        req.session.user = user;
+        req.session.save(err => {
+          if (err) {
+            const err = {
+              errors: [
+                ErrorUtils.getErrorJson(lang, 'error_saving_session')
+              ]
+            };
+            return res.status(400).json(err);
+          }
+        });
+
+        bcrypt.compare(req.headers.h_api_key_tx, user.apiKeyTx, (err, isValid) => {
+          if (err) {
+            const err = {
+              errors: [
+                ErrorUtils.getErrorJson(lang, 'error_invalid_apikey')
+              ]
+            };
+            return res.status(400).json(err);
+          }
+          if (!isValid) {
+            const err = {
+              errors: [
+                ErrorUtils.getErrorJson(lang, 'error_invalid_apikey')
+              ]
+            };
+            return res.status(400).json(err);
+          } else {
+            const ret = {
+              sessionKey: req.session.id,
+              csrfToken: user.csrfTx,
+              refreshKey: req.session.id,
+              user: {
+                userId: user.userId,
+                userCd: user.userCd,
+                userTx: user.userTx,
+                langTx: user.langTx,
+                roleId: user.roleId,
+                roleTx: user.roleTx,
+                serviceId: user.serviceId,
+                serviceTx: user.serviceTx,
+                addDt: user.addDt,
+                updDt: user.updDt,
+                upduserId: user.upduserId,
+                upduserTx: user.upduserTx,
+                adduserId: user.adduserId,
+                adduserTx: user.adduserTx
+              },
+              company: {
+                companyId: user.companyId,
+                companyCd: user.companyCd,
+                companyTx: user.companyTx
+              }
+            };
+            Logger.log('info', `${req.ip} - Login user: ${user.userId} - User code: ${user.userCd}`);
+            return res.json(ret);
+          }
+        });
+      })
+      .catch((err) => {
+        return res.status(400).send({ errors: [{ message: '', code: ErrorUtils.getDefaultErrorCode() }] });
+      });
     });
   }
 

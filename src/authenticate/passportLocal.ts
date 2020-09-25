@@ -6,6 +6,7 @@
 import { AuthenticationMiddleware } from './authenticationMiddleware';
 import { Db, Db1, Db2, Db3 } from '../db/db';
 import * as Passport from 'passport';
+import { Utils } from '../utils/utils'
 
 const bcrypt = require('bcrypt');
 const LocalStrategy = require('passport-local').Strategy;
@@ -52,7 +53,7 @@ export class PassportLocal {
               return done(null, false)
             }
             delete user.passwordTx;
-            user.csrfTx = this.guid();
+            user.csrfTx = Utils.guid();
             return done(null, user)
           })
         })
@@ -60,13 +61,6 @@ export class PassportLocal {
     ));
 
     passport.authenticationMiddleware = new AuthenticationMiddleware();
-  }
-
-  guid() {
-    function s4() {
-      return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-    }
-    return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
   }
 
   selectDB (username) {

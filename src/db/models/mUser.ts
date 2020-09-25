@@ -71,6 +71,10 @@ export class MUser {
           where.push(' US.SERVICE_ID=?');
           values.push(args.serviceId);
         }
+        if (args.openId) {
+          where.push(' MU.W_OPEN_ID=? ');
+          values.push(args.openId);
+        }
         if (filterModel && filterModel.serviceTx) {
           where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
           values.push(TableUtils.filterModelValue(filterModel.serviceTx));
@@ -301,6 +305,38 @@ export class MUser {
       })
     })
   }
+
+  // 更新用户微信openId
+  updateWxOpenId (args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.openId,
+        args.serviceId,
+        args.userId
+      ]
+      this.db.driver.execQuery(updateWxOpenIdSql, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
+  // 验证微信用户登录
+  authWxUser (openId: string, serviceId: number, companyCd: string) {
+    return new Promise((resolve, reject) => {
+      this.db.driver.execQuery(authWxUser, [openId, serviceId, companyCd], (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data[0]))
+        }      
+      })
+    });
+  }
+
 }
 
 let authUser = `
@@ -408,6 +444,79 @@ FROM
       ON US.SERVICE_ID = MS.SERVICE_ID
     LEFT JOIN M_ROLE MR
       ON US.ROLE_ID = MR.ROLE_ID
+`;
+
+const updateWxOpenIdSql = `
+  UPDATE
+    M_USER
+  SET
+    W_OPEN_ID = ?,
+    SERVICE_ID = ?
+  WHERE
+    USER_ID = ?
+`;
+
+let authWxUser = `
+SELECT
+  MU.USER_ID,
+  MU.USER_CD,
+  MU.USER_TX,
+  MU.LANG_TX,
+  MU.PASSWORD_TX,
+  MU.COUNTRY_CD,
+  MU.MAIL,
+  MU.LOCK_FL,
+  MU.RESET_FL,
+  MU.TEL,
+  MU.MY_NO,
+  MU.SEX,
+  MU.WECHAT_CD,
+  MU.UPD_DT,
+  MU.ADD_DT,
+  MU.ADDUSER_ID,
+  MU.ADDUSER_TX,
+  MU.UPDUSER_ID,
+  MU.UPDUSER_TX,
+  US.AUTHORITY_ID,
+  MA.AUTHORITY_TX,
+  US.ROLE_ID,
+  MR.ROLE_TX,
+  US.LAST_LOGIN_DT,
+  US.CONTINUE_LOGIN_NR,
+  US.POINT_NR,
+  US.VIP_FL,
+  US.VIP_PLAN_CD,
+  US.VIP_FROM_DT,
+  US.VIP_TO_DT,
+  MV.VIP_PLAN_TX,
+  MS.SERVICE_ID,
+  MS.SERVICE_TX,
+  MC.COMPANY_ID,
+  MC.COMPANY_CD,
+  MC.COMPANY_TX,
+  MCI.CONNECTION_CD,
+  MS.API_KEY_TX
+FROM
+  M_USER MU
+    LEFT JOIN USER_SERVICE US
+      ON MU.USER_ID = US.USER_ID
+    LEFT JOIN M_ROLE MR
+      ON US.ROLE_ID = MR.ROLE_ID
+    LEFT JOIN M_AUTHORITY MA
+      ON US.AUTHORITY_ID = MA.AUTHORITY_ID
+    LEFT JOIN M_VIP_PLAN MV
+      ON US.VIP_PLAN_CD = MV.VIP_PLAN_CD
+    LEFT JOIN M_SERVICE MS
+      ON US.SERVICE_ID = MS.SERVICE_ID
+    LEFT JOIN M_COMPANY MC
+      ON MS.COMPANY_ID = MC.COMPANY_ID
+    LEFT JOIN M_CONNECTION_INFO MCI
+      ON MS.CONNECTION_CD = MCI.CONNECTION_CD
+WHERE
+  MU.W_OPEN_ID = ? AND
+  US.SERVICE_ID = ? AND
+  MC.COMPANY_CD = ?
+LIMIT 1
 `;
 
 const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?,?)'
