@@ -258,28 +258,21 @@ export class Archive {
  */
 const selectByArchive = `
   SELECT
-    archive.*,
+    archive.ARCHIVE_ID,
+    archive.BLOCK_ID,
+    block.BLOCK_TX,
+    block.TYPE,
+    archive.ARCHIVE_TX,
+    archive.RESPONSIBLE,
+    archive.ADD_DT,
+    state.STATE_FL,
     (
-      SELECT COUNT(1) FROM R_FILE where BLOCK_ID = ? and ARCHIVE_ID = archive.ARCHIVE_ID
-    ) as fileTotalCnt,
-    (SELECT
-        STATE_FL
-     FROM
-        R_FILE file01
-     WHERE
-        file01.ADD_DT = (
-            SELECT
-                MAX(file02.ADD_DT)
-            FROM
-                R_FILE file02
-            WHERE
-                file02.ARCHIVE_ID = archive.ARCHIVE_ID
-            GROUP BY
-                file02.ARCHIVE_ID
-        )
-    ) as stateFl
+      SELECT COUNT(1) FROM R_FILE where BLOCK_ID = 3 and ARCHIVE_ID = archive.ARCHIVE_ID
+    ) as fileTotalCnt
   FROM
     R_ARCHIVE as archive
+    LEFT JOIN M_BLOCK block ON archive.BLOCK_ID = block.BLOCK_ID AND block.DELETE_FL = 0
+    LEFT JOIN R_ARCHIVE_STATE state ON archive.ARCHIVE_ID = state.ARCHIVE_ID AND state.DELETE_FL = 0
 `
 
 /**
