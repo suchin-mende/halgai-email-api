@@ -72,10 +72,10 @@ export class Archive {
       const values = [];
       if (args) {
         const where = [];
-        where.push('DELETE_FL = 0');
+        where.push('archive.DELETE_FL = 0')
 
         if (args.blockId) {
-          where.push('BLOCK_ID = ?');
+          where.push('archive.BLOCK_ID = ?')
 
           for (var i = 0; i < 2; i++) {
             values.push(args.blockId);
@@ -83,12 +83,12 @@ export class Archive {
         }
 
         if (args.archiveId) {
-          where.push('ARCHIVE_ID = ?');
+          where.push('archive.ARCHIVE_ID = ?')
           values.push(args.archiveId);
         }
 
         if (args.archiveTx) {
-          where.push(`ARCHIVE_TX like \'%${args.archiveTx}%\'`);
+          where.push(`archive.ARCHIVE_TX like \'%${args.archiveTx}%\'`)
         }
 
         if (where.length > 0) {
