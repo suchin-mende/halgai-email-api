@@ -28,25 +28,29 @@ export class File {
       const values = [];
       const where = [];
 
-      where.push('DELETE_FL = 0');
+      where.push('file.DELETE_FL = 0');
 
       if (args.projectId) {
-        where.push('PROJECT_ID = ?');
+        where.push('file.PROJECT_ID = ?');
         values.push(args.projectId);
       }
 
       if (args.blockId) {
-        where.push('BLOCK_ID = ?');
+        where.push('file.BLOCK_ID = ?');
         values.push(args.blockId);
       }
 
+      if (args.blockCd) {
+        where.push(`block.BLOCK_CD like \'%${args.blockCd}%\' `);
+      }
+
       if (args.archiveId) {
-        where.push('ARCHIVE_ID = ?');
+        where.push('file.ARCHIVE_ID = ?');
         values.push(args.archiveId);
       }
 
       if (args.templateId) {
-        where.push('TEMPLATE_ID = ?');
+        where.push('file.TEMPLATE_ID = ?');
         values.push(args.templateId);
       }
 
@@ -78,25 +82,29 @@ export class File {
       const values = [];
       if (args) {
         const where = [];
-        where.push('DELETE_FL = 0');
+        where.push('file.DELETE_FL = 0');
 
         if (args.projectId) {
-          where.push('PROJECT_ID = ?');
+          where.push('file.PROJECT_ID = ?');
           values.push(args.projectId);
         }
 
         if (args.blockId) {
-          where.push('BLOCK_ID = ?');
+          where.push('file.BLOCK_ID = ?');
           values.push(args.blockId);
         }
 
+        if (args.blockCd) {
+          where.push(`block.BLOCK_CD like \'%${args.blockCd}%\' `);
+        }
+
         if (args.archiveId) {
-          where.push('ARCHIVE_ID = ?');
+          where.push('file.ARCHIVE_ID = ?');
           values.push(args.archiveId);
         }
 
         if (args.templateId) {
-          where.push('TEMPLATE_ID = ?');
+          where.push('file.TEMPLATE_ID = ?');
           values.push(args.templateId);
         }
 
@@ -181,9 +189,10 @@ export class File {
 // 检索文件SQL
 const selectByFile = `
   SELECT
-    *
+    file.*
   FROM
-    R_FILE
+    R_FILE AS file
+    LEFT JOIN M_BLOCK block ON file.BLOCK_ID = block.BLOCK_ID AND block.DELETE_FL = 0
 `;
 
 // 检索文件条数SQL
@@ -191,7 +200,8 @@ const selectCountByFile = `
   SELECT
     COUNT(1) AS totalCount
   FROM
-    R_FILE
+    R_FILE AS file
+    LEFT JOIN M_BLOCK block ON file.BLOCK_ID = block.BLOCK_ID AND block.DELETE_FL = 0
 `;
 
 // 新增文件SQL
