@@ -80,10 +80,7 @@ export class Archive {
 
         if (args.blockId) {
           where.push('archive.BLOCK_ID = ?')
-
-          for (var i = 0; i < 2; i++) {
-            values.push(args.blockId);
-          }
+          values.push(args.blockId)
         }
 
         if (args.blockCd) {
@@ -274,7 +271,7 @@ const selectByArchive = `
     archive.RESPONSIBLE,
     archive.ADD_DT,
     state.STATE_FL,
-    block.BLOCK_CD,
+    archive.ARCHIVE_CD,
     (
       SELECT COUNT(1) FROM R_FILE where BLOCK_ID = 3 and ARCHIVE_ID = archive.ARCHIVE_ID
     ) as fileTotalCnt
