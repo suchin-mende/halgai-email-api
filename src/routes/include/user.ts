@@ -43,9 +43,14 @@ export class User extends BaseRoute {
       }
       query.serviceId = req.headers.h_service_id;
       try {
-        const users = await Db.mainDb.models.mUser.getUsers(query);
+        Utils.args2SqlLimit(query);
         const total = await Db.mainDb.models.mUser.count(query);
-        return res.json({ users: users, total: total.total });
+        let result = {};
+        if (total > 0)
+          result['users'] = await Db.mainDb.models.mUser.getUsers(query);
+
+        Utils.pagerNext(req, query, total, result['users'], result);
+        res.json(result);
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }

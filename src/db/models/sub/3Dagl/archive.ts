@@ -28,20 +28,24 @@ export class Archive {
       const values = [];
       const where = [];
 
-      where.push('DELETE_FL = 0');
+      where.push('archive.DELETE_FL = 0');
 
       if (args.blockId) {
-        where.push('BLOCK_ID = ?')
+        where.push('archive.BLOCK_ID = ?')
         values.push(args.blockId)
       }
 
+      if (args.blockCd) {
+        where.push(`block.BLOCK_CD like \'%${args.blockCd}%\' `);
+      }
+
       if (args.archiveId) {
-        where.push('ARCHIVE_ID = ?');
+        where.push('archive.ARCHIVE_ID = ?');
         values.push(args.archiveId);
       }
 
       if (args.archiveTx) {
-        where.push(`ARCHIVE_TX like \'%${args.archiveTx}%\'`);
+        where.push(`archive.ARCHIVE_TX like \'%${args.archiveTx}%\'`);
       }
 
       if (where.length > 0) {
@@ -80,6 +84,10 @@ export class Archive {
           for (var i = 0; i < 2; i++) {
             values.push(args.blockId);
           }
+        }
+
+        if (args.blockCd) {
+          where.push(`block.BLOCK_CD like \'%${args.blockCd}%\' `);
         }
 
         if (args.archiveId) {
@@ -266,6 +274,7 @@ const selectByArchive = `
     archive.RESPONSIBLE,
     archive.ADD_DT,
     state.STATE_FL,
+    block.BLOCK_CD,
     (
       SELECT COUNT(1) FROM R_FILE where BLOCK_ID = 3 and ARCHIVE_ID = archive.ARCHIVE_ID
     ) as fileTotalCnt
@@ -282,7 +291,9 @@ const selectCountByArchive = `
   SELECT
     COUNT(1) AS totalCount
   FROM
-    R_ARCHIVE
+    R_ARCHIVE as archive
+    LEFT JOIN M_BLOCK block ON archive.BLOCK_ID = block.BLOCK_ID AND block.DELETE_FL = 0
+    LEFT JOIN R_ARCHIVE_STATE state ON archive.ARCHIVE_ID = state.ARCHIVE_ID AND state.DELETE_FL = 0
 `;
 
 /**
