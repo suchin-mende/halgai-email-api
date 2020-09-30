@@ -48,9 +48,16 @@ export class Block extends BaseRoute {
       }
       console.log(query);
       try {
+        Utils.args2SqlLimit(query);
+
         const db = await Db3.getSubdb(req.session.db);
-        const blocks = await Db3.block.select(db, query);
-        res.json({ blocks: blocks })
+        const count = await Db3.block.selectCount(db, query);
+        let result = {};
+        if (count > 0)
+          result['blocks'] = await Db3.block.select(db, query);
+
+        Utils.pagerNext(req, query, count, result['blocks'], result);
+        res.json(result)
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }

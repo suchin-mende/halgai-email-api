@@ -217,8 +217,8 @@ export class Utils {
     if (!args.pageNo)
       args.pageNo = 1;
 
-    if (!args.pageSize)
-      args.pageSize = 15;
+    if (args.pageNo == null || args.pageSize == null)
+      return;
 
     args.startRow = (args.pageNo - 1) * parseInt(args.pageSize);
     args.endRow = args.pageSize; 

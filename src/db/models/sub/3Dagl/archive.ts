@@ -266,6 +266,7 @@ const selectByArchive = `
     archive.RESPONSIBLE,
     archive.ADD_DT,
     state.STATE_FL,
+    archive.BLOCK_CD,
     (
       SELECT COUNT(1) FROM R_FILE where BLOCK_ID = 3 and ARCHIVE_ID = archive.ARCHIVE_ID
     ) as fileTotalCnt

@@ -117,6 +117,7 @@ export class MUser {
           query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
+      
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -169,7 +170,7 @@ export class MUser {
         }
         if (args.serviceId) {
           where.push(' US.SERVICE_ID=?');
-          values.push(args.logicalWhId);
+          values.push(args.serviceId);
         }
         if (filterModel && filterModel.serviceTx) {
           where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
@@ -210,7 +211,7 @@ export class MUser {
         if (err) {
           reject(err);
         } else {
-          resolve(TableUtils.toCamelCase(data[0]));
+          resolve(data[0].TOTAL);
         }
       });
     });

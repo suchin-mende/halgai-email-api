@@ -12,6 +12,52 @@ export class Block {
 
   constructor() { }
 
+  selectCount(db: any, args: any): Bluebird {
+    return new Bluebird((resolve, reject) => {
+      let query = selectCountByBlock;
+      const values = [];
+      if (args) {
+        let filterModel;
+        if (args.filterModel && Utils.isJSON(args.filterModel)) {
+          filterModel = JSON.parse(args.filterModel);
+        }
+        const where = [];
+        where.push('BLOCK.DELETE_FL=0');
+
+        if (args.projectId) {
+          where.push('BLOCK.PROJECT_ID in (0, ?)');
+          values.push(args.projectId);
+        }
+        if (args.blockId) {
+          where.push('BLOCK.BLOCK_ID = ?');
+          values.push(args.blockId);
+        }
+        if (args.blockTx) {
+          where.push(`BLOCK.BLOCK_TX like \'%${args.blockTx}%\'`)
+        }
+        if (args.parentBlockId) {
+          where.push('BLOCK.PARENT_BLOCK_ID = ?');
+          values.push(args.parentBlockId);
+        }
+        if (args.type) {
+          where.push('BLOCK.TYPE = ?');
+          values.push(args.type);
+        }
+        // Join the strings to build the query
+        if (where.length > 0) {
+          query = `${query} WHERE ${where.join(' AND ')}`;
+        }
+      }
+      db.driver.execQuery(query, values, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data[0].totalCount);
+        }
+      });
+    });
+  }
+
   select(db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
       let query = selectByBlock;
@@ -135,6 +181,15 @@ export class Block {
   }
 
 }
+
+const selectCountByBlock = `
+  SELECT
+    COUNT(1) AS totalCount
+  FROM
+    M_BLOCK BLOCK
+    LEFT JOIN M_PROJECT PROJECT ON BLOCK.PROJECT_ID = PROJECT.PROJECT_ID
+    LEFT JOIN M_BLOCK BLOCK1 ON BLOCK.PARENT_BLOCK_ID = BLOCK1.BLOCK_ID
+`
 
 const selectByBlock = `
   SELECT
