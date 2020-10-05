@@ -54,14 +54,18 @@ export class FileUtils {
 
   private static imageUpload(destPath, fileUpload) {
     let thumbPath = `${destPath}_${Settings.uploadSetting.image.thumbWidth}${path.extname(fileUpload.name)}`;
-    
-    FileUtils.zoomImage(
-      fileUpload.data, 
-      destPath, 
-      Settings.uploadSetting.image.maxWidth, 
-      Settings.uploadSetting.image.maxHeight, 
-      Settings.uploadSetting.image.quality
-    );
+/*    
+#    FileUtils.zoomImage(
+#      fileUpload.data, 
+#      destPath, 
+#      Settings.uploadSetting.image.maxWidth, 
+#      Settings.uploadSetting.image.maxHeight, 
+#      Settings.uploadSetting.image.quality
+#    );
+*/
+    var ws = fs.createWriteStream(destPath);
+    ws.write(fileUpload.data);
+    ws.end();
 
     FileUtils.zoomImage(
       fileUpload.data, 

@@ -78,13 +78,10 @@ export class Archive {
         const where = [];
         where.push('archive.DELETE_FL = 0')
 
-        if (args.blockId) {
-          where.push('archive.BLOCK_ID = ?')
-
-          for (var i = 0; i < 2; i++) {
-            values.push(args.blockId);
-          }
-        }
+      if (args.blockId) {
+        where.push('archive.BLOCK_ID = ?')
+        values.push(args.blockId)
+      }
 
         if (args.blockCd) {
           where.push(`block.BLOCK_CD like \'%${args.blockCd}%\' `);
@@ -274,7 +271,7 @@ const selectByArchive = `
     archive.RESPONSIBLE,
     archive.ADD_DT,
     state.STATE_FL,
-    block.BLOCK_CD,
+    archive.ARCHIVE_CD,
     (
       SELECT COUNT(1) FROM R_FILE where BLOCK_ID = 3 and ARCHIVE_ID = archive.ARCHIVE_ID
     ) as fileTotalCnt
