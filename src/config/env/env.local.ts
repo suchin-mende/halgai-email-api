@@ -46,10 +46,10 @@ export const Settings = {
       return null;
     },
     image: {
-      maxWidth: 800,
-      maxHeight: 800,
+      maxWidth: 2000,
+      maxHeight: 2000,
       thumbWidth: 320,
-      quality: 85
+      quality: 100
     }
   },
   wx: {
