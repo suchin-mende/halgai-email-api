@@ -167,10 +167,20 @@ export class Block {
    */
   delete (db: any, args: any) {
     return new Promise((resolve, reject) => {
-      const values = [
-        args.blockId
-      ];
-      db.driver.execQuery(deleteBlock, values, (err, data) => {
+      let query = deleteBlock;
+      const values = [];
+      if (args) {
+        const where = [];
+        if (args.projectId) {
+          where.push('PROJECT_ID = ?');
+          values.push(args.projectId);
+        }
+        if (args.blockId) {
+          where.push('BLOCK_ID = ?');
+          values.push(args.blockId);
+        }
+      }
+      db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err)
         } else {
@@ -258,7 +268,5 @@ const deleteBlock = `
     M_BLOCK
   SET
     DELETE_FL = 1
-  WHERE
-    BLOCK_ID = ?
 `;
 

@@ -105,6 +105,7 @@ export class Project extends BaseRoute {
       try {
         const db = await Db3.getSubdb(req.session.db);
         await Db3.project.delete(db, query);
+        await Db3.block.delete(db, query);
         return res.json({ message: 'OK' });
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
