@@ -189,11 +189,13 @@ export class File {
 // 检索文件SQL
 const selectByFile = `
   SELECT
-    file.*
+    file.*,
+    archive.ARCHIVE_TX
   FROM
     R_FILE AS file
     LEFT JOIN M_BLOCK block ON file.BLOCK_ID = block.BLOCK_ID AND block.DELETE_FL = 0
-`;
+    LEFT JOIN R_ARCHIVE archive ON file.ARCHIVE_ID = archive.ARCHIVE_ID
+`
 
 // 检索文件条数SQL
 const selectCountByFile = `
