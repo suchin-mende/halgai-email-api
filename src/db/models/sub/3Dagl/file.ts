@@ -136,6 +136,37 @@ export class File {
   }
 
   /**
+   * 依据id检索文件
+   * @param db
+   * @param args
+   */
+  selectFileById(db: any, args: any): Bluebird {
+    return new Bluebird((resolve, reject) => {
+
+      let query = selectFileById;
+
+      const values = [];
+      if (args) {
+        const where = [];
+        where.push('FILE_ID = ?');
+        values.push(args.fileId);
+
+        query = `${query} WHERE ${where.join(' AND ')}`;
+      }
+
+      console.log(query);
+
+      db.driver.execQuery(query, values, (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(TableUtils.toCamelCase(data));
+        }
+      });
+    });
+  }
+
+  /**
    * 新增文件
    * @param args
    */
@@ -184,6 +215,21 @@ export class File {
     })
   }
 
+  delete (db:any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.fileId
+      ]
+      db.driver.execQuery(deleteFile, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 // 检索文件SQL
@@ -206,6 +252,13 @@ const selectCountByFile = `
     LEFT JOIN M_BLOCK block ON file.BLOCK_ID = block.BLOCK_ID AND block.DELETE_FL = 0
 `;
 
+const selectFileById = `
+  SELECT
+    *
+  FROM
+    R_FILE AS file
+`
+
 // 新增文件SQL
 const insert = `
   INSERT INTO
@@ -222,4 +275,16 @@ const logicaDeleteWithTemplate = `
   WHERE
     TEMPLATE_ID = ?
     AND DELETE_FL = 0
+`;
+
+/**
+ * delete file
+ */
+const deleteFile = `
+  UPDATE
+    R_FILE
+  SET
+    DELETE_FL = 1
+  WHERE
+    FILE_ID = ?
 `;

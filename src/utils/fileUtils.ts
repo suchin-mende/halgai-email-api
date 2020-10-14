@@ -146,4 +146,18 @@ export class FileUtils {
         callback(ret);
     })
   }
+
+  static deleteFile(path, name) {
+    if (!fs.existsSync(path))
+      return;
+
+    let files = fs.readdirSync(path);
+    files.forEach((file) => {
+      if (file.indexOf(name) == -1)
+        return;
+      
+      let fp = path + '/' + file;
+      fs.unlinkSync(fp);
+    })
+  }
 }
