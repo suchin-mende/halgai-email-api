@@ -149,6 +149,26 @@ export class File extends BaseRoute {
       }
       return res.json({ message: 'OK'});
     });
+
+    router.delete('/:lan/v1/:id/file/:fid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      const query = {
+        fileId: req.params.fid
+      };
+      try {
+        const db = await Db3.getSubdb(req.session.db);
+        const dbFile = await Db3.file.selectFileById(db, query);
+
+        if (dbFile != null) {
+          await Db3.file.delete(db, query);
+          FileUtils.deleteFile(Settings.uploadSetting.path + dbFile['filePass'], 
+            dbFile['fileTx']);
+        }
+        return res.json({ message: 'OK' });
+      } catch (err) {
+        console.log(err)
+        return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
+      }
+    });
   }
 
 }
