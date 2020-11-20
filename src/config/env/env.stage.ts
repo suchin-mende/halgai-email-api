@@ -57,5 +57,5 @@ export const Settings = {
     APPID: 'wxdda31f6bdf2cc976',
     SECRET: '3a66cad52d927f0e3b0f89de3537f46f'
   },
-  EMAIL_API_LOGIN_URL: 'https://api.mongol.email/?/ApiLogin/%s/%s'
+  EMAIL_API_LOGIN_URL: 'http://mongol.email/?/ApiLogin/%s/%s'
 };
