@@ -111,8 +111,11 @@ export class Authentication extends BaseRoute {
                 companyTx: user.companyTx
               }
             };
-            if (req.headers.h_service_id == 1)
+            if (req.headers.h_service_id == 1) {
               ret.user['mail'] = user.mail;
+              ret.user['url'] = util.format(Settings.EMAIL_API_LOGIN_URL, 
+                user.userCd, req.body.password);
+            }
             Logger.log('info', `${req.ip} - Login user: ${user.userId} - User code: ${user.userCd}`);
             return res.json(ret);
           }
