@@ -38,7 +38,7 @@ export class FamilyUsers extends BaseRoute {
    */
   public static create(router: Router) {
     // add familyusers route
-    router.get('/v1/:id/familyusers', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/:lan/v1/:id/familyusers', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let query;
       if (Object.keys(req.query).length > 0) {
         query = req.query;
@@ -46,6 +46,7 @@ export class FamilyUsers extends BaseRoute {
       try {
         const db = await Db1.getSubdb(req.session.db);
         const familyUsers = await Db1.familyUsers.select(db, query);
+        console.log('familyUsers=======', familyUsers);
         const totaljson: any = await Db1.familyUsers.count(db, query);
         console.log("familyTotal===="); console.log(JSON.stringify(totaljson));
         return res.json({ familyusers: familyUsers, total: totaljson.total });
@@ -54,13 +55,13 @@ export class FamilyUsers extends BaseRoute {
       }
     });
 
-    router.post('/v1/:id/familyusers', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/familyusers', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }
       const query = {
         companyId: req.session.user.companyId,
-        logicalWhId: req.session.user.logicalWhId,
+        logicalWhId: req.session.user.serviceId,
 
         ownerId: req.body.ownerId,
         familyCd: req.body.familyCd,
@@ -89,13 +90,13 @@ export class FamilyUsers extends BaseRoute {
       }
     });
 
-    router.put('/v1/:id/familyusers', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.put('/:lan/v1/:id/familyusers', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }
       const query = {
         companyId: req.session.user.companyId,
-        logicalWhId: req.session.user.logicalWhId,
+        logicalWhId: req.session.user.serviceId,
 
         ownerId: req.body.ownerId,
         familyCd: req.body.familyCd,
@@ -124,7 +125,7 @@ export class FamilyUsers extends BaseRoute {
       }
     });
 
-    router.post('/v1/:id/familyusers/delete', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/familyusers/delete', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }

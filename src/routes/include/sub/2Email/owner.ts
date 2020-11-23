@@ -46,7 +46,7 @@ export class Owner extends BaseRoute {
         query = {};
       }
       query.companyId = req.session.user.companyId;
-      query.logicalWhId = req.session.user.logicalWhId;
+      query.logicalWhId = req.session.user.serviceId;
       try {
         const db = await Db2.getSubdb(req.session.db);
         const owners = await Db2.owner.select(db, query);

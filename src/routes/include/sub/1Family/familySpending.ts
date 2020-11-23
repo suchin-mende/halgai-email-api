@@ -41,7 +41,7 @@ export class FamilySpending extends BaseRoute {
    */
   public static create(router: Router) {
     // add spendings route
-    router.get('/v1/:id/spendings', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/:lan/v1/:id/spendings', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let query;
       if (Object.keys(req.query).length > 0) {
         query = req.query;
@@ -56,13 +56,13 @@ export class FamilySpending extends BaseRoute {
       }
     });
 
-    router.put('/v1/:id/spendings', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.put('/:lan/v1/:id/spendings', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }
       const query = {
         companyId: req.session.user.companyId,
-        logicalWhId: req.session.user.logicalWhId,
+        logicalWhId: req.session.user.serviceId,
 
         ownerId: req.body.ownerId,
         familySpendingId: req.body.familyspendingId,
@@ -99,7 +99,7 @@ export class FamilySpending extends BaseRoute {
       }
     });
 
-    router.post('/v1/:id/spendings/delete', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/spendings/delete', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       if (Object.keys(req.body).length <= 0) {
         return res.status(400).send({ errors: [ErrorUtils.getErrorJson(req.session.user.langTx, 'error_http_body_required_jsondata')] });
       }

@@ -13,115 +13,119 @@ export class FamilyUsers {
 
   select (db: any, args: any): Bluebird {
     return new Bluebird((resolve, reject) => {
-      let query = selectBySearchForm
-      const values = []
+      let query = selectBySearchForm;
+      console.log(args);
+      const values = [];
       if (args) {
-        let filterModel
+        let filterModel;
         if (args.filterModel && Utils.isJSON(args.filterModel)) {
-          filterModel = JSON.parse(args.filterModel)
+          filterModel = JSON.parse(args.filterModel);
         }
-        const where = []
-        where.push('TU.DEL_FL=0')
+        const where = [];
+        where.push('TU.DEL_FL=0');
         if (args.userId) {
-          where.push(' TU.USER_ID=?')
-          values.push(args.userId)
+          where.push(' TU.USER_ID=?');
+          values.push(args.userId);
         }
         if (args.tuFamilyCd) {
-          where.push(' TU.FAMILY_CD=?')
-          values.push(args.tuFamilyCd)
+          where.push(' TU.FAMILY_CD=?');
+          values.push(args.tuFamilyCd);
         } else if (filterModel && filterModel.tuFamilyCd) {
-          where.push(TableUtils.filterModelWhere(filterModel.tuFamilyCd, 'TU.FAMILY_CD'))
-          values.push(TableUtils.filterModelValue(filterModel.tuFamilyCd))
+          where.push(TableUtils.filterModelWhere(filterModel.tuFamilyCd, 'TU.FAMILY_CD'));
+          values.push(TableUtils.filterModelValue(filterModel.tuFamilyCd));
         }
         if (args.userTx) {
-          where.push(' TU.USER_TX=?')
-          values.push(args.userTx)
+          where.push(' TU.USER_TX=?');
+          values.push(args.userTx);
         } else if (filterModel && filterModel.userTx) {
-          where.push(TableUtils.filterModelWhere(filterModel.userTx, 'TU.USER_TX'))
-          values.push(TableUtils.filterModelValue(filterModel.userTx))
+          where.push(TableUtils.filterModelWhere(filterModel.userTx, 'TU.USER_TX'));
+          values.push(TableUtils.filterModelValue(filterModel.userTx));
         }
         if (args.ownerFl) {
-          where.push(' TU.OWNER_FL=?')
-          values.push(args.ownerFl)
+          where.push(' TU.OWNER_FL=?');
+          values.push(args.ownerFl);
         }
         if (args.sexCd) {
-          where.push(' TU.SEX_CD=?')
-          values.push(args.sexCd)
+          where.push(' TU.SEX_CD=?');
+          values.push(args.sexCd);
         }
         if (args.birthDt) {
-          where.push(' TU.BIRTH_DT=?')
-          values.push(args.birthDt)
+          where.push(' TU.BIRTH_DT=?');
+          values.push(args.birthDt);
         } else if (filterModel && filterModel.birthDt) {
-          where.push(TableUtils.filterModelWhere(filterModel.birthDt, 'TU.BIRTH_DT'))
-          values.push(TableUtils.filterModelValue(filterModel.birthDt))
+          where.push(TableUtils.filterModelWhere(filterModel.birthDt, 'TU.BIRTH_DT'));
+          values.push(TableUtils.filterModelValue(filterModel.birthDt));
         }
         if (args.identification) {
-          where.push(' TU.IDENTIFICATION=?')
-          values.push(args.identification)
+          where.push(' TU.IDENTIFICATION=?');
+          values.push(args.identification);
         } else if (filterModel && filterModel.identification) {
-          where.push(TableUtils.filterModelWhere(filterModel.identification, 'TU.IDENTIFICATION'))
-          values.push(TableUtils.filterModelValue(filterModel.identification))
+          where.push(TableUtils.filterModelWhere(filterModel.identification, 'TU.IDENTIFICATION'));
+          values.push(TableUtils.filterModelValue(filterModel.identification));
         }
         if (args.politicalBackfield) {
-          where.push(' TU.POLITICAL_BACKFIELD=?')
-          values.push(args.politicalBackfield)
+          where.push(' TU.POLITICAL_BACKFIELD=?');
+          values.push(args.politicalBackfield);
         } else if (filterModel && filterModel.politicalBackfield) {
-          where.push(TableUtils.filterModelWhere(filterModel.politicalBackfield, 'TU.POLITICAL_BACKFIELD'))
-          values.push(TableUtils.filterModelValue(filterModel.politicalBackfield))
+          where.push(TableUtils.filterModelWhere(filterModel.politicalBackfield, 'TU.POLITICAL_BACKFIELD'));
+          values.push(TableUtils.filterModelValue(filterModel.politicalBackfield));
         }
         if (args.wenhua) {
-          where.push(' TU.WENHUA=?')
-          values.push(args.wenhua)
+          where.push(' TU.WENHUA=?');
+          values.push(args.wenhua);
         } else if (filterModel && filterModel.wenhua) {
-          where.push(TableUtils.filterModelWhere(filterModel.wenhua, 'TU.WENHUA'))
-          values.push(TableUtils.filterModelValue(filterModel.wenhua))
+          where.push(TableUtils.filterModelWhere(filterModel.wenhua, 'TU.WENHUA'));
+          values.push(TableUtils.filterModelValue(filterModel.wenhua));
         }
         if (args.telTx) {
-          where.push(' TU.TEL_TX=?')
-          values.push(args.telTx)
+          where.push(' TU.TEL_TX=?');
+          values.push(args.telTx);
         } else if (filterModel && filterModel.telTx) {
-          where.push(TableUtils.filterModelWhere(filterModel.telTx, 'TU.TEL_TX'))
-          values.push(TableUtils.filterModelValue(filterModel.telTx))
+          where.push(TableUtils.filterModelWhere(filterModel.telTx, 'TU.TEL_TX'));
+          values.push(TableUtils.filterModelValue(filterModel.telTx));
         }
         if (filterModel && filterModel.updDt) {
           if (filterModel.updDt.type === 'inRange') {
-            where.push(' UPD_DT >= ?')
-            values.push(filterModel.updDt.dateFrom)
-            where.push(' UPD_DT <= ?')
-            values.push(filterModel.updDt.dateTo)
+            where.push(' UPD_DT >= ?');
+            values.push(filterModel.updDt.dateFrom);
+            where.push(' UPD_DT <= ?');
+            values.push(filterModel.updDt.dateTo);
           } else {
-            where.push(TableUtils.filterModelWhere(filterModel.updDt, 'UPD_DT'))
-            values.push(TableUtils.filterModelValue(filterModel.updDt))
+            where.push(TableUtils.filterModelWhere(filterModel.updDt, 'UPD_DT'));
+            values.push(TableUtils.filterModelValue(filterModel.updDt));
           }
         }
         if (filterModel && filterModel.addDt) {
           if (filterModel.addDt.type === 'inRange') {
-            where.push(' ADD_DT >= ?')
-            values.push(filterModel.addDt.dateFrom)
-            where.push(' ADD_DT <= ?')
-            values.push(filterModel.addDt.dateTo)
+            where.push(' ADD_DT >= ?');
+            values.push(filterModel.addDt.dateFrom);
+            where.push(' ADD_DT <= ?');
+            values.push(filterModel.addDt.dateTo);
           } else {
-            where.push(TableUtils.filterModelWhere(filterModel.addDt, 'ADD_DT'))
-            values.push(TableUtils.filterModelValue(filterModel.addDt))
+            where.push(TableUtils.filterModelWhere(filterModel.addDt, 'ADD_DT'));
+            values.push(TableUtils.filterModelValue(filterModel.addDt));
           }
         }
         // Join the strings to build the query
         if (where.length > 0) {
-          query = `${query} WHERE ${where.join(' AND ')}`
+          query = `${query} WHERE ${where.join(' AND ')}`;
         }
         // Check if there are pagination parameters
         if (args.colId) {
-          query = ` ${query} ORDER BY ${TableUtils.toSnakeCase(args.colId)} ${args.sort || 'asc'}`
+          // query = ` ${query} ORDER BY ${TableUtils.toSnakeCase(args.colId)} ${args.sort || 'asc'}`;
         }
         if (args.endRow) {
-          query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`
+          query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
+      console.log('query==', query);
+      console.log('values==', values);
+
       db.driver.execQuery(query, values, (err, data) => {
         if (err) {
-          reject(err)
+          reject(err);
         } else {
-          resolve(TableUtils.toCamelCase(data))
+          resolve(TableUtils.toCamelCase(data));
         }
       })
     })

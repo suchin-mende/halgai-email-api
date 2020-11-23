@@ -37,7 +37,7 @@ export class Owner extends BaseRoute {
    */
   public static create(router: Router) {
     // add deliareas route
-    router.get('/v1/:id/owners', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+    router.get('/:lan/v1/:id/owners', auth.auth, async (req: any, res: Response, next: NextFunction) => {
       let query;
       if (Object.keys(req.query).length > 0) {
         query = req.query;
@@ -46,7 +46,7 @@ export class Owner extends BaseRoute {
         query = {};
       }
       query.companyId = req.session.user.companyId;
-      query.logicalWhId = req.session.user.logicalWhId;
+      query.logicalWhId = req.session.user.serviceId;
       try {
         const db = await Db1.getSubdb(req.session.db);
         const owners = await Db1.owner.select(db, query);

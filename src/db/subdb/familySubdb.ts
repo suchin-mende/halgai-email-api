@@ -58,7 +58,7 @@ export class Subdb1 {
         const dbSettings = {
           protocol: 'mysql',
           query: { pool: true, multipleStatements: true },
-          host: dbInfo.dbUrlTx.replace('jdbc:mariadb:aurora//', '').replace(/.$/, ''),
+          host: 'localhost',//dbInfo.dbUrlTx.replace('jdbc:mariadb:aurora//', '').replace(/.$/, ''),
           database: dbInfo.dbSchemaTx,
           user: dbInfo.dbUsernameTx,
           password: dbInfo.dbPasswordTx

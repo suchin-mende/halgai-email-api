@@ -113,7 +113,7 @@ export class Authentication extends BaseRoute {
             };
             if (req.headers.h_service_id == 1) {
               ret.user['mail'] = user.mail;
-              ret.user['url'] = util.format(Settings.EMAIL_API_LOGIN_URL, 
+              ret.user['url'] = util.format(Settings.EMAIL_API_LOGIN_URL,
                 user.userCd, req.body.password);
             }
             Logger.log('info', `${req.ip} - Login user: ${user.userId} - User code: ${user.userCd}`);
@@ -197,7 +197,7 @@ export class Authentication extends BaseRoute {
       let lang = req.params.lan ? req.params.lan : 'cn';
 
       axios
-      .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL, 
+      .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL,
           Settings.wx.APPID, Settings.wx.SECRET, params.code)
       )
       .then(async (resp) => {
