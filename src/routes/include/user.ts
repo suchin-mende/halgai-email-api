@@ -102,6 +102,7 @@ export class User extends BaseRoute {
         userTx: req.body.userTx,
         roleId: req.body.roleId,
         password: Utils.hashText(req.body.passwordTx),
+        mail: (req.body.serviceId == 1) ? req.body.userCd + '@mongol.email' : '',
         telTx: req.body.tel,
         authCd: req.body.authCd,
         vipPlanCd: req.body.vipPlanCd ? req.body.vipPlanCd : 0

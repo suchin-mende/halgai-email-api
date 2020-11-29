@@ -117,7 +117,7 @@ export class MUser {
           query = ` ${query} LIMIT ${args.startRow || 0},${args.endRow}`;
         }
       }
-      
+
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
           reject(err);
@@ -227,6 +227,7 @@ export class MUser {
         args.userTx,
         args.langTx,
         args.password,
+        args.mail,
         args.telTx,
         args.lockFl,
         args.resetFl,
@@ -333,7 +334,7 @@ export class MUser {
           reject(err)
         } else {
           resolve(TableUtils.toCamelCase(data[0]))
-        }      
+        }
       })
     });
   }
@@ -520,7 +521,7 @@ WHERE
 LIMIT 1
 `;
 
-const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?,?)'
+const insert = 'CALL USER_Ins(?,?,?,?,?,?,?,?,?,?,?,?,?)'
 const update = 'CALL USER_Upd(?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
 const del = 'CALL USER_Del(?,?,?)'
 const updatePW = 'CALL USER_UpdPw(?,?,?,?)'
