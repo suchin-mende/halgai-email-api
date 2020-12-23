@@ -129,14 +129,22 @@ export class User extends BaseRoute {
               "uid": req.body.userCd,
               "pass": req.body.passwordTx,
               "add": '',
-              "quota": '100'
+              "quota": '100',
+              'capacity': Settings.vipPlan.capacityDefault,
+              'fileSize': Settings.vipPlan.attachmentDefault
             };
             if (req.body.vipPlanCd == "1") {
               pladata.quota = Settings.vipPlan.nomalQuota;
+              pladata.capacity = Settings.vipPlan.capacityNormal;
+              pladata.fileSize = Settings.vipPlan.attachmentNormal;
             } else if (req.body.vipPlanCd == "2") {
               pladata.quota = Settings.vipPlan.premiumQuota;
+              pladata.capacity = Settings.vipPlan.capacityPremium;
+              pladata.fileSize = Settings.vipPlan.attachmentPremium;
             } else if (req.body.vipPlanCd == "3") {
               pladata.quota = Settings.vipPlan.FirstQuota;
+              pladata.capacity = Settings.vipPlan.capacityFirst;
+              pladata.fileSize = Settings.vipPlan.attachmentFirst;
             }
             const params = new URLSearchParams();
             Object.keys(pladata).forEach(function (key) {
