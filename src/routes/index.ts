@@ -35,6 +35,8 @@ import { Template } from './include/sub/3Dagl/template';
 import { News } from './include/sub/3Dagl/news';
 import { Wx } from './include/sub/3Dagl/wx';
 
+import { VipPlan } from './include/sub/2Email/vipPlan';
+
 import { Db, Db1, Db2, Db3 } from '../db/db';
 
 /**
@@ -106,6 +108,8 @@ export class IndexRoute extends BaseRoute {
     Template.create(router);
     News.create(router);
     Wx.create(router);
+
+    VipPlan.create(router);
   }
 
   /**
