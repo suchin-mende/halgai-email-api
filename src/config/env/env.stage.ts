@@ -26,7 +26,15 @@ export const Settings = {
   vipPlan: {
     nomalQuota: 500,
     premiumQuota: 1000,
-    firstQuota: 2000
+    firstQuota: 2000,
+    capacityDefault: 1,
+    capacityNormal: 2,
+    capacityPremium: 3,
+    capacityFirst: 4,
+    attachmentDefault: 1,
+    attachmentNormal: 2,
+    attachmentPremium: 3,
+    attachmentFirst: 4
   },
   uploadSetting : {
     path: path.resolve(__dirname,'../../../public/upload'),
