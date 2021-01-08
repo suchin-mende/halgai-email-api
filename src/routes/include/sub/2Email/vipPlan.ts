@@ -111,7 +111,6 @@ export class VipPlan extends BaseRoute {
         delete params.vipPlanCd
         delete params.status
         params['couponCd'] = code
-        console.log(params)
 
         //优惠券
         const tickets = await models.coupon.select(params)
