@@ -53,7 +53,6 @@ export class VipPlan {
           query = `${query} WHERE ${where.join(' AND ')}`;
         }
       }
-      console.log(query)
 
       this.db.driver.execQuery(query, values, (err, data) => {
         if (err) {
