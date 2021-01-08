@@ -51,8 +51,8 @@ export class VipPlan extends BaseRoute {
     });
 
     // Vip付款计划
-    router.get('/:lan/v1/:id/vip/plan/:pid', async (req: any, res: Response, next: NextFunction) => {
-      const { pid } = req.params
+    router.get('/:lan/v1/:id/vip/plan/:pid/:child?', async (req: any, res: Response, next: NextFunction) => {
+      const { pid, child } = req.params
       const params = {
         vipPlanCd: pid,
         status: 0,
@@ -62,11 +62,14 @@ export class VipPlan extends BaseRoute {
       try {
         const plan = await Db.mainDb.models.vipPlan.planList(params);
         if (plan.length === 0) {
-          res.json({})
-          return
+          return res.status(404).send({ errors: [{ message: 'NotFound', code: ErrorUtils.getDefaultErrorCode() }] });
         }
 
         const result = { ...plan[0] }
+        if (!(child != null && eval(req.params.child) === true)) {
+          res.json(result)
+          return
+        }
         delete params.vipPlanCd
         params['parentPlanCd'] = pid
 
@@ -74,7 +77,6 @@ export class VipPlan extends BaseRoute {
         result['children'] = plans
         res.json(result);
       } catch (err) {
-        console.log(err)
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
     });
