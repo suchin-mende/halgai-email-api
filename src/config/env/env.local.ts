@@ -63,7 +63,15 @@ export const Settings = {
   wx: {
     GET_ACCESS_TOKEN_URL: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code',
     APPID: 'wxdda31f6bdf2cc976',
-    SECRET: '3a66cad52d927f0e3b0f89de3537f46f'
+    SECRET: '3a66cad52d927f0e3b0f89de3537f46f',
+    unifiedUrl: 'https://api.mch.weixin.qq.com/pay/unifiedorder',
+    mail: {
+      mchId: '',
+      key: '',
+      appId: {
+        native: ''
+      }
+    }
   },
   EMAIL_API_LOGIN_URL: 'http://mongol.email/?/ApiLogin/%s/%s'
 };
