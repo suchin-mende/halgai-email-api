@@ -75,6 +75,10 @@ export class MUser {
           where.push(' MU.W_OPEN_ID=? ');
           values.push(args.openId);
         }
+        if (args.anyAuthCd) {
+          where.push(' MU.USER_CD=? OR MU.MAIL=? OR MU.TEL=? ');
+          values.push(args.anyAuthCd, args.anyAuthCd, args.anyAuthCd);
+        }
         if (filterModel && filterModel.serviceTx) {
           where.push(TableUtils.filterModelWhere(filterModel.serviceTx, 'MS.SERVICE_TX'));
           values.push(TableUtils.filterModelValue(filterModel.serviceTx));

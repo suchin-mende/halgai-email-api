@@ -34,15 +34,24 @@ export class Authentication extends BaseRoute {
    */
   public static create(router: Router) {
     //add login route
-    router.post('/:lan/v1/:id/auth/login', (req: any, res: Response, next: NextFunction) => {
+    router.post('/:lan/v1/:id/auth/login', async(req: any, res: Response, next: NextFunction) => {
+      let lang = req.params.lan ? req.params.lan : 'cn';
       if (req.body.userCd) {
+        let getUser = await Db.mainDb.models.mUser.getUsers({ anyAuthCd: req.body.userCd });
+        if (getUser.length === 0) {
+          const err = {
+            errors: [
+              ErrorUtils.getErrorJson(lang, 'error_invalid_loginid_password')
+            ]
+          };
+          return res.status(400).json(err);
+        }
         req.body.userCd = JSON.stringify({
-          userCd: req.body.userCd,
+          userCd: getUser[0].userCd,
           companyCd: req.params.id,
           serviceId: req.headers.h_service_id });
       }
       passport.authenticate('local', (err, user, info) => {
-        let lang = req.params.lan ? req.params.lan : 'cn';
         if (err) {
           const errJson = { errors: [err]};
           return res.status(400).json(errJson);
