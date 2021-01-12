@@ -36,7 +36,7 @@ import { News } from './include/sub/3Dagl/news';
 import { Wx } from './include/sub/3Dagl/wx';
 
 import { VipPlan } from './include/sub/2Email/vipPlan';
-
+import { Cashier } from './include/sub/2Email/cashier';
 import { Db, Db1, Db2, Db3 } from '../db/db';
 
 /**
@@ -110,6 +110,7 @@ export class IndexRoute extends BaseRoute {
     Wx.create(router);
 
     VipPlan.create(router);
+    Cashier.create(router);
   }
 
   /**
