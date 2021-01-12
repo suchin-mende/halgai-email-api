@@ -65,13 +65,23 @@ export const Settings = {
     APPID: 'wxdda31f6bdf2cc976',
     SECRET: '3a66cad52d927f0e3b0f89de3537f46f',
     unifiedUrl: 'https://api.mch.weixin.qq.com/pay/unifiedorder',
-    mail: {
+    OAuth: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect',
+    default: {
       mchId: '',
       key: '',
       appId: {
-        native: ''
+        mp: ''
+      }
+    },
+    mail: {
+      appId: {
+        app: ''
       }
     }
+  },
+  cashierUrl: {
+    default: 'https://api.mongol.email/%s/v1/%s/cashier/%s',
+    payment: 'https://api.mongol.email/%s/v1/%s/cashier/pay/%s',
   },
   EMAIL_API_LOGIN_URL: 'http://mongol.email/?/ApiLogin/%s/%s'
 };

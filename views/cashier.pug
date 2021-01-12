@@ -1,0 +1,10 @@
+doctype html
+html
+  head
+    title= title
+    script.
+      var redirectUrl= '!{redirectUrl}';
+    script(src='/javascripts/jquery-3.2.1.min.js', crossorigin="anonymous")
+    script(src='/javascripts/cashier.js')
+  body
+    block content

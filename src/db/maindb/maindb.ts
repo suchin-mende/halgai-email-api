@@ -12,6 +12,7 @@ import { MConnectionInfo } from '../models/mConnectionInfo';
 import { MService } from '../models/mService';
 import { MRole } from '../models/mRole';
 import { TmpAuth } from '../models/tmpAuth'
+import { MUserPaymentLog } from '../models/mUserPaymentLog'
 
 import {
   VipPlan,
@@ -30,7 +31,8 @@ export class MainDb {
     mRole: null,
     tmpAuth: null,
     vipPlan: null,
-    coupon: null
+    coupon: null,
+    mUserPaymentLog: null
   }
 
   constructor() {
@@ -54,5 +56,6 @@ export class MainDb {
     this.models.tmpAuth = new TmpAuth(this.db);
     this.models.vipPlan = new VipPlan(this.db);
     this.models.coupon = new Coupon(this.db);
+    this.models.mUserPaymentLog = new MUserPaymentLog(this.db);
   }
 }
