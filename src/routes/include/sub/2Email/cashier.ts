@@ -10,6 +10,8 @@ import { ErrorUtils } from '../../../../utils/errorUtils';
 import { Db } from '../../../../db/db';
 import { unifiedOrder } from '../../../../utils/wx'
 import { Settings } from '../../../../config/settings';
+const axios = require('axios');
+const util = require('util');
 
 /**
  * / route
@@ -44,10 +46,21 @@ export class Cashier extends BaseRoute {
       new Cashier().cashierView(req, res, next);
     });
 
+    /**
+     * 微信授权成功，重定向到当前路由
+     */
     router.get('/:lan/v1/:id/cashier/pay/:orderId', (req: Request, res: Response, next: NextFunction) => {
       const { lan, id, orderId } = req.params
-      console.log(req)
-      console.log(req.query.code)
+      const { code } = req.query
+      // code换取openid
+      axios
+      .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL, 
+          Settings.wx.default.appId.mp, Settings.wx.default.key, code)
+      )
+      .then(async (resp) => {
+      })
+      .catch((err) => {
+      });
       new Cashier().cashierView(req, res, next);
     });
   }
