@@ -34,6 +34,7 @@ import { File } from './include/sub/3Dagl/file';
 import { Template } from './include/sub/3Dagl/template';
 import { News } from './include/sub/3Dagl/news';
 import { Wx } from './include/sub/3Dagl/wx';
+import { UserProfile } from './include/userProfile';
 
 import { VipPlan } from './include/sub/2Email/vipPlan';
 import { Cashier } from './include/sub/2Email/cashier';
@@ -111,6 +112,7 @@ export class IndexRoute extends BaseRoute {
 
     VipPlan.create(router);
     Cashier.create(router);
+    UserProfile.create(router);
   }
 
   /**
