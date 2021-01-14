@@ -40,7 +40,7 @@ export class UserProfile extends BaseRoute {
       let userProfile = null;
       try {
         if (serviceId === 1)
-          userProfile = await Db.mainDb.models.mUserProfile.mailUserProfile(serviceId, req.params.uid)
+          userProfile = await Db.mainDb.models.mUser.mailUserProfile(serviceId, req.params.uid)
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }

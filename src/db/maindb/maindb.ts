@@ -13,7 +13,6 @@ import { MService } from '../models/mService';
 import { MRole } from '../models/mRole';
 import { TmpAuth } from '../models/tmpAuth'
 import { MUserPaymentLog } from '../models/mUserPaymentLog'
-import { MUserProfile } from '../models/MUserProfile'
 
 import {
   VipPlan,
@@ -33,8 +32,7 @@ export class MainDb {
     tmpAuth: null,
     vipPlan: null,
     coupon: null,
-    mUserPaymentLog: null,
-    mUserProfile: null
+    mUserPaymentLog: null
   }
 
   constructor() {
@@ -59,6 +57,5 @@ export class MainDb {
     this.models.vipPlan = new VipPlan(this.db);
     this.models.coupon = new Coupon(this.db);
     this.models.mUserPaymentLog = new MUserPaymentLog(this.db);
-    this.models.mUserProfile = new MUserProfile(this.db);
   }
 }
