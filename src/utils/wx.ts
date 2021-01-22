@@ -49,7 +49,7 @@ function obj2Xml(params) {
 // 微信统一下单
 export async function unifiedOrder (
       appId, mchId, key, body, tradeNo, totalFee, userIp, notifyUrl,
-      tradeType, productId) {
+      tradeType, openid) {
       const params = {
             appId: appId,
             mchId: mchId,
@@ -61,7 +61,7 @@ export async function unifiedOrder (
             notify_url: notifyUrl,
             trade_type: tradeType
       };
-      (productId != null) && (params['product_id'] = productId)
+      (openid != null) && (params['openid'] = openid)
       const signStr = sign(params, key)
       params['sign'] = signStr
       console.log(params)

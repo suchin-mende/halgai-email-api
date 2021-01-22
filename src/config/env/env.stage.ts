@@ -66,16 +66,16 @@ export const Settings = {
     SECRET: '3a66cad52d927f0e3b0f89de3537f46f',
     unifiedUrl: 'https://api.mch.weixin.qq.com/pay/unifiedorder',
     OAuth: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect',
-    default: {
+    halgai: {
       mchId: '',
       key: '',
-      appId: {
-        mp: ''
-      }
-    },
-    mail: {
-      appId: {
-        app: ''
+      mp: {
+        // 公众号
+        appId: 'wxfb957686704a1b4d',
+        key: '9382dd5a40e93be55a0e2a4e415977e2'
+      },
+      mail: {
+        appId: ''
       }
     }
   },

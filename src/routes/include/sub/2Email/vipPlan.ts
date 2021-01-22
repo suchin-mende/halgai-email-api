@@ -216,11 +216,6 @@ export class VipPlan extends BaseRoute {
       let idx = 0
       result['qrdata'] = await QRCode.toDataURL(Settings.cashierUrl.default.replace(/%s/g, () => cashierParams[idx++]))
       res.json(result);
-      // 生成订单
-      // const { mail } = Settings.wx;
-      // const unifiedResult = await unifiedOrder(mail.appId.native, mail.mchId, mail.key, plan.vipPlanTx, '1', 
-      //   result.realMoney * 100, req.ip, '', 'JSAPI', 'productId')
-      // res.json(result);
     });
 
   }
