@@ -2,7 +2,7 @@ var crypto = require('crypto');
 const axios = require('axios');
 import { Settings } from '../config/settings';
 
-function randomWord(randomFlag, min, max){
+export function randomWord(randomFlag, min, max){
       var str = "",
       range = min,
       arr = [];
@@ -21,7 +21,7 @@ function randomWord(randomFlag, min, max){
       return str;
 }
     
-function sign (params, key) {
+export function sign (params, key) {
       const sorted = [...Object.keys(params)].sort()
       let str = ''
       sorted.forEach(k => {
@@ -46,13 +46,25 @@ function obj2Xml(params) {
       return xml;
 }
 
+export function checkSign(result, key) {
+      if (!result.sign) {
+        return false
+      }
+      const copyObj = {
+        ...result
+      }
+      delete copyObj.sign
+      const newSign = sign(copyObj, key)
+      return newSign.toUpperCase() === result.sign
+}
+
 // 微信统一下单
 export async function unifiedOrder (
       appId, mchId, key, body, tradeNo, totalFee, userIp, notifyUrl,
       tradeType, openid) {
       const params = {
-            appId: appId,
-            mchId: mchId,
+            appid: appId,
+            mch_id: mchId,
             nonce_str: randomWord(true, 32, 32),
             body: body,
             out_trade_no: tradeNo,
