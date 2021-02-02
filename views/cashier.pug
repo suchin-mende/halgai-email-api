@@ -7,4 +7,7 @@ html
     script(src='/javascripts/jquery-3.2.1.min.js', crossorigin="anonymous")
     script(src='/javascripts/cashier.js')
   body
+- var isSuccess = !{success}
+if (!isSuccess)
+  h2 参数异常
     block content

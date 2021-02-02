@@ -67,8 +67,8 @@ export const Settings = {
     unifiedUrl: 'https://api.mch.weixin.qq.com/pay/unifiedorder',
     OAuth: 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect',
     halgai: {
-      mchId: '',
-      key: '',
+      mchId: '1602735026',
+      key: 'V0H7Iq2YQCGHNtHgt35uyqtetUJNlMr7',
       mp: {
         // 公众号
         appId: 'wxfb957686704a1b4d',
