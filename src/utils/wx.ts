@@ -76,9 +76,9 @@ export async function unifiedOrder (
       (openid != null) && (params['openid'] = openid)
       const signStr = sign(params, key)
       params['sign'] = signStr
-      console.log(params)
+      // console.log(params)
       const xml = obj2Xml(params);
-      console.log(xml);
+      // console.log(xml);
 
       return new Promise((resolve, reject) => {
               axios

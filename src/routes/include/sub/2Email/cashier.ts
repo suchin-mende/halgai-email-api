@@ -97,16 +97,16 @@ export class Cashier extends BaseRoute {
     // code换取openid
     if (pageModel.success) {
       const { halgai } = Settings.wx
-      const unifiedResult = this.payementInfo(code, payment[0], req)
+      const unifiedResult = await this.payementInfo(code, payment[0], req)
       const payRequest = {
         appId: halgai.mp.appId,
-        timeStamp: new Date().getTime() / 1000,
+        timeStamp: Math.ceil(new Date().getTime() / 1000),
         nonceStr: randomWord(true, 32, 32),
         package: `prepay_id=${unifiedResult['prepay_id']}`,
         signType: 'MD5'
       }
       payRequest['paySign'] = wxSign(payRequest, Settings.wx.halgai.key)
-      pageModel['payRequest'] = payRequest
+      pageModel['payRequest'] = JSON.stringify(payRequest)
     }
     res.render('cashier', pageModel);
   }
@@ -118,7 +118,7 @@ export class Cashier extends BaseRoute {
       .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL, 
         Settings.wx.halgai.mp.appId, Settings.wx.halgai.mp.key, code)
       );
-    console.log(wxResult.data);
+    // console.log(wxResult.data);
     const data = wxResult.data;
     if (!Utils.isEmpty(data.errcode)) {
       return null;
