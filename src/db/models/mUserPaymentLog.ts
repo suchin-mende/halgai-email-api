@@ -70,6 +70,23 @@ export class MUserPaymentLog {
     })
   }
 
+  updatePaymentState (db: any, args: any) {
+    return new Promise((resolve, reject) => {
+      const values = [
+        args.payFl,
+        args.paymentType,
+        args.logId
+      ]
+      db.driver.execQuery(updatePaymentState, values, (err, data) => {
+        if (err) {
+          reject(err)
+        } else {
+          resolve(TableUtils.toCamelCase(data))
+        }
+      })
+    })
+  }
+
 }
 
 const insertPaymentLogSql = `
@@ -114,4 +131,15 @@ const selectPaymentLogSql = `
     UPDCOUNTER_NR
   FROM
     USER_PAYMENT_LOG
+`
+
+const updatePaymentState = `
+  UPDATE
+    USER_PAYMENT_LOG
+  SET
+    PAY_FL = ?,
+    PAYMENT_TYPE = ?,
+    UPD_DT = CURRENT_TIMESTAMP
+  WHERE
+    PAYMENT_LOG_ID = ?
 `

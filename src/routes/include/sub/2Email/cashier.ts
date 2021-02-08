@@ -8,7 +8,7 @@ import { NextFunction, Request, Response, Router } from 'express';
 import { BaseRoute } from '../../../route';
 import { ErrorUtils } from '../../../../utils/errorUtils';
 import { Db } from '../../../../db/db';
-import { unifiedOrder, checkSign, randomWord, sign as wxSign } from '../../../../utils/wx'
+import { unifiedOrder, checkSign, randomWord, sign as wxSign, validUnifiedResult } from '../../../../utils/wx'
 import { Settings } from '../../../../config/settings';
 import { Utils } from '../../../../utils/utils'
 import { lang } from 'moment';
@@ -16,8 +16,8 @@ import { log } from 'console';
 import { sign } from 'crypto';
 const axios = require('axios');
 const util = require('util');
-const Xml2js = require('xml2js');
-const XmlParser = new Xml2js.Parser({explicitArray: false, ignoreAttrs: false});
+
+const wxReplyData = msg => Utils.buildXML(msg ? {return_code: 'FAIL', return_msg: msg} : {return_code: 'SUCCESS'});
 /**
  * / route
  *
@@ -56,6 +56,41 @@ export class Cashier extends BaseRoute {
      */
     router.get('/:lan/v1/:id/cashier/pay/:orderId', async (req: Request, res: Response, next: NextFunction) => {
       new Cashier().cashierPaymentView(req, res, next);
+    });
+
+    /**
+     * 支付成功回调
+     */
+    router.get('/:lan/v1/:id/cashier/notify/wx', async (req: Request, res: Response, next: NextFunction) => {
+      res.header('Content-Type', 'application/xml; charset=utf-8');
+
+      try {
+        const callbackData = await validUnifiedResult(req.body)
+        const paymentNo = callbackData['out_trade_no']
+        const wxTradeNo = callbackData['transaction_id']
+        const price = callbackData['total_fee']
+
+        const { models: { mUserPaymentLog } } = Db.mainDb
+        const payment = await mUserPaymentLog.selectPayment({
+          logId: paymentNo
+        });
+        if (payment == null || payment.price * 100 != price ) {
+          res.send(wxReplyData('Error'))
+          return
+        }
+        if (payment.payFl === 1) {
+          res.send(wxReplyData(null))
+        }
+
+        mUserPaymentLog.updatePaymentState({
+          payFl: 1,
+          paymentType: 'wechat',
+          logId: paymentNo
+        })
+        res.send(wxReplyData(null))
+      } catch(err) {
+        res.send(wxReplyData('Error'))
+      }
     });
   }
 
@@ -98,15 +133,19 @@ export class Cashier extends BaseRoute {
     if (pageModel.success) {
       const { halgai } = Settings.wx
       const unifiedResult = await this.payementInfo(code, payment[0], req)
-      const payRequest = {
-        appId: halgai.mp.appId,
-        timeStamp: Math.ceil(new Date().getTime() / 1000),
-        nonceStr: randomWord(true, 32, 32),
-        package: `prepay_id=${unifiedResult['prepay_id']}`,
-        signType: 'MD5'
+      if (!unifiedResult) {
+        pageModel.success = false
+      } else {
+        const payRequest = {
+          appId: halgai.mp.appId,
+          timeStamp: Math.ceil(new Date().getTime() / 1000),
+          nonceStr: randomWord(true, 32, 32),
+          package: `prepay_id=${unifiedResult['prepay_id']}`,
+          signType: 'MD5'
+        }
+        payRequest['paySign'] = wxSign(payRequest, Settings.wx.halgai.key)
+        pageModel['payRequest'] = JSON.stringify(payRequest)
       }
-      payRequest['paySign'] = wxSign(payRequest, Settings.wx.halgai.key)
-      pageModel['payRequest'] = JSON.stringify(payRequest)
     }
     res.render('cashier', pageModel);
   }
@@ -114,18 +153,18 @@ export class Cashier extends BaseRoute {
   private async payementInfo(code, paymentLog, req) {
     console.log('----- payment info')
     // 读取微信用户信息
-    const wxResult = await axios
-      .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL, 
-        Settings.wx.halgai.mp.appId, Settings.wx.halgai.mp.key, code)
-      );
-    // console.log(wxResult.data);
-    const data = wxResult.data;
-    if (!Utils.isEmpty(data.errcode)) {
-      return null;
-    }
-    // const data = {
-    //   openid: 'oa1qG5naiTSVWRYlhMBM17bw7RFs'
+    // const wxResult = await axios
+    //   .get(util.format(Settings.wx.GET_ACCESS_TOKEN_URL, 
+    //     Settings.wx.halgai.mp.appId, Settings.wx.halgai.mp.key, code)
+    //   );
+    // // console.log(wxResult.data);
+    // const data = wxResult.data;
+    // if (!Utils.isEmpty(data.errcode)) {
+    //   return null;
     // }
+    const data = {
+      openid: 'oa1qG5naiTSVWRYlhMBM17bw7RFs'
+    }
 
     // 查询vip plan
     const params = {
@@ -150,36 +189,13 @@ export class Cashier extends BaseRoute {
         plan.vipPlanTx,
         paymentLog.paymentLogId, 
         paymentLog.price * 100,
-        req.ip, Settings.cashierUrl.default, 'JSAPI', data.openid)
-
+        req.ip, Settings.cashierUrl.callbackWx, 'JSAPI', data.openid)
     try {
-      const unified = await this.parseUnifiedResult(unifiedResult['data'])
+      const unified = await validUnifiedResult(unifiedResult['data'])
       return unified
     } catch (err){
       return null
     }
   }
 
-  private parseUnifiedResult(data) {
-    return new Promise((resolve, reject) => {
-      XmlParser.parseString(data, (err, result) => {
-        const { xml } = result
-        if (err) {
-          reject(err)
-          return
-        }
-        const isSign = checkSign(xml, Settings.wx.halgai.key)
-        if (!isSign) {
-          reject(new Error(''))
-          return
-        }
-
-        if (xml['return_code'] === 'SUCCESS' && xml['result_code'] === 'SUCCESS') {
-          resolve(xml)
-          return
-        }
-        reject(new Error(''))
-      })
-    })
-  }
 }

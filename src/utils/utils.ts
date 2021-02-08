@@ -6,6 +6,7 @@
 
 const moment = require('moment');
 const bcrypt = require('bcrypt');
+const xml2js = require('xml2js');
 
 export class Utils {
   constructor() { }
@@ -248,5 +249,10 @@ export class Utils {
       return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
     }
     return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+  }
+
+  static buildXML (obj, rootName = 'xml') {
+    const opt = {xmldec: null, rootName, allowSurrogateChars: true, cdata: true};
+    return new xml2js.Builder(opt).buildObject(obj);
   }
 }
