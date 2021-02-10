@@ -167,12 +167,18 @@ export class User extends BaseRoute {
 
           //TODO:MMailにログインして正しいURLを返す
 
-          const result = {
+          let result = {}
+          if (req.body.vipPlanCd && dbUser['affectedRows'] !== 0) {
+            result = {
+              ...result,
+              userId: dbUser['userId'],
+              email: query['email']
+            }
+          }
+          result = {
+            ...result,
             message: 'OK',
             url: Settings.emailServerDomain + '/?/login'
-          }
-          if (req.body.vipPlanCd && dbUser['affectedRows'] !== 0) {
-            result['userId'] = dbUser['userId']
           }
         return res.json(result);
       } catch (err) {
