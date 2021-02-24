@@ -35,12 +35,12 @@ export class UserProfile extends BaseRoute {
     /**
      * 个人信息
      */
-    router.get('/:lan/v1/:id/user/profile/:uid', auth.auth, async (req: any, res: Response, next: NextFunction) => {
-      const { serviceId } = req.session.user
+    router.get('/:lan/v1/:id/user/profile', auth.auth, async (req: any, res: Response, next: NextFunction) => {
+      const { serviceId, userId } = req.session.user
       let userProfile = null;
       try {
         if (serviceId === 1)
-          userProfile = await Db.mainDb.models.mUser.mailUserProfile(serviceId, req.params.uid)
+          userProfile = await Db.mainDb.models.mUser.mailUserProfile(serviceId, userId)
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
