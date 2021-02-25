@@ -2,6 +2,9 @@ var crypto = require('crypto');
 const axios = require('axios');
 import { Settings } from '../config/settings';
 
+const Xml2js = require('xml2js');
+const XmlParser = new Xml2js.Parser({explicitArray: false, ignoreAttrs: false});
+
 export function randomWord(randomFlag, min, max){
       var str = "",
       range = min,
@@ -76,9 +79,9 @@ export async function unifiedOrder (
       (openid != null) && (params['openid'] = openid)
       const signStr = sign(params, key)
       params['sign'] = signStr
-      console.log(params)
+      // console.log(params)
       const xml = obj2Xml(params);
-      console.log(xml);
+      // console.log(xml);
 
       return new Promise((resolve, reject) => {
               axios
@@ -92,3 +95,26 @@ export async function unifiedOrder (
               })
           })
 }
+
+export function validUnifiedResult(data) {
+      return new Promise((resolve, reject) => {
+        XmlParser.parseString(data, (err, result) => {
+          const { xml } = result
+          if (err) {
+            reject(err)
+            return
+          }
+          const isSign = checkSign(xml, Settings.wx.halgai.key)
+          if (!isSign) {
+            reject(new Error(''))
+            return
+          }
+  
+          if (xml['return_code'] === 'SUCCESS' && xml['result_code'] === 'SUCCESS') {
+            resolve(xml)
+            return
+          }
+          reject(new Error(''))
+        })
+      })
+    }

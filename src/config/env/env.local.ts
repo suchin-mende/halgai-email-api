@@ -82,6 +82,7 @@ export const Settings = {
   cashierUrl: {
     default: 'https://api.mongol.email/%s/v1/%s/cashier/%s',
     payment: 'https://api.mongol.email/%s/v1/%s/cashier/pay/%s',
+    callbackWx: 'https://api.mongol.email/%s/v1/%s/cashier/notify/wx'
   },
   EMAIL_API_LOGIN_URL: 'http://mongol.email/?/ApiLogin/%s/%s'
 };

@@ -117,7 +117,7 @@ export class User extends BaseRoute {
             });
           }
         }
-        await Db.mainDb.models.mUser.insert(query);
+        const dbUser = await Db.mainDb.models.mUser.insert(query);
         if (req.body.serviceId !== 2)
           await Db.mainDb.models.tmpAuth.delete(query);
 
@@ -167,8 +167,20 @@ export class User extends BaseRoute {
 
           //TODO:MMailにログインして正しいURLを返す
 
-
-        return res.json({ message: 'OK', url: Settings.emailServerDomain + '/?/login' });
+          let result = {}
+          if (req.body.vipPlanCd && dbUser['affectedRows'] !== 0) {
+            result = {
+              ...result,
+              userId: dbUser['userId'],
+              email: query['email']
+            }
+          }
+          result = {
+            ...result,
+            message: 'OK',
+            url: Settings.emailServerDomain + '/?/login'
+          }
+        return res.json(result);
       } catch (err) {
         return res.status(400).send({ errors: [{ message: err.sqlMessage, code: ErrorUtils.getDefaultErrorCode() }] });
       }
